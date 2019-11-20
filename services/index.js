@@ -3,5 +3,5 @@ const userService = require('./user.service');
 
 module.exports = {
   oauthService,
-  userService
+  userService,
 };

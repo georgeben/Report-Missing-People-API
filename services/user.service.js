@@ -6,10 +6,23 @@ const { UserModel } = require('../db/models');
  * @returns {Object} user - The user's details if the user exists
  */
 async function findUserByEmail(email) {
-    const user = await UserModel.findOne({
-        email
-    });
-    return user;
+  const user = await UserModel.findOne({
+    email,
+  });
+  return user;
+}
+
+/**
+ *
+ * @param {String} facebookID - User's facebook ID
+ * @returns {Object} user - The user's details if the user exists
+ */
+
+async function findUserByFacebookID(facebookID) {
+  const user = await UserModel.findOne({
+    facebookID,
+  });
+  return user;
 }
 
 /**
@@ -18,12 +31,13 @@ async function findUserByEmail(email) {
  * @returns {Object} newuser - The newly created user
  */
 async function createUser(userData) {
-    let newUser = new UserModel(userData)
-    newUser = await newUser.save();
-    return newUser;
+  let newUser = new UserModel(userData);
+  newUser = await newUser.save();
+  return newUser;
 }
 
 module.exports = {
-    findUserByEmail,
-    createUser
-}
+  findUserByEmail,
+  createUser,
+  findUserByFacebookID,
+};
