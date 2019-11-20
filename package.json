@@ -1,7 +1,7 @@
 {
   "name": "report-missing-people",
   "version": "1.0.0",
-  "description": "Report cases for missing people",
+  "description": "Report cases of missing people",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,10 +11,20 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "google-auth-library": "^5.5.1",
     "method-override": "^3.0.0",
+    "mongoose": "^5.7.11",
     "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }
