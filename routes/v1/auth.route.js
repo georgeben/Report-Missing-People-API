@@ -5,8 +5,10 @@ const router = Router();
 const HOME_DIR = path.join(__dirname, '..', '..');
 
 /* eslint-disable import/no-dynamic-require */
-const { oauthController } = require(path.join(HOME_DIR, 'controllers'));
+const { oauthController, userController } = require(path.join(HOME_DIR, 'controllers'));
 const passport = require(path.join(HOME_DIR, 'config', 'passport.js'));
+
+router.post('/signup', userController.signUpUser);
 
 router.post('/google', oauthController.googleSignIn);
 

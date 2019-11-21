@@ -40,9 +40,11 @@ async function googleSignIn(req, res, next) {
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        id: createdUser._id,
-        fullname: createdUser.fullname,
-        email: createdUser.email,
+        user: {
+          id: createdUser._id,
+          fullname: createdUser.fullname,
+          email: createdUser.email,
+        },
       },
     });
   } catch (error) {
@@ -97,9 +99,11 @@ async function facebookSignIn(req, res, next) {
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        id: createdUser._id,
-        fullname: createdUser.fullname,
-        email: createdUser.email,
+        user: {
+          id: createdUser._id,
+          fullname: createdUser.fullname,
+          email: createdUser.email,
+        },
       },
     });
   } catch (error) {
@@ -181,9 +185,11 @@ async function twitterSignIn(req, res, next) {
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        id: createdUser._id,
-        fullname: createdUser.fullname,
-        email: createdUser.email,
+        user: {
+          id: createdUser._id,
+          fullname: createdUser.fullname,
+          email: createdUser.email,
+        },
       },
     });
   } catch (error) {
