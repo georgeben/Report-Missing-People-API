@@ -9,7 +9,7 @@ const { oauthService, userService } = require(path.join(HOME_DIR, 'services'));
  * Signs in a user using Google OAUTH
  * @param {Object} req - The request object
  * @param {Object} res - The response object
- * @param {Object} next - Next middleware function
+ * @param {Funtion} next - Next middleware function
  */
 async function googleSignIn(req, res, next) {
   const { id_token } = req.body;
@@ -37,7 +37,7 @@ async function googleSignIn(req, res, next) {
       googleID: payload.sub,
     };
     const createdUser = await userService.createUser(userData);
-    res.status(201).json({
+    return res.status(201).json({
       data: {
         message: 'Successfully created user',
         id: createdUser._id,
@@ -50,7 +50,7 @@ async function googleSignIn(req, res, next) {
     logger.log('error', 'Shit happens', {
       error,
     });
-    res.status(500).json({
+    return res.status(500).json({
       error: 'I think I fucked up',
     });
   }
@@ -60,14 +60,12 @@ async function googleSignIn(req, res, next) {
  * Route handler for Facebook Login
  * @param {Object} req - The request object
  * @param {Object} res - The response object
- * @param {Object} next - Next middleware function
+ * @param {Function} next - Next middleware function
  */
 async function facebookSignIn(req, res, next) {
   const fbUserProfile = req.user;
-  console.log('FB User profile', fbUserProfile);
   // Warning: With facebook, the user's email is not guaranteed to exist
   const fbEmail = fbUserProfile.emails[0].value;
-  console.log('Users email is', fbEmail);
   try {
     // Check if user exists
     let user;
@@ -77,7 +75,6 @@ async function facebookSignIn(req, res, next) {
     } else {
       user = await userService.findUserByFacebookID(fbUserProfile.id);
     }
-    console.log({ user });
     if (user) {
       // User has already registered, sign user in
       return res.status(200).json({
@@ -97,7 +94,7 @@ async function facebookSignIn(req, res, next) {
     };
     if (fbEmail) userData.email = fbEmail;
     const createdUser = await userService.createUser(userData);
-    res.status(201).json({
+    return res.status(201).json({
       data: {
         message: 'Successfully created user',
         id: createdUser._id,
@@ -107,10 +104,100 @@ async function facebookSignIn(req, res, next) {
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      error: 'Something went wrong',
+    });
+  }
+}
+
+/**
+ * Route handler for Twitter sign in. Redirects user to the twitter
+ * sign in page
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next
+ */
+async function getTwitterAuthorization(req, res, next) {
+  try {
+    const twitterRequestToken = await oauthService.getTwitterRequestToken();
+    if (twitterRequestToken === false) {
+      return res.status(500).json({
+        error: 'Something went wrong',
+      });
+    }
+    return res.redirect(`https://api.twitter.com/oauth/authorize?oauth_token=${twitterRequestToken}`, 302);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: 'Something went wrong',
+    });
+  }
+}
+
+/**
+ * Route handler for Twitter sign in callback
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next
+ */
+
+async function twitterSignIn(req, res, next) {
+  try {
+    const {
+      oauth_token: requestToken,
+      oauth_verifier: oauthVerifier,
+    } = req.query;
+    const twitterData = await oauthService.getTwitterUserData(
+      requestToken,
+      oauthVerifier,
+    );
+
+    // Check if user exists
+    let user;
+    const { email: twitterEmail, id: twitterID } = twitterData;
+    if (twitterEmail) {
+      user = await userService.findUserByEmail(twitterEmail);
+    } else {
+      user = await userService.findUserByTwitterID(twitterID);
+    }
+    if (user) {
+      return res.status(200).json({
+        data: {
+          message: 'This user is already registered',
+          token: 'jwttoken',
+        },
+      });
+    }
+
+    const userData = {
+      fullname: twitterData.name,
+      photoURL: twitterData.profile_image_url_https,
+      twitterID: twitterData.id,
+    };
+
+    if (twitterEmail) userData.email = twitterEmail;
+    const createdUser = await userService.createUser(userData);
+
+    return res.status(201).json({
+      data: {
+        message: 'Successfully created user',
+        id: createdUser._id,
+        fullname: createdUser.fullname,
+        email: createdUser.email,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    logger.log('error', error);
+    return res.status(500).json({
+      error: 'Something went wrong',
+    });
   }
 }
 
 module.exports = {
   googleSignIn,
   facebookSignIn,
+  getTwitterAuthorization,
+  twitterSignIn,
 };

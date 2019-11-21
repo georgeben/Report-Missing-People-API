@@ -10,6 +10,7 @@
   "author": "George Benjamin",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.7.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -20,6 +21,9 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
+    "redis": "^2.8.0",
+    "twit": "^2.2.11",
+    "twittersignin": "^1.1.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
