@@ -23,4 +23,7 @@ router.get(
   oauthController.facebookSignIn,
 );
 
+router.get('/twitter', oauthController.getTwitterAuthorization);
+router.get('/twitter/callback', oauthController.twitterSignIn);
+
 module.exports = router;

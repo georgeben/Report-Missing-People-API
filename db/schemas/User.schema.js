@@ -36,6 +36,10 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
+  twitterID: {
+    type: String,
+    required: false,
+  },
   phoneNumber: {
     type: String,
     required: false,

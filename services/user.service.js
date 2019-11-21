@@ -26,6 +26,17 @@ async function findUserByFacebookID(facebookID) {
 }
 
 /**
+ * @param {String} twitterID - User's twitter ID
+ * @returns {Object} user - The user's details if the user exists
+ */
+async function findUserByTwitterID(twitterID) {
+  const user = await UserModel.findOne({
+    twitterID,
+  });
+  return user;
+}
+
+/**
  * Creates a new user
  * @param {Object} userData - The data of the user to be created
  * @returns {Object} newuser - The newly created user
@@ -40,4 +51,5 @@ module.exports = {
   findUserByEmail,
   createUser,
   findUserByFacebookID,
+  findUserByTwitterID,
 };
