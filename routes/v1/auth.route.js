@@ -9,6 +9,7 @@ const { oauthController, userController } = require(path.join(HOME_DIR, 'control
 const passport = require(path.join(HOME_DIR, 'config', 'passport.js'));
 
 router.post('/signup', userController.signUpUser);
+router.post('/login', userController.signInUser);
 
 router.post('/google', oauthController.googleSignIn);
 

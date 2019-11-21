@@ -24,6 +24,25 @@ async function generatePasswordHash(password) {
   });
 }
 
+/**
+ * Compares the plain text password with the hashed password for a match
+ * @param  {string} password Plain text password
+ * @param  {string} hash     Hashed password
+ * @return {Promise} Resolves to a boolean value indicating if passwords match
+ */
+async function comparePassword(password, hash) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, hash, (err, res) => {
+      if (!err) {
+        resolve(res);
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
+
 module.exports = {
   generatePasswordHash,
+  comparePassword,
 };
