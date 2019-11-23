@@ -1,4 +1,8 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Promise = require('bluebird');
+
+Promise.promisifyAll(jwt);
 
 const saltRounds = 10;
 /**
@@ -42,7 +46,30 @@ async function comparePassword(password, hash) {
   });
 }
 
+/**
+ * Creates a signed JWT token
+ * @param  {Object} payload - Data to be encoded in the JWT token
+ * @return {String} token - Returns a promise containing the signed token
+ */
+async function signJWTToken(payload) {
+  const token = await jwt.sign(payload, process.env.JWT_SECRET);
+  return token;
+}
+
+/**
+ * Decodes a JWT jwtToken
+ * @param  {String} jwtToken - The JWT token to decode
+ * @return {Object} Returns an object representing the decoded data
+ */
+
+async function decodeJWTToken(jwtToken) {
+  const decoded = await jwt.verify(jwtToken, process.env.JWT_SECRET);
+  return decoded;
+}
+
 module.exports = {
   generatePasswordHash,
   comparePassword,
+  signJWTToken,
+  decodeJWTToken,
 };

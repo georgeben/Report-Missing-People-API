@@ -5,13 +5,13 @@ const router = Router();
 const HOME_DIR = path.join(__dirname, '..', '..');
 
 /* eslint-disable import/no-dynamic-require */
-const { oauthController, userController } = require(path.join(HOME_DIR, 'controllers'));
+const { authController } = require(path.join(HOME_DIR, 'controllers'));
 const passport = require(path.join(HOME_DIR, 'config', 'passport.js'));
 
-router.post('/signup', userController.signUpUser);
-router.post('/login', userController.signInUser);
+router.post('/signup', authController.signUpUser);
+router.post('/login', authController.signInUser);
 
-router.post('/google', oauthController.googleSignIn);
+router.post('/google', authController.googleSignIn);
 
 router.get(
   '/facebook',
@@ -23,10 +23,10 @@ router.get(
   passport.authenticate('facebook', {
     session: false,
   }),
-  oauthController.facebookSignIn,
+  authController.facebookSignIn,
 );
 
-router.get('/twitter', oauthController.getTwitterAuthorization);
-router.get('/twitter/callback', oauthController.twitterSignIn);
+router.get('/twitter', authController.getTwitterAuthorization);
+router.get('/twitter/callback', authController.twitterSignIn);
 
 module.exports = router;

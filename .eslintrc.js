@@ -10,10 +10,11 @@ module.exports = {
     SharedArrayBuffer: 'readonly'
   },
   parserOptions: {
-    ecmaVersion: 8
+    ecmaVersion: 2018
   },
   rules: {
     'no-underscore-dangle': 'off',
-    camelcase: 'off',
+    'camelcase': 'off',
+    'import/no-dynamic-require': 'off'
   }
 };
