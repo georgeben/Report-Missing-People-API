@@ -13,6 +13,21 @@ async function findUserByEmail(email) {
 }
 
 /**
+ * Retrieves a user from the db using the user's id
+ * @param {String} id - User's id
+ * @param {Boolean} includePassword - Select the user password
+ * @returns {Object} user - The user
+ */
+async function findUserByID(id, includePassword = false) {
+  let user;
+  if (includePassword) {
+    user = await UserModel.findById(id);
+  } else {
+    user = await UserModel.findById(id).select('-password');
+  }
+  return user;
+}
+/**
  *
  * @param {String} facebookID - User's facebook ID
  * @returns {Object} user - The user's details if the user exists
@@ -52,4 +67,5 @@ module.exports = {
   createUser,
   findUserByFacebookID,
   findUserByTwitterID,
+  findUserByID,
 };
