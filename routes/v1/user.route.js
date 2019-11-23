@@ -8,6 +8,6 @@ const { userController } = require(path.join(HOME_DIR, 'controllers'));
 const { checkAuth } = require(path.join(HOME_DIR, 'middlewares'));
 
 router.get('/', checkAuth, userController.getUserData);
-router.put('/', checkAuth, userController.updateUserData);
+router.put('/', checkAuth, userController.updateUserProfile);
 
 module.exports = router;

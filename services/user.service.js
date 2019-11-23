@@ -62,10 +62,44 @@ async function createUser(userData) {
   return newUser;
 }
 
+/**
+ * Updates a user's profile. Profile information
+ * includes names, photo country, state and address.
+ * @param {String} id - The ID of the user to update
+ * @param {Object} userData - The data of the user to be created
+ * @returns {Object} user - The updated user
+ */
+async function updateUserProfile(id, {
+  fullname,
+  firstname,
+  lastname,
+  photoURL,
+  country,
+  state,
+  address,
+}) {
+  /* Destructuring the profile information passed to this
+  method to ensure that only the correct fields are updated
+  in case wrong fields are passed
+  */
+  let user = await findUserByID(id);
+  user.fullname = fullname;
+  user.firstname = firstname;
+  user.lastname = lastname;
+  user.photoURL = photoURL;
+  user.country = country;
+  user.state = state;
+  user.address = address;
+
+  user = await user.save();
+  return user;
+}
+
 module.exports = {
   findUserByEmail,
   createUser,
   findUserByFacebookID,
   findUserByTwitterID,
   findUserByID,
+  updateUserProfile,
 };
