@@ -38,6 +38,7 @@ async function signUpUser(req, res, next) {
       id: createdUser._id,
       fullname: createdUser.fullname,
       email: createdUser.email,
+      slug: createdUser.slug,
     };
     const token = await authHelper.signJWTToken(createdUserData);
 
@@ -91,6 +92,7 @@ async function signInUser(req, res, next) {
       id: existingUser._id,
       fullname: existingUser.fullname,
       email: existingUser.email,
+      slug: existingUser.slug,
     };
     const token = await authHelper.signJWTToken(userData);
 
@@ -131,6 +133,7 @@ async function googleSignIn(req, res, next) {
         id: existingUser._id,
         fullname: existingUser.fullname,
         email: existingUser.email,
+        slug: existingUser.slug,
       };
       const token = await authHelper.signJWTToken(userData);
       return res.status(200).json({
@@ -157,6 +160,7 @@ async function googleSignIn(req, res, next) {
       id: createdUser._id,
       fullname: createdUser.fullname,
       email: createdUser.email,
+      slug: createdUser.slug,
     };
     const token = await authHelper.signJWTToken(createdUserData);
 
@@ -205,6 +209,7 @@ async function facebookSignIn(req, res, next) {
         id: existingUser._id,
         fullname: existingUser.fullname,
         email: existingUser.email,
+        slug: existingUser.slug,
       };
       const token = await authHelper.signJWTToken(userData);
       return res.status(200).json({
@@ -232,6 +237,7 @@ async function facebookSignIn(req, res, next) {
       id: createdUser._id,
       fullname: createdUser.fullname,
       email: createdUser.email,
+      slug: createdUser.slug,
     };
     const token = await authHelper.signJWTToken(createdUserData);
     return res.status(201).json({
@@ -268,7 +274,7 @@ async function getTwitterAuthorization(req, res, next) {
     }
     return res.redirect(
       302,
-      `https://api.twitter.com/oauth/authorize?oauth_token=${twitterRequestToken}`
+      `https://api.twitter.com/oauth/authorize?oauth_token=${twitterRequestToken}`,
     );
   } catch (error) {
     console.log(error);
@@ -309,6 +315,7 @@ async function twitterSignIn(req, res, next) {
         id: existingUser._id,
         fullname: existingUser.fullname,
         email: existingUser.email,
+        slug: existingUser.slug,
       };
       const token = await authHelper.signJWTToken(userData);
       return res.status(200).json({
@@ -335,6 +342,7 @@ async function twitterSignIn(req, res, next) {
       id: createdUser._id,
       fullname: createdUser.fullname,
       email: createdUser.email,
+      slug: createdUser.slug,
     };
     const token = await authHelper.signJWTToken(createdUserData);
 

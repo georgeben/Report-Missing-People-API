@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const slug = require('mongoose-slug-generator');
+
+mongoose.plugin(slug);
 
 const { Schema } = mongoose;
 
@@ -19,6 +22,12 @@ const userSchema = new Schema({
     type: String,
     required: true,
     lowercase: true,
+  },
+  slug: {
+    type: String,
+    slug: 'fullname',
+    slug_padding_size: 4,
+    unique: true,
   },
   password: {
     type: String,
