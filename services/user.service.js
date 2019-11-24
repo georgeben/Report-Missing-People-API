@@ -5,10 +5,17 @@ const { UserModel } = require('../db/models');
  * @param {String} email - User's email
  * @returns {Object} user - The user's details if the user exists
  */
-async function findUserByEmail(email) {
-  const user = await UserModel.findOne({
-    email,
-  });
+async function findUserByEmail(email, includePassword = true) {
+  let user;
+  if (includePassword) {
+    user = await UserModel.findOne({
+      email,
+    });
+  } else {
+    user = await UserModel.findOne({
+      email,
+    }).select('-password');
+  }
   return user;
 }
 
@@ -95,6 +102,28 @@ async function updateUserProfile(id, {
   return user;
 }
 
+/**
+ * Checks if a user has verified their email address
+ * @param {String} email - The user's email
+ * @returns {Boolean} - The status of the verified email
+ */
+async function checkEmailVerificationStatus(email) {
+  const user = await findUserByEmail(email);
+  return user.verifiedEmail;
+}
+
+/**
+ * Verifies a user's email
+ * @param {String} email - The email of the user to verify
+ * @returns {Object} user
+ */
+async function verifyUserEmail(email) {
+  let user = await findUserByEmail(email, false);
+  user.verifiedEmail = true;
+  user = await user.save();
+  return user;
+}
+
 module.exports = {
   findUserByEmail,
   createUser,
@@ -102,4 +131,6 @@ module.exports = {
   findUserByTwitterID,
   findUserByID,
   updateUserProfile,
+  checkEmailVerificationStatus,
+  verifyUserEmail,
 };

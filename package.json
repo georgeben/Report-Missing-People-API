@@ -10,6 +10,7 @@
   "author": "George Benjamin",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.7",
     "bluebird": "^3.7.1",
     "body-parser": "^1.19.0",

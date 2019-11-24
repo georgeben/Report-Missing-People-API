@@ -3,7 +3,7 @@ const path = require('path');
 const HOME_DIR = path.join(__dirname, '..');
 
 const { logger, authHelper } = require(path.join(HOME_DIR, 'utils'));
-const { oauthService, userService } = require(path.join(HOME_DIR, 'services'));
+const { oauthService, userService, emailService } = require(path.join(HOME_DIR, 'services'));
 
 /**
  * Route handler for registering a new user
@@ -41,6 +41,8 @@ async function signUpUser(req, res, next) {
       slug: createdUser.slug,
     };
     const token = await authHelper.signJWTToken(createdUserData);
+    // Send email confirmation
+    emailService.sendConfirmationEmail(email);
 
     return res.status(201).json({
       data: {
@@ -364,6 +366,39 @@ async function twitterSignIn(req, res, next) {
   }
 }
 
+/**
+ * Route handler for verifying a user's email
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next
+ */
+async function verifyEmail(req, res, next) {
+  try {
+    const { token } = req.query;
+    const email = await authHelper.decodeJWTToken(token);
+    const verifiedEmail = await userService.checkEmailVerificationStatus(email);
+    if (verifiedEmail) {
+      return res.status(409).json({
+        error: 'Email has already been verified',
+      });
+    }
+
+    let updatedUser = await userService.verifyUserEmail(email);
+    updatedUser = updatedUser.toJSON();
+
+    return res.status(200).json({
+      data: {
+        user: {
+          ...updatedUser,
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // Handle error
+  }
+}
+
 module.exports = {
   googleSignIn,
   facebookSignIn,
@@ -371,4 +406,5 @@ module.exports = {
   twitterSignIn,
   signUpUser,
   signInUser,
+  verifyEmail,
 };
