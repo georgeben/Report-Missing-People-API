@@ -399,6 +399,38 @@ async function verifyEmail(req, res, next) {
   }
 }
 
+/**
+ * Route handler for resending the confirmation email to a user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next
+ */
+async function resendVerificationEmail(req, res, next) {
+  try {
+    const { email } = req.user;
+    if (!email) {
+      return res.status(400).json({
+        error: 'Email not supplied',
+      });
+    }
+    const verifiedEmail = await userService.checkEmailVerificationStatus(email);
+    if (verifiedEmail) {
+      return res.status(409).json({
+        error: 'Email has already been verified',
+      });
+    }
+    emailService.sendConfirmationEmail(email);
+    return res.status(200).json({
+      data: {
+        message: 'Confirmation email has been sent',
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // Handle error
+  }
+}
+
 module.exports = {
   googleSignIn,
   facebookSignIn,
@@ -407,4 +439,5 @@ module.exports = {
   signUpUser,
   signInUser,
   verifyEmail,
+  resendVerificationEmail,
 };
