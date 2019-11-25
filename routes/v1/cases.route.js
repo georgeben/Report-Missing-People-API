@@ -10,5 +10,6 @@ const { checkAuth, checkProfileStatus } = require(path.join(HOME_DIR, 'middlewar
 router.get('/', caseController.getCases);
 router.get('/:slug', caseController.getSingleCase);
 router.post('/', checkAuth, checkProfileStatus, caseController.createCase);
+router.put('/:slug', checkAuth, checkProfileStatus, caseController.updateCase);
 
 module.exports = router;

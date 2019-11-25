@@ -65,9 +65,53 @@ async function findCaseBySlug(slug) {
   return reportedCase;
 }
 
+/**
+ * Updates a reported cases
+ * @param {String} slug - The slug of the case to update
+ * @param {Object} param1 - The updated data of the case
+ */
+async function updateCase(
+  slug,
+  {
+    fullname,
+    nicknames,
+    age,
+    gender,
+    language,
+    addressLastSeen,
+    state,
+    country,
+    dateLastSeen,
+    photoURL,
+    eventDescription,
+    physicalInformation,
+    solved,
+  }
+) {
+  // TODO: Refactor this method
+  let reportedCase = await findCaseBySlug(slug);
+  if (fullname) reportedCase.fullname = fullname;
+  if (nicknames) reportedCase.nicknames = nicknames;
+  if (age) reportedCase.age = age;
+  if (gender) reportedCase.gender = gender;
+  if (language) reportedCase.language = language;
+  if (addressLastSeen) reportedCase.addressLastSeen = addressLastSeen;
+  if (state) reportedCase.state = state;
+  if (country) reportedCase.country = country;
+  if (dateLastSeen) reportedCase.dateLastSeen = dateLastSeen;
+  if (photoURL) reportedCase.photoURL = photoURL;
+  if (eventDescription) reportedCase.eventDescription = eventDescription;
+  if (physicalInformation) reportedCase.physicalInformation = physicalInformation;
+  if (solved) reportedCase.solved = solved;
+
+  let updatedCase = await reportedCase.save();
+  return updatedCase;
+}
+
 module.exports = {
   createCase,
   checkForDuplicateCase,
   getCases,
   findCaseBySlug,
+  updateCase,
 };
