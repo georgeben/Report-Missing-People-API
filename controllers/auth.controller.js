@@ -6,6 +6,32 @@ const { logger, authHelper } = require(path.join(HOME_DIR, 'utils'));
 const { oauthService, userService, emailService } = require(path.join(HOME_DIR, 'services'));
 
 /**
+ * Generates a JWT for a user
+ * @param {Object} user - The user to generate a JWT for
+ * @returns {String} token - The JWT token
+ */
+async function generateJWTToken(user) {
+  const userData = {
+    id: user._id,
+    fullname: user.fullname,
+    email: user.email,
+    slug: user.slug,
+    verifiedEmail: user.verifiedEmail,
+    completedProfile: user.completedProfile,
+  };
+  const token = await authHelper.signJWTToken(userData);
+  return token;
+}
+
+/**
+ * @param {Object} user - Removes the password field from the user object
+ */
+function removePassword(user) {
+  const { password, ...userData } = user.toJSON();
+  return userData;
+}
+
+/**
  * Route handler for registering a new user
  * @param {Object} req - The request object
  * @param {Object} res - The response object
@@ -31,16 +57,9 @@ async function signUpUser(req, res, next) {
       password: hashedPassword,
     };
 
-    const createdUser = await userService.createUser(userData);
-
-    // Generate jwt token
-    const createdUserData = {
-      id: createdUser._id,
-      fullname: createdUser.fullname,
-      email: createdUser.email,
-      slug: createdUser.slug,
-    };
-    const token = await authHelper.signJWTToken(createdUserData);
+    let createdUser = await userService.createUser(userData);
+    createdUser = removePassword(createdUser);
+    const token = await generateJWTToken(createdUser);
     // Send email confirmation
     emailService.sendConfirmationEmail(email);
 
@@ -48,7 +67,7 @@ async function signUpUser(req, res, next) {
       data: {
         message: 'Successfully created user',
         user: {
-          ...createdUserData,
+          ...createdUser,
           token,
         },
       },
@@ -71,7 +90,7 @@ async function signInUser(req, res, next) {
   const { email, password } = req.body;
   try {
     // Check if user exists
-    const existingUser = await userService.findUserByEmail(email);
+    let existingUser = await userService.findUserByEmail(email);
     if (!existingUser) {
       return res.status(404).json({
         error: 'The user does not exist. Create an account first.',
@@ -89,19 +108,13 @@ async function signInUser(req, res, next) {
       });
     }
 
-    // Generate jwt token
-    const userData = {
-      id: existingUser._id,
-      fullname: existingUser.fullname,
-      email: existingUser.email,
-      slug: existingUser.slug,
-    };
-    const token = await authHelper.signJWTToken(userData);
+    existingUser = removePassword(existingUser);
+    const token = await generateJWTToken(existingUser);
 
     return res.status(200).json({
       data: {
         user: {
-          ...userData,
+          ...existingUser,
           token,
         },
       },
@@ -128,20 +141,14 @@ async function googleSignIn(req, res, next) {
     const payload = await oauthService.verifyGoogleIDToken(id_token);
 
     // Check if user exists
-    const existingUser = await userService.findUserByEmail(payload.email);
+    let existingUser = await userService.findUserByEmail(payload.email);
     if (existingUser) {
-      // User has already registered, sign user in
-      const userData = {
-        id: existingUser._id,
-        fullname: existingUser.fullname,
-        email: existingUser.email,
-        slug: existingUser.slug,
-      };
-      const token = await authHelper.signJWTToken(userData);
+      existingUser = existingUser.toJSON();
+      const token = await generateJWTToken(existingUser);
       return res.status(200).json({
         data: {
           user: {
-            ...userData,
+            ...existingUser,
             token,
           },
         },
@@ -154,23 +161,18 @@ async function googleSignIn(req, res, next) {
       email: payload.email,
       photoURL: payload.picture,
       googleID: payload.sub,
+      verifiedEmail: true,
     };
-    const createdUser = await userService.createUser(userData);
+    let createdUser = await userService.createUser(userData);
 
-    // Generate jwt token
-    const createdUserData = {
-      id: createdUser._id,
-      fullname: createdUser.fullname,
-      email: createdUser.email,
-      slug: createdUser.slug,
-    };
-    const token = await authHelper.signJWTToken(createdUserData);
+    const token = await generateJWTToken(createdUser);
+    createdUser = createdUser.toJSON();
 
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
         user: {
-          ...createdUserData,
+          ...createdUser,
           token,
         },
       },
@@ -207,17 +209,12 @@ async function facebookSignIn(req, res, next) {
     }
     if (existingUser) {
       // User has already registered, sign user in
-      const userData = {
-        id: existingUser._id,
-        fullname: existingUser.fullname,
-        email: existingUser.email,
-        slug: existingUser.slug,
-      };
-      const token = await authHelper.signJWTToken(userData);
+      existingUser = existingUser.toJSON();
+      const token = await generateJWTToken(existingUser);
       return res.status(200).json({
         data: {
           user: {
-            ...userData,
+            ...existingUser,
             token,
           },
         },
@@ -231,22 +228,19 @@ async function facebookSignIn(req, res, next) {
       photoURL: `http://graph.facebook.com/${fbUserProfile.id}/picture?type=square`,
       facebookID: fbUserProfile.id,
     };
-    if (fbEmail) userData.email = fbEmail;
-    const createdUser = await userService.createUser(userData);
+    if (fbEmail) {
+      userData.email = fbEmail;
+      userData.verifiedEmail = true;
+    }
+    let createdUser = await userService.createUser(userData);
 
-    // Generate jwt token
-    const createdUserData = {
-      id: createdUser._id,
-      fullname: createdUser.fullname,
-      email: createdUser.email,
-      slug: createdUser.slug,
-    };
-    const token = await authHelper.signJWTToken(createdUserData);
+    const token = await generateJWTToken(createdUser);
+    createdUser = createdUser.toJSON();
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
         user: {
-          ...createdUserData,
+          ...createdUser,
           token,
         },
       },
@@ -313,17 +307,13 @@ async function twitterSignIn(req, res, next) {
       existingUser = await userService.findUserByTwitterID(twitterID);
     }
     if (existingUser) {
-      const userData = {
-        id: existingUser._id,
-        fullname: existingUser.fullname,
-        email: existingUser.email,
-        slug: existingUser.slug,
-      };
-      const token = await authHelper.signJWTToken(userData);
+      // Sign the user in
+      const token = await generateJWTToken(existingUser);
+      existingUser = existingUser.toJSON();
       return res.status(200).json({
         data: {
           user: {
-            ...userData,
+            ...existingUser,
             token,
           },
         },
@@ -337,22 +327,16 @@ async function twitterSignIn(req, res, next) {
     };
 
     if (twitterEmail) userData.email = twitterEmail;
-    const createdUser = await userService.createUser(userData);
+    let createdUser = await userService.createUser(userData);
 
-    // Generate jwt token
-    const createdUserData = {
-      id: createdUser._id,
-      fullname: createdUser.fullname,
-      email: createdUser.email,
-      slug: createdUser.slug,
-    };
-    const token = await authHelper.signJWTToken(createdUserData);
+    const token = await generateJWTToken(createdUser);
+    createdUser = createdUser.toJSON();
 
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
         user: {
-          ...createdUserData,
+          ...createdUser,
           token,
         },
       },
