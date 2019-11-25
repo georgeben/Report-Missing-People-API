@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 const mongoose = require('mongoose');
 const slug = require('mongoose-slug-generator');
 
@@ -12,11 +13,9 @@ const userSchema = new Schema({
   },
   firstname: {
     type: String,
-    required: false,
   },
   lastname: {
     type: String,
-    required: false,
   },
   email: {
     type: String,
@@ -49,10 +48,6 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
-  phoneNumber: {
-    type: String,
-    required: false,
-  },
   country: {
     type: String,
   },
@@ -71,6 +66,13 @@ const userSchema = new Schema({
     default: false,
   },
 
+}, { timestamps: true });
+
+userSchema.pre('save', function (next) {
+  let nameArr = this.fullname.split(' ');
+  this.firstname = nameArr[0];
+  this.lastname = nameArr[1];
+  next();
 });
 
 module.exports = userSchema;
