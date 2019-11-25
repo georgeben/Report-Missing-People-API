@@ -55,8 +55,19 @@ async function getCases(status) {
   return cases;
 }
 
+/**
+ * Retrieves information about a reported case
+ * @param {String} slug - The case's slug
+ * @returns {Object} reportedCase - Data about the case
+ */
+async function findCaseBySlug(slug) {
+  const reportedCase = await CaseModel.findOne({ slug });
+  return reportedCase;
+}
+
 module.exports = {
   createCase,
   checkForDuplicateCase,
   getCases,
+  findCaseBySlug,
 };

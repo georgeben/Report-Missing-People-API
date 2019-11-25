@@ -53,7 +53,35 @@ async function getCases(req, res, next) {
     // TODO: Handle error
   }
 }
+
+/**
+ *cRoute handler for retrieving a reported case
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - Next middleware
+ */
+async function getSingleCase(req, res, next) {
+  let { slug } = req.params;
+  try {
+    const reportedCase = await caseService.findCaseBySlug(slug);
+    if (!reportedCase) {
+      return res.status(404).json({
+        error: 'Case not found',
+      });
+    }
+
+    return res.status(200).json({
+      data: {
+        case: reportedCase,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   createCase,
   getCases,
+  getSingleCase,
 };
