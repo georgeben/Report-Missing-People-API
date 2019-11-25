@@ -34,6 +34,26 @@ async function createCase(req, res, next) {
     // TODO: Handle error
   }
 }
+
+/**
+ * Route handler for retrieving reported cases
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - Next middleware
+ */
+async function getCases(req, res, next) {
+  const { status } = req.query;
+  try {
+    const cases = await caseService.getCases(status);
+    return res.status(200).json({
+      data: cases,
+    });
+  } catch (error) {
+    console.log(error);
+    // TODO: Handle error
+  }
+}
 module.exports = {
   createCase,
+  getCases,
 };

@@ -83,6 +83,10 @@ const caseSchema = new Schema(
         type: String,
       },
     },
+    solved: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

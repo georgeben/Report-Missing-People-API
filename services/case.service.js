@@ -17,7 +17,6 @@ async function findCaseByName(fullname) {
  */
 async function createCase(caseData) {
   let newCase = new CaseModel(caseData);
-  console.log('In service', newCase.fullname);
   newCase = await newCase.save();
   return newCase;
 }
@@ -34,7 +33,30 @@ async function checkForDuplicateCase(caseData) {
   return existingCase.reportedBy.toString() === caseData.reportedBy;
 }
 
+/**
+ * Retrieves the list of reported cases
+ * @param {String} status - The status of the case: open, close or all
+ * @returns {Array} cases - The list of reported cases
+ */
+async function getCases(status) {
+  let cases;
+  switch (status) {
+    case 'all':
+      cases = await CaseModel.find().lean();
+      break;
+    case 'closed':
+      cases = await CaseModel.find({ solved: true }).lean();
+      break;
+    default:
+      cases = await CaseModel.find({ solved: false }).lean();
+      break;
+  }
+
+  return cases;
+}
+
 module.exports = {
   createCase,
   checkForDuplicateCase,
+  getCases,
 };
