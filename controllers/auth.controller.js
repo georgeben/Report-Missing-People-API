@@ -378,8 +378,8 @@ async function verifyEmail(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // Handle error
+    console.log('Boom', error);
+    // TODO: Handle error
   }
 }
 

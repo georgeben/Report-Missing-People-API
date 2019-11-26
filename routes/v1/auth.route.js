@@ -4,15 +4,20 @@ const { Router } = require('express');
 const router = Router();
 const HOME_DIR = path.join(__dirname, '..', '..');
 
-/* eslint-disable import/no-dynamic-require */
 const { authController } = require(path.join(HOME_DIR, 'controllers'));
-const { checkAuth } = require(path.join(HOME_DIR, 'middlewares'));
+const { checkAuth, validate } = require(path.join(HOME_DIR, 'middlewares'));
+const { schemas } = require(path.join(HOME_DIR, 'utils'));
 const passport = require(path.join(HOME_DIR, 'config', 'passport.js'));
 
-router.post('/signup', authController.signUpUser);
-router.post('/login', authController.signInUser);
+router.post('/signup', validate(schemas.signUp, 'body'), authController.signUpUser);
 
-router.post('/google', authController.googleSignIn);
+router.post('/login', validate(schemas.logIn, 'body'), authController.signInUser);
+
+router.post(
+  '/google',
+  validate(schemas.googleSignIn, 'body'),
+  authController.googleSignIn,
+);
 
 router.get(
   '/facebook',
@@ -30,7 +35,7 @@ router.get(
 router.get('/twitter', authController.getTwitterAuthorization);
 router.get('/twitter/callback', authController.twitterSignIn);
 
-router.put('/verify-email', authController.verifyEmail);
+router.put('/verify-email', validate(schemas.verifyEmail, 'query'), authController.verifyEmail);
 router.post('/resend-verification-email', checkAuth, authController.resendVerificationEmail);
 
 module.exports = router;
