@@ -46,4 +46,26 @@ module.exports = {
       .trim()
       .required(),
   }),
+  updateUserProfile: Joi.object({
+    profile: Joi.object({
+      fullname: Joi.string()
+        .trim()
+        .min(2)
+        .pattern(namePattern, 'letters'),
+      photoURL: Joi.string()
+        .trim()
+        .uri({ scheme: ['http', 'https'] }),
+      country: Joi.string()
+        .trim()
+        .pattern(namePattern, 'letters'),
+      state: Joi.string()
+        .trim()
+        .pattern(namePattern, 'letters'),
+      address: Joi.string()
+        .trim(),
+    })
+      .required()
+      .with('country', 'state')
+      .with('state', 'address'),
+  }),
 };
