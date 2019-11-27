@@ -1,6 +1,8 @@
 const Joi = require('@hapi/joi');
 
 const namePattern = /^[a-zA-Z]+$/;
+const fullnamePattern = /^([a-zA-Z]+\s{1}[a-zA-Z]+$)/;
+const slugPattern = /^[a-z]+(?:-([a-z]+|[0-9]{4}|([a-z]+[0-9]{4})))*$/;
 
 module.exports = {
   signUp: Joi.object({
@@ -8,15 +10,15 @@ module.exports = {
       .trim()
       .min(2)
       .required()
-      .pattern(namePattern, 'letters'),
+      .pattern(fullnamePattern, 'Firstname Lastname'),
     firstname: Joi.string()
       .trim()
       .min(2)
-      .pattern(namePattern, 'letters'),
+      .pattern(namePattern, 'name'),
     lastname: Joi.string()
       .trim()
       .min(2)
-      .pattern(namePattern, 'letters'),
+      .pattern(namePattern, 'name'),
     email: Joi.string()
       .trim()
       .email({ minDomainSegments: 2 })
@@ -51,21 +53,24 @@ module.exports = {
       fullname: Joi.string()
         .trim()
         .min(2)
-        .pattern(namePattern, 'letters'),
+        .pattern(fullnamePattern, 'Firstname Lastname'),
       photoURL: Joi.string()
         .trim()
         .uri({ scheme: ['http', 'https'] }),
       country: Joi.string()
-        .trim()
-        .pattern(namePattern, 'letters'),
-      state: Joi.string()
-        .trim()
-        .pattern(namePattern, 'letters'),
-      address: Joi.string()
         .trim(),
+      state: Joi.string()
+        .trim(),
+      address: Joi.string().trim(),
     })
       .required()
       .with('country', 'state')
       .with('state', 'address'),
+  }),
+  checkForSlug: Joi.object({
+    slug: Joi.string()
+      .trim()
+      .required()
+      .pattern(slugPattern, 'slug-0000 or slug-slug0001'),
   }),
 };
