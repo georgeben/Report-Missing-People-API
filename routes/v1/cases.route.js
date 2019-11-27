@@ -24,6 +24,13 @@ router.post(
   validate(schemas.createCase),
   caseController.createCase,
 );
-router.put('/:slug', checkAuth, checkProfileStatus, caseController.updateCase);
+router.put(
+  '/:slug',
+  checkAuth,
+  checkProfileStatus,
+  validate(schemas.checkForSlug, 'params'),
+  validate(schemas.updateCase),
+  caseController.updateCase,
+);
 
 module.exports = router;

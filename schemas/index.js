@@ -118,4 +118,41 @@ module.exports = {
       healthInformation: Joi.string().trim(),
     }),
   }),
+  updateCase: Joi.object({
+    fullname: Joi.string()
+      .trim()
+      .min(3)
+      .pattern(fullnamePattern, 'Firstname Lastname'),
+    nicknames: Joi.array().items(Joi.string()),
+    age: Joi.number()
+      .integer()
+      .min(1),
+    gender: Joi.string()
+      .trim()
+      .valid('MALE', 'FEMALE', 'BISEXUAL', 'OTHER'),
+    language: Joi.string()
+      .trim()
+      .pattern(namePattern, 'name'),
+    addressLastSeen: Joi.string().trim(),
+    country: Joi.string().trim(),
+    state: Joi.string().trim(),
+    dateLastSeen: Joi.date().max('now'),
+    photoURL: Joi.string()
+      .trim()
+      .uri({ scheme: ['http', 'https'] }),
+    eventDescription: Joi.string().trim(),
+    physicalInformation: Joi.object({
+      description: Joi.string().trim(),
+      height: Joi.number()
+        .positive()
+        .min(0.1)
+        .precision(3),
+      weight: Joi.number().integer(),
+      lastSeenClothing: Joi.string().trim(),
+      healthInformation: Joi.string().trim(),
+    }),
+    solved: Joi.boolean(),
+  })
+    .with('country', 'state')
+    .with('state', 'addressLastSeen'),
 };
