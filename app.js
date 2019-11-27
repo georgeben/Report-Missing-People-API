@@ -5,7 +5,7 @@ const passport = require('passport');
 const morgan = require('morgan');
 const cors = require('cors');
 const routes = require('./routes');
-const middlewares = require('./middlewares');
+const { jwtParser } = require('./middlewares');
 // const { logger } = require('./utils');
 const { NODE_ENV } = process.env;
 
@@ -24,7 +24,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-Object.values(middlewares).forEach((middleware) => app.use(middleware));
+app.use(jwtParser);
 
 app.use('/api', routes);
 

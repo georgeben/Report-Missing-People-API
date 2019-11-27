@@ -15,6 +15,7 @@ module.exports = {
   rules: {
     'no-underscore-dangle': 'off',
     'camelcase': 'off',
-    'import/no-dynamic-require': 'off'
+    'import/no-dynamic-require': 'off',
+    'prefer-const': 'warn',
   }
 };
