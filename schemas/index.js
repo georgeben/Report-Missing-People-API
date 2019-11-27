@@ -57,10 +57,8 @@ module.exports = {
       photoURL: Joi.string()
         .trim()
         .uri({ scheme: ['http', 'https'] }),
-      country: Joi.string()
-        .trim(),
-      state: Joi.string()
-        .trim(),
+      country: Joi.string().trim(),
+      state: Joi.string().trim(),
       address: Joi.string().trim(),
     })
       .required()
@@ -72,5 +70,52 @@ module.exports = {
       .trim()
       .required()
       .pattern(slugPattern, 'slug-0000 or slug-slug0001'),
+  }),
+  createCase: Joi.object({
+    fullname: Joi.string()
+      .trim()
+      .min(2)
+      .required()
+      .pattern(fullnamePattern, 'Firstname Lastname'),
+    nicknames: Joi.array().items(Joi.string()),
+    age: Joi.number()
+      .integer()
+      .min(1)
+      .required(),
+    gender: Joi.string()
+      .trim()
+      .required()
+      .valid('MALE', 'FEMALE', 'BISEXUAL', 'OTHER'),
+    language: Joi.string()
+      .trim()
+      .required()
+      .pattern(namePattern, 'name'),
+    addressLastSeen: Joi.string()
+      .trim()
+      .required(),
+    country: Joi.string()
+      .trim()
+      .required(),
+    state: Joi.string()
+      .trim()
+      .required(),
+    dateLastSeen: Joi.date()
+      .required()
+      .max('now'),
+    photoURL: Joi.string()
+      .trim()
+      .required()
+      .uri({ scheme: ['http', 'https'] }),
+    eventDescription: Joi.string().trim(),
+    physicalInformation: Joi.object({
+      description: Joi.string().trim(),
+      height: Joi.number()
+        .positive()
+        .min(0.1)
+        .precision(3),
+      weight: Joi.number().integer(),
+      lastSeenClothing: Joi.string().trim(),
+      healthInformation: Joi.string().trim(),
+    }),
   }),
 };

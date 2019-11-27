@@ -9,7 +9,7 @@ const { checkAuth, checkProfileStatus, validate } = require(path.join(
   HOME_DIR,
   'middlewares',
 ));
-const { schemas } = require(path.join(HOME_DIR, 'utils'));
+const schemas = require(path.join(HOME_DIR, 'schemas'));
 
 router.get('/', caseController.getCases);
 router.get(
@@ -17,7 +17,13 @@ router.get(
   validate(schemas.checkForSlug, 'params'),
   caseController.getSingleCase,
 );
-router.post('/', checkAuth, checkProfileStatus, caseController.createCase);
+router.post(
+  '/',
+  checkAuth,
+  checkProfileStatus,
+  validate(schemas.createCase),
+  caseController.createCase,
+);
 router.put('/:slug', checkAuth, checkProfileStatus, caseController.updateCase);
 
 module.exports = router;

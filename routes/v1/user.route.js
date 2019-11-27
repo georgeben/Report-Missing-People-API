@@ -6,7 +6,7 @@ const HOME_DIR = path.join(__dirname, '..', '..');
 
 const { userController } = require(path.join(HOME_DIR, 'controllers'));
 const { checkAuth, validate } = require(path.join(HOME_DIR, 'middlewares'));
-const { schemas } = require(path.join(HOME_DIR, 'utils'));
+const schemas = require(path.join(HOME_DIR, 'schemas'));
 
 router.get('/', checkAuth, userController.getUserData);
 router.put(

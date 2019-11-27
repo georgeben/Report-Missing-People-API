@@ -6,7 +6,7 @@ const HOME_DIR = path.join(__dirname, '..', '..');
 
 const { authController } = require(path.join(HOME_DIR, 'controllers'));
 const { checkAuth, validate } = require(path.join(HOME_DIR, 'middlewares'));
-const { schemas } = require(path.join(HOME_DIR, 'utils'));
+const schemas = require(path.join(HOME_DIR, 'schemas'));
 const passport = require(path.join(HOME_DIR, 'config', 'passport.js'));
 
 router.post('/signup', validate(schemas.signUp, 'body'), authController.signUpUser);
