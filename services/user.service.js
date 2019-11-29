@@ -76,7 +76,9 @@ async function createUser(userData) {
  * @param {Object} userData - The data of the user to be created
  * @returns {Object} user - The updated user
  */
-async function updateUserProfile( id, { fullname, photoURL, country, state, address }) {
+async function updateUserProfile(id, {
+  fullname, photoURL, cloudinaryPhotoID, country, state, address,
+}) {
   /* Destructuring the profile information passed to this
   method to ensure that only the correct fields are updated
   in case wrong fields are passed
@@ -84,6 +86,7 @@ async function updateUserProfile( id, { fullname, photoURL, country, state, addr
   let user = await findUserByID(id);
   if (fullname) user.fullname = fullname;
   if (photoURL) user.photoURL = photoURL;
+  if (cloudinaryPhotoID) user.cloudinaryPhotoID = cloudinaryPhotoID;
   if (country) user.country = country;
   if (state) user.state = state;
   if (address) user.address = address;

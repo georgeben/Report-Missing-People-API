@@ -58,6 +58,10 @@ const caseSchema = new Schema(
       type: String,
       required: true,
     },
+    cloudinaryPhotoID: {
+      type: String,
+      required: true,
+    },
     eventDescription: {
       type: String,
     },

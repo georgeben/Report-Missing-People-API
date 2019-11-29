@@ -49,22 +49,16 @@ module.exports = {
       .required(),
   }),
   updateUserProfile: Joi.object({
-    profile: Joi.object({
-      fullname: Joi.string()
-        .trim()
-        .min(2)
-        .pattern(fullnamePattern, 'Firstname Lastname'),
-      photoURL: Joi.string()
-        .trim()
-        .uri({ scheme: ['http', 'https'] }),
-      country: Joi.string().trim(),
-      state: Joi.string().trim(),
-      address: Joi.string().trim(),
-    })
-      .required()
-      .with('country', 'state')
-      .with('state', 'address'),
-  }),
+    fullname: Joi.string()
+      .trim()
+      .min(2)
+      .pattern(fullnamePattern, 'Firstname Lastname'),
+    country: Joi.string().trim(),
+    state: Joi.string().trim(),
+    address: Joi.string().trim(),
+  })
+    .with('country', 'state')
+    .with('state', 'address'),
   checkForSlug: Joi.object({
     slug: Joi.string()
       .trim()
@@ -102,10 +96,6 @@ module.exports = {
     dateLastSeen: Joi.date()
       .required()
       .max('now'),
-    photoURL: Joi.string()
-      .trim()
-      .required()
-      .uri({ scheme: ['http', 'https'] }),
     eventDescription: Joi.string().trim(),
     physicalInformation: Joi.object({
       description: Joi.string().trim(),
@@ -137,9 +127,6 @@ module.exports = {
     country: Joi.string().trim(),
     state: Joi.string().trim(),
     dateLastSeen: Joi.date().max('now'),
-    photoURL: Joi.string()
-      .trim()
-      .uri({ scheme: ['http', 'https'] }),
     eventDescription: Joi.string().trim(),
     physicalInformation: Joi.object({
       description: Joi.string().trim(),

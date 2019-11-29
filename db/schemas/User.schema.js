@@ -36,6 +36,9 @@ const userSchema = new Schema({
     type: String,
     default: 'https://p7.hiclipart.com/preview/419/473/131/computer-icons-user-profile-login-user.jpg',
   },
+  cloudinaryPhotoID: {
+    type: String,
+  },
   googleID: {
     type: String,
     required: false,

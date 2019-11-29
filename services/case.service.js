@@ -83,6 +83,7 @@ async function updateCase(
     country,
     dateLastSeen,
     photoURL,
+    cloudinaryPhotoID,
     eventDescription,
     physicalInformation,
     solved,
@@ -100,6 +101,7 @@ async function updateCase(
   if (country) reportedCase.country = country;
   if (dateLastSeen) reportedCase.dateLastSeen = dateLastSeen;
   if (photoURL) reportedCase.photoURL = photoURL;
+  if (cloudinaryPhotoID) reportedCase.cloudinaryPhotoID = cloudinaryPhotoID;
   if (eventDescription) reportedCase.eventDescription = eventDescription;
   if (physicalInformation) reportedCase.physicalInformation = physicalInformation;
   if (solved) reportedCase.solved = solved;
