@@ -1,4 +1,6 @@
-const { caseService } = require('../services');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
+const { caseService, cloudinaryService } = require('../services');
 
 /**
  * Route handler for creating a case
@@ -10,14 +12,31 @@ async function createCase(req, res, next) {
   // Get the case data
   let caseData = req.body;
   const { id } = req.user;
+  const { file } = req;
   try {
     caseData.reportedBy = id;
     const isDuplicate = await caseService.checkForDuplicateCase(caseData);
     if (isDuplicate) {
+      fs.unlinkAsync(req.file.path);
       return res.status(409).json({
         error: 'That case has already been reported',
       });
     }
+
+    // Check that a file was included
+    if (!file) {
+      return res.status(400).json({
+        error: 'Include a valid photo form this case',
+      });
+    }
+    // Upload case photo to cloudinary
+    let image = await cloudinaryService.uploadImage(file.path, 'case_photos');
+    caseData.photoURL = image.secure_url;
+    caseData.cloudinaryPhotoID = image.public_id;
+
+    // Delete image from disk storage
+    await fs.unlinkAsync(req.file.path);
+
     let createdCase = await caseService.createCase(caseData);
     createdCase = createdCase.toJSON();
     // TODO: Probably call a service to tweet the case

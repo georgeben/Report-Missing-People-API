@@ -96,10 +96,6 @@ module.exports = {
     dateLastSeen: Joi.date()
       .required()
       .max('now'),
-    photoURL: Joi.string()
-      .trim()
-      .required()
-      .uri({ scheme: ['http', 'https'] }),
     eventDescription: Joi.string().trim(),
     physicalInformation: Joi.object({
       description: Joi.string().trim(),
