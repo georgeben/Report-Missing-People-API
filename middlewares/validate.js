@@ -13,7 +13,7 @@ function validate(schema, property = 'body') {
     } else {
       const { details } = error;
       const message = details.map((i) => i.message).join(',');
-      fs.unlinkAsync(req.file.path);
+      if (req.file) fs.unlinkAsync(req.file.path);
       return res.status(422).json({
         error: message,
       });

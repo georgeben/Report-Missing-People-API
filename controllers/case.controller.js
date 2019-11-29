@@ -109,20 +109,37 @@ async function updateCase(req, res, next) {
   const { slug } = req.params;
   const { id } = req.user;
   const caseData = req.body;
+  const { file } = req;
   try {
     let reportedCase = await caseService.findCaseBySlug(slug);
 
     // Check that the case exists
     if (!reportedCase) {
+      fs.unlinkAsync(req.file.path);
       return res.status(404).json({
         error: 'Case not found',
       });
     }
     // Ensure that the person trying to update it created it
     if (reportedCase.reportedBy.toString() !== id) {
+      fs.unlinkAsync(req.file.path);
       return res.status(403).json({
         error: 'Operation not permitted',
       });
+    }
+
+    // Check if there is a file
+    if (file) {
+      if (reportedCase.cloudinaryPhotoID) {
+        await cloudinaryService.deleteImage(reportedCase.cloudinaryPhotoID);
+      }
+      let image = await cloudinaryService.uploadImage(file.path, 'case_photos');
+
+      caseData.photoURL = image.secure_url;
+      caseData.cloudinaryPhotoID = image.public_id;
+
+      // Delete the image from disk storage
+      await fs.unlinkAsync(req.file.path);
     }
 
     // Update the case

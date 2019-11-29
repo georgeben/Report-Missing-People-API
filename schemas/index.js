@@ -127,9 +127,6 @@ module.exports = {
     country: Joi.string().trim(),
     state: Joi.string().trim(),
     dateLastSeen: Joi.date().max('now'),
-    photoURL: Joi.string()
-      .trim()
-      .uri({ scheme: ['http', 'https'] }),
     eventDescription: Joi.string().trim(),
     physicalInformation: Joi.object({
       description: Joi.string().trim(),

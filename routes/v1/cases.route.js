@@ -30,6 +30,7 @@ router.put(
   checkAuth,
   checkProfileStatus,
   validate(schemas.checkForSlug, 'params'),
+  upload('case-photo'),
   validate(schemas.updateCase),
   caseController.updateCase,
 );
