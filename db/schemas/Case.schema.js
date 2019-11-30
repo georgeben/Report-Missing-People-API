@@ -62,7 +62,7 @@ const caseSchema = new Schema(
       type: String,
       required: true,
     },
-    eventDescription: {
+    description: {
       type: String,
     },
     reportedBy: {
