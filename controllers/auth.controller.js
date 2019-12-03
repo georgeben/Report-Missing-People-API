@@ -1,4 +1,5 @@
 const path = require('path');
+const { processConfirmEmail } = require('../background-jobs');
 
 const HOME_DIR = path.join(__dirname, '..');
 
@@ -39,7 +40,7 @@ function removePassword(user) {
  */
 async function signUpUser(req, res, next) {
   const { firstname, lastname, fullname, email, password } = req.body;
-  // Check if user exisits
+  // Check if user exists
   try {
     const user = await userService.findUserByEmail(email);
     if (user) {
@@ -60,8 +61,8 @@ async function signUpUser(req, res, next) {
     let createdUser = await userService.createUser(userData);
     createdUser = removePassword(createdUser);
     const token = await generateJWTToken(createdUser);
-    // Send email confirmation
-    emailService.sendConfirmationEmail(email);
+    // Add the send confirmation email job to the queue
+    processConfirmEmail(email);
 
     return res.status(201).json({
       data: {
