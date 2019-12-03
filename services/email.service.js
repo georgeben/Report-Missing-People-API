@@ -43,10 +43,21 @@ function getEmailHtml(type, token) {
                 <p style="text-align: left; margin-left: 16px; margin-top: 20px; color: rgb(93, 93, 93);">Best wishes from barefoot nomad team</p>
               </div>
               </body>`;
+    case 'newsletter-acknowledgement':
+      return `<body>
+                <h2>You will start receiving emails now</h2>
+                <p><a href='${BASE_URL}/api/v1/newsletter/?token=${token}'>Change email subscription settings</a></p>
+              </body>
+              `;
     default:
       throw new Error('Email kind not found');
   }
 }
+
+/**
+ * Sends an email to a user to confirm their email
+ * @param {String} email - The email to send the mail to
+ */
 async function sendConfirmationEmail(email) {
   try {
     const token = await authHelper.signJWTToken(email);
@@ -57,15 +68,41 @@ async function sendConfirmationEmail(email) {
       html: getEmailHtml(constants.EMAIL_TYPES.CONFIRM_EMAIL, token),
     };
 
-    // Refactor this to use a background thread
+    // TODO: Refactor this to use a background thread
     sgMail.send(msg);
   } catch (error) {
     console.log(error);
 
-    // Handle error
+    // TODO: Handle error
+  }
+}
+
+/**
+ * Sends an acknowledgement email to users that have subscribed to newsletter
+ * @param {String} email - The email to send the mail to
+ */
+async function sendNewsletterAcknowledgementEmail(email) {
+  try {
+    const token = await authHelper.signJWTToken({ email });
+    console.log('Newsletter token', token);
+    const msg = {
+      to: email,
+      from: constants.FROM_EMAIL,
+      subject: 'Thank you for subscribing to our newsletter',
+      html: getEmailHtml(
+        constants.EMAIL_TYPES.NEWSLETTER_ACKNOWLEDGEMENT,
+        token,
+      ),
+    };
+
+    sgMail.send(msg);
+  } catch (error) {
+    console.log(error);
+    // TODO: Handle error
   }
 }
 
 module.exports = {
   sendConfirmationEmail,
+  sendNewsletterAcknowledgementEmail,
 };

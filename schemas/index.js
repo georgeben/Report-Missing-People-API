@@ -142,4 +142,26 @@ module.exports = {
   })
     .with('country', 'state')
     .with('state', 'addressLastSeen'),
+  newsletterSubscription: Joi.object({
+    email: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 })
+      .required(),
+    frequency: Joi.string()
+      .trim()
+      .valid('DAILY', 'WEEKLY')
+      .required(),
+    country: Joi.string().trim(),
+    state: Joi.string().trim(),
+  }).with('state', 'country'),
+  updateNewsletterSubscription: Joi.object({
+    newEmail: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 }),
+    frequency: Joi.string()
+      .trim()
+      .valid('DAILY', 'WEEKLY'),
+    country: Joi.string().trim(),
+    state: Joi.string().trim(),
+  }).with('state', 'country'),
 };
