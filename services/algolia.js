@@ -9,9 +9,9 @@ const casesIndex = client.initIndex(process.env.CASE_INDEX || 'dev_CASES');
  */
 async function addObject(data) {
   try {
-    const algoliaObject = { ...data.toJSON() };
+    const algoliaObject = { ...data };
     algoliaObject.objectID = data._id;
-    await casesIndex.addObject(data);
+    await casesIndex.addObject(algoliaObject);
   } catch (error) {
     // TODO: How to handle error when an algolia operation fails
     console.log(error);
@@ -23,12 +23,14 @@ async function addObject(data) {
  * @param {Object} data - The existing object to update
  */
 async function updateObject(data) {
+  const { changedFields } = data;
+  let caseData = data._doc;
   try {
     const algoliaObject = {};
-    data.changedFields.forEach((item) => {
-      algoliaObject[item] = data[item];
+    changedFields.forEach((item) => {
+      algoliaObject[item] = caseData[item];
     });
-    algoliaObject.objectID = data._id.toString();
+    algoliaObject.objectID = caseData._id.toString();
     await casesIndex.partialUpdateObject(algoliaObject);
   } catch (error) {
     console.log({ error });

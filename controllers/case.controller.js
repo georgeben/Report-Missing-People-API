@@ -26,7 +26,7 @@ async function createCase(req, res, next) {
     // Check that a file was included
     if (!file) {
       return res.status(400).json({
-        error: 'Include a valid photo form this case',
+        error: 'Include a valid photo for this case',
       });
     }
     // Upload case photo to cloudinary
@@ -115,7 +115,7 @@ async function updateCase(req, res, next) {
 
     // Check that the case exists
     if (!reportedCase) {
-      fs.unlinkAsync(req.file.path);
+      if (req.file) fs.unlinkAsync(req.file.path);
       return res.status(404).json({
         error: 'Case not found',
       });
