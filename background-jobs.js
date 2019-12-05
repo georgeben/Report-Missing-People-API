@@ -3,6 +3,7 @@ const constants = require('./constants');
 
 const emailQueue = new Bull('email-worker');
 const algoliaQueue = new Bull(constants.WORKERS.ALGOLIA_WORKER);
+const newsletterQueue = new Bull(constants.WORKERS.NEWSLETTER_WORKER);
 
 /**
  * Places a confirm email job on the background queue
@@ -46,9 +47,17 @@ async function processCaseUpdateEvent(caseData) {
   algoliaQueue.add(constants.JOB_NAMES.UPDATE_CASE, { caseData: { ...caseData } });
 }
 
+/**
+ * Places the daily newsletter emails on the background queue
+ */
+async function processDailyNewsletterEmail(subscribers, reportedCases) {
+  newsletterQueue.add(constants.JOB_NAMES.DAILY_NEWSLETTER, { subscribers, reportedCases });
+}
+
 module.exports = {
   processConfirmEmail,
   processNewsletterAcknowledgementEmail,
   processNewCaseEvent,
   processCaseUpdateEvent,
+  processDailyNewsletterEmail,
 };

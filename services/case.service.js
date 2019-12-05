@@ -56,6 +56,20 @@ async function getCases(status) {
 }
 
 /**
+ * Retrieves the list of reported cases from a given date till present
+ * @param {Date} startData - The date to start from
+ * @returns {Array} cases - The list of reported cases between the specified date range
+ */
+async function getCasesFromDate(startDate) {
+  const cases = await CaseModel.find({
+    createdAt: {
+      $gt: startDate,
+    },
+  });
+  return cases;
+}
+
+/**
  * Retrieves information about a reported case
  * @param {String} slug - The case's slug
  * @returns {Object} reportedCase - Data about the case
@@ -116,4 +130,5 @@ module.exports = {
   getCases,
   findCaseBySlug,
   updateCase,
+  getCasesFromDate,
 };

@@ -68,7 +68,6 @@ async function sendConfirmationEmail(email) {
       html: getEmailHtml(constants.EMAIL_TYPES.CONFIRM_EMAIL, token),
     };
 
-    // TODO: Refactor this to use a background thread
     sgMail.send(msg);
   } catch (error) {
     console.log(error);
@@ -102,7 +101,44 @@ async function sendNewsletterAcknowledgementEmail(email) {
   }
 }
 
+/**
+ * Sends a daily newsletter listing all the reported cases that have been reported
+ * the past day
+ * @param {String} email - The email to send the mail to
+ * @param {Array} cases - The array of cases that have been reported since the past day
+ */
+async function sendDailyNewsletter(email, cases) {
+  try {
+    const token = await authHelper.signJWTToken({ email });
+    let text = '';
+    for (let i = 0; i < cases.length; i++) {
+      text += cases[i].fullname;
+    }
+    let msg = {
+      to: email,
+      from: constants.FROM_EMAIL,
+      subject: 'Reported missing people cases for the past day',
+      text,
+    };
+    if (process.env.NODE_ENV !== 'production') {
+      msg = {
+        ...msg,
+        mail_settings: {
+          sandbox_mode: {
+            enable: true,
+          },
+        },
+      };
+    }
+
+    sgMail.send(msg);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   sendConfirmationEmail,
   sendNewsletterAcknowledgementEmail,
+  sendDailyNewsletter,
 };

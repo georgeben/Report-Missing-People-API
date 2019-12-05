@@ -1,4 +1,5 @@
 const { NewsletterSubscription } = require('../db/models');
+const emailService = require('./email.service');
 
 /**
  * Retrieves a newsletter subscriber with the given email
@@ -14,6 +15,14 @@ async function getSubscriber(email) {
  */
 async function getAllSubscribers() {
   const subscribers = await NewsletterSubscription.find({});
+  return subscribers;
+}
+
+/**
+ * Retrieves all daily newsletter subscribers
+ */
+async function getDailySubscribers() {
+  const subscribers = await NewsletterSubscription.find({ frequency: 'DAILY' });
   return subscribers;
 }
 
@@ -51,10 +60,29 @@ async function unsubscribe(email) {
   return result;
 }
 
+async function processDailyNewsletters(subscribers, reportedCases) {
+  const locationsOfReportedCases = [];
+  reportedCases.forEach((reportedCase) => {
+    if (!locationsOfReportedCases.includes(reportedCase.state)) {
+      locationsOfReportedCases.push(reportedCase.state);
+    }
+  });
+  subscribers.forEach(async (subscriber) => {
+    if (locationsOfReportedCases.includes(subscriber.state)) {
+      // Get the cases for that location
+      const casesOfInterest = reportedCases.filter((item) => item.state === subscriber.state);
+      // Send the email
+      emailService.sendDailyNewsletter(subscriber.email, casesOfInterest);
+    }
+  });
+}
+
 module.exports = {
   getSubscriber,
   addNewSubscription,
   updateSubscription,
   getAllSubscribers,
   unsubscribe,
+  getDailySubscribers,
+  processDailyNewsletters,
 };
