@@ -15,6 +15,7 @@ module.exports = {
     ADD_NEW_CASE: 'add-case',
     UPDATE_CASE: 'update-case',
     DAILY_NEWSLETTER: 'daily-newsletter',
+    WEEKLY_NEWSLETTER: 'weekly-newsletter',
   },
   FROM_EMAIL: 'no-reply@report-missing-people.com',
 };

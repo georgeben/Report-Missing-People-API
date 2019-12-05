@@ -111,8 +111,15 @@ newsletterQueue.process(constants.JOB_NAMES.DAILY_NEWSLETTER, async (job, done) 
   logger.log('info', `📰Received ${job.name}#${job.id}`);
   const { subscribers, reportedCases } = job.data;
   // Call a service to send out the daily newsletters
-  newsletterService.processDailyNewsletters(subscribers, reportedCases);
+  newsletterService.processNewsletters(subscribers, reportedCases, 'DAILY');
 
+  done();
+});
+
+newsletterQueue.process(constants.JOB_NAMES.WEEKLY_NEWSLETTER, async (job, done) => {
+  logger.log('info', `📰Received ${job.name}#${job.id}`);
+  const { subscribers, reportedCases } = job.data;
+  newsletterService.processNewsletters(subscribers, reportedCases, 'WEEKLY');
   done();
 });
 

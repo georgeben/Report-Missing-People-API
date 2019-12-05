@@ -107,7 +107,7 @@ async function sendNewsletterAcknowledgementEmail(email) {
  * @param {String} email - The email to send the mail to
  * @param {Array} cases - The array of cases that have been reported since the past day
  */
-async function sendDailyNewsletter(email, cases) {
+async function sendNewsletter(email, cases, type) {
   try {
     const token = await authHelper.signJWTToken({ email });
     let text = '';
@@ -117,7 +117,7 @@ async function sendDailyNewsletter(email, cases) {
     let msg = {
       to: email,
       from: constants.FROM_EMAIL,
-      subject: 'Reported missing people cases for the past day',
+      subject: `Reported cases of missing people for the past ${type === 'DAILY' ? 'day' : 'week'}`,
       text,
     };
     if (process.env.NODE_ENV !== 'production') {
@@ -140,5 +140,5 @@ async function sendDailyNewsletter(email, cases) {
 module.exports = {
   sendConfirmationEmail,
   sendNewsletterAcknowledgementEmail,
-  sendDailyNewsletter,
+  sendNewsletter,
 };

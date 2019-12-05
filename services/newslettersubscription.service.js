@@ -27,6 +27,14 @@ async function getDailySubscribers() {
 }
 
 /**
+ * Retrieves all weekly newsletter subscribers
+ */
+async function getWeeklySubscribers() {
+  const subscribers = await NewsletterSubscription.find({ frequency: 'WEEKLY' });
+  return subscribers;
+}
+
+/**
  * Creates a new newsletter subscriber
  * @param {Object} subscriptionData - The data of the new subscriber
  */
@@ -60,7 +68,7 @@ async function unsubscribe(email) {
   return result;
 }
 
-async function processDailyNewsletters(subscribers, reportedCases) {
+async function processNewsletters(subscribers, reportedCases, type) {
   const locationsOfReportedCases = [];
   reportedCases.forEach((reportedCase) => {
     if (!locationsOfReportedCases.includes(reportedCase.state)) {
@@ -72,7 +80,7 @@ async function processDailyNewsletters(subscribers, reportedCases) {
       // Get the cases for that location
       const casesOfInterest = reportedCases.filter((item) => item.state === subscriber.state);
       // Send the email
-      emailService.sendDailyNewsletter(subscriber.email, casesOfInterest);
+      emailService.sendNewsletter(subscriber.email, casesOfInterest, type);
     }
   });
 }
@@ -84,5 +92,6 @@ module.exports = {
   getAllSubscribers,
   unsubscribe,
   getDailySubscribers,
-  processDailyNewsletters,
+  getWeeklySubscribers,
+  processNewsletters,
 };

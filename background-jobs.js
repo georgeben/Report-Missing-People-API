@@ -54,10 +54,18 @@ async function processDailyNewsletterEmail(subscribers, reportedCases) {
   newsletterQueue.add(constants.JOB_NAMES.DAILY_NEWSLETTER, { subscribers, reportedCases });
 }
 
+/**
+ * Places the daily newsletter emails on the background queue
+ */
+async function processWeeklyNewsletterEmail(subscribers, reportedCases) {
+  newsletterQueue.add(constants.JOB_NAMES.WEEKLY_NEWSLETTER, { subscribers, reportedCases });
+}
+
 module.exports = {
   processConfirmEmail,
   processNewsletterAcknowledgementEmail,
   processNewCaseEvent,
   processCaseUpdateEvent,
   processDailyNewsletterEmail,
+  processWeeklyNewsletterEmail,
 };
