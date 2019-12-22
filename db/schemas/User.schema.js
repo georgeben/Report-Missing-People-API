@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring */
 const mongoose = require('mongoose');
 const slug = require('mongoose-slug-generator');
+const locationSchema = require('./Location.Schema');
 
 mongoose.plugin(slug);
 
@@ -36,6 +37,18 @@ const userSchema = new Schema({
     type: String,
     default: 'https://p7.hiclipart.com/preview/419/473/131/computer-icons-user-profile-login-user.jpg',
   },
+  residentialAddress: {
+    location: locationSchema,
+    formatted_address: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+  },
   cloudinaryPhotoID: {
     type: String,
   },
@@ -51,15 +64,6 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
-  country: {
-    type: String,
-  },
-  state: {
-    type: String,
-  },
-  address: {
-    type: String,
-  },
   completedProfile: {
     type: Boolean,
     default: false,
@@ -72,7 +76,7 @@ const userSchema = new Schema({
 }, { timestamps: true });
 
 userSchema.pre('save', function (next) {
-  let nameArr = this.fullname.split(' ');
+  const nameArr = this.fullname.split(' ');
   this.firstname = nameArr[0];
   this.lastname = nameArr[1];
   next();

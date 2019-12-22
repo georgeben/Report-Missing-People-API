@@ -53,12 +53,27 @@ module.exports = {
       .trim()
       .min(2)
       .pattern(fullnamePattern, 'Firstname Lastname'),
-    country: Joi.string().trim(),
-    state: Joi.string().trim(),
-    address: Joi.string().trim(),
-  })
-    .with('country', 'state')
-    .with('state', 'address'),
+    residentialAddress: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }),
+  }),
   checkForSlug: Joi.object({
     slug: Joi.string()
       .trim()
