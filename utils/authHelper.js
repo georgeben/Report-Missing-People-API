@@ -67,9 +67,28 @@ async function decodeJWTToken(jwtToken) {
   return decoded;
 }
 
+/**
+ * Generates a JWT for a user
+ * @param {Object} user - The user to generate a JWT for
+ * @returns {String} token - The JWT token
+ */
+async function generateJWTToken(user) {
+  const userData = {
+    id: user._id,
+    fullname: user.fullname,
+    email: user.email,
+    slug: user.slug,
+    verifiedEmail: user.verifiedEmail,
+    completedProfile: user.completedProfile,
+  };
+  const token = await signJWTToken(userData);
+  return token;
+}
+
 module.exports = {
   generatePasswordHash,
   comparePassword,
   signJWTToken,
   decodeJWTToken,
+  generateJWTToken,
 };

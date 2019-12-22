@@ -179,4 +179,9 @@ module.exports = {
     country: Joi.string().trim(),
     state: Joi.string().trim(),
   }).with('state', 'country'),
+  updateEmail: Joi.object({
+    email: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 }),
+  }),
 };

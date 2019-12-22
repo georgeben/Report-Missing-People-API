@@ -2,6 +2,8 @@
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const { userService, cloudinaryService } = require('../services');
+const { authHelper } = require('../utils');
+const { processConfirmEmail } = require('../background-jobs');
 
 /**
  * Route handler for retrieving data about the logged in user
@@ -35,9 +37,9 @@ async function getUserData(req, res, next) {
  */
 async function updateUserProfile(req, res, next) {
   try {
-    let { fullname, country, state, address } = req.body;
-    let profile = {
-      fullname, country, state, address,
+    const { fullname, residentialAddress } = req.body;
+    const profile = {
+      fullname, residentialAddress,
     };
     const { id } = req.user;
     const { file } = req;
@@ -52,7 +54,7 @@ async function updateUserProfile(req, res, next) {
         );
       }
       // Upload the image to cloudinary and retrieve the URL
-      let image = await cloudinaryService.uploadImage(
+      const image = await cloudinaryService.uploadImage(
         file.path,
         'user_photos',
       );
@@ -78,7 +80,44 @@ async function updateUserProfile(req, res, next) {
   }
 }
 
+/**
+ * Route handler for updating a user's email
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - Next middleware
+ */
+async function updateEmail(req, res, next) {
+  try {
+    // Get the user trying to update their email
+    const { email } = req.body;
+    // Check if that email has already been registered
+    const existingEmail = await userService.findUserByEmail(email, false);
+    if (existingEmail) {
+      return res.status(409).json({
+        error: 'That email has already been registered',
+      });
+    }
+    // Update the email
+    const updatedUser = await userService.updateUserEmail(req.user.email, email);
+    const token = await authHelper.generateJWTToken(updatedUser);
+    // Add the send confirmation email job to the queue
+    processConfirmEmail(email);
+    // Send response to the user
+    return res.status(200).json({
+      data: {
+        message: 'Successfully updated email',
+        user: updatedUser,
+        token,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // TODO Handle error
+  }
+}
+
 module.exports = {
   updateUserProfile,
   getUserData,
+  updateEmail,
 };

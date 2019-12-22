@@ -3,6 +3,12 @@ const { authHelper } = require('../utils');
 const constants = require('../constants');
 require('dotenv').config();
 
+let FRONTEND_URL;
+if (process.env.NODE_ENV === 'production') {
+  FRONTEND_URL = process.env.FRONTEND_URL;
+} else {
+  FRONTEND_URL = process.env.DEV_FRONTEND_URL;
+}
 const { BASE_URL } = process.env;
 
 sgMail.setApiKey(process.env.SENDGRID_APIKEY);
@@ -25,7 +31,7 @@ function getEmailHtml(type, token) {
                 text-align: center;
                 box-shadow: 0px 5px 15px 0px rgb(153, 153, 153, 0.5);
                 border-radius: 8px;">
-                <h4 style="color: rgb(93, 93, 93); font-size: 28px; padding-top: 40px;">Thank you for signing up to help find missing people</h4>
+                <h4 style="color: rgb(93, 93, 93); font-size: 28px; padding-top: 40px;">Please confirm your email</h4>
                 <p style="color: rgb(93, 93, 93); font-size: 17px;">Please confirm your account by clicking the button below, Ignore this message if you didn't request it</p>
                 <a style="background-color: #FD297B; /* Green */
                         outline: none;
@@ -38,7 +44,7 @@ function getEmailHtml(type, token) {
                         display: inline-block;
                         font-size: 16px;
                         font-weight: bold;
-                        cursor: pointer;" href='${BASE_URL}/api/v1/auth/verify-email?token=${token}'>confirm email</a>
+                        cursor: pointer;" href='${FRONTEND_URL}/auth/verify-email?token=${token}'>confirm email</a>
                 <p style="color: rgb(93, 93, 93); font-size: 17px; margin-top: 50px;">Once confirmed, you'll be able to log in to Barefoot Nomad with your new account.</p>
                 <p style="text-align: left; margin-left: 16px; margin-top: 20px; color: rgb(93, 93, 93);">Best wishes from barefoot nomad team</p>
               </div>

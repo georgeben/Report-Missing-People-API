@@ -39,7 +39,9 @@ function removePassword(user) {
  * @param {function} next
  */
 async function signUpUser(req, res, next) {
-  const { firstname, lastname, fullname, email, password } = req.body;
+  const {
+    firstname, lastname, fullname, email, password,
+  } = req.body;
   // Check if user exists
   try {
     const user = await userService.findUserByEmail(email);
@@ -114,10 +116,8 @@ async function signInUser(req, res, next) {
 
     return res.status(200).json({
       data: {
-        user: {
-          ...existingUser,
-          token,
-        },
+        user: existingUser,
+        token,
       },
     });
   } catch (error) {
@@ -380,6 +380,11 @@ async function verifyEmail(req, res, next) {
     });
   } catch (error) {
     console.log('Boom', error);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(400).json({
+        error: 'Email verification failed',
+      });
+    }
     // TODO: Handle error
   }
 }

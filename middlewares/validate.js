@@ -7,7 +7,7 @@ const fs = Promise.promisifyAll(require('fs'));
  */
 function validate(schema, property = 'body') {
   return (req, res, next) => {
-    const { error } = schema.validate(req[property]);
+    const { error } = schema.validate(req[property], { allowUnknown: true });
     if (error === undefined) {
       next();
     } else {
