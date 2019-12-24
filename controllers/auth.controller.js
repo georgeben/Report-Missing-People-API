@@ -359,8 +359,15 @@ async function twitterSignIn(req, res, next) {
  */
 async function verifyEmail(req, res, next) {
   try {
-    const { token } = req.query;
+    const { token } = req.body;
     const email = await authHelper.decodeJWTToken(token);
+    // check if the email exists before it is verified
+    const exists = await userService.findUserByEmail(email);
+    if (!exists) {
+      return res.status(404).json({
+        error: 'Account for this email is not found',
+      });
+    }
     const verifiedEmail = await userService.checkEmailVerificationStatus(email);
     if (verifiedEmail) {
       return res.status(409).json({
@@ -368,14 +375,15 @@ async function verifyEmail(req, res, next) {
       });
     }
 
-    let updatedUser = await userService.verifyUserEmail(email);
-    updatedUser = updatedUser.toJSON();
+    const updatedUser = await userService.verifyUserEmail(email);
+    // Regenerate a new token
+    const updatedToken = await generateJWTToken(updatedUser);
+    console.log({ updatedToken });
 
     return res.status(200).json({
       data: {
-        user: {
-          ...updatedUser,
-        },
+        user: updatedUser,
+        token: updatedToken,
       },
     });
   } catch (error) {

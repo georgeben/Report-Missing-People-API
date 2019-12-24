@@ -79,6 +79,14 @@ userSchema.pre('save', function (next) {
   const nameArr = this.fullname.split(' ');
   this.firstname = nameArr[0];
   this.lastname = nameArr[1];
+
+  // Check if the profile is complete
+  if (this.verifiedEmail) {
+    if (this.residentialAddress.formatted_address) {
+      // The profile is complete
+      this.completedProfile = true;
+    }
+  }
   next();
 });
 
