@@ -44,7 +44,7 @@ function getEmailHtml(type, token) {
                         display: inline-block;
                         font-size: 16px;
                         font-weight: bold;
-                        cursor: pointer;" href='${FRONTEND_URL}/auth/verify-email?token=${token}'>confirm email</a>
+                        cursor: pointer;" href='${FRONTEND_URL}/verify-email?token=${token}'>confirm email</a>
                 <p style="color: rgb(93, 93, 93); font-size: 17px; margin-top: 50px;">Once confirmed, you'll be able to log in to Barefoot Nomad with your new account.</p>
                 <p style="text-align: left; margin-left: 16px; margin-top: 20px; color: rgb(93, 93, 93);">Best wishes from barefoot nomad team</p>
               </div>

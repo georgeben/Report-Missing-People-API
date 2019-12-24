@@ -35,7 +35,7 @@ router.get(
 router.get('/twitter', authController.getTwitterAuthorization);
 router.get('/twitter/callback', authController.twitterSignIn);
 
-router.put('/verify-email', validate(schemas.verifyEmail, 'query'), authController.verifyEmail);
+router.put('/verify-email', validate(schemas.verifyEmail), authController.verifyEmail);
 router.post('/resend-verification-email', checkAuth, authController.resendVerificationEmail);
 
 module.exports = router;
