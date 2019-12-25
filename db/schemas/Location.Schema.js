@@ -7,6 +7,6 @@ const locationSchema = new Schema({
     type: String,
   },
   coordinates: [Number], // An array storing the longitude and latitude
-});
+}, { _id: false });
 
 module.exports = locationSchema;
