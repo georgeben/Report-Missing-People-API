@@ -4,7 +4,7 @@
   "description": "Report cases of missing people",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node worker.js & node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "George Benjamin",
@@ -12,9 +12,11 @@
   "dependencies": {
     "@hapi/joi": "^16.1.8",
     "@sendgrid/mail": "^6.4.0",
+    "algoliasearch": "^3.35.1",
     "bcrypt": "^3.0.7",
     "bluebird": "^3.7.1",
     "body-parser": "^1.19.0",
+    "bull": "^3.12.1",
     "cloudinary": "^1.17.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -22,10 +24,12 @@
     "google-auth-library": "^5.5.1",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
+    "moment": "^2.24.0",
     "mongoose": "^5.7.11",
     "mongoose-slug-generator": "^1.0.4",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
+    "node-cron": "^2.0.3",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
     "redis": "^2.8.0",

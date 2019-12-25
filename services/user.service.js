@@ -77,7 +77,7 @@ async function createUser(userData) {
  * @returns {Object} user - The updated user
  */
 async function updateUserProfile(id, {
-  fullname, photoURL, cloudinaryPhotoID, country, state, address,
+  fullname, photoURL, cloudinaryPhotoID, residentialAddress,
 }) {
   /* Destructuring the profile information passed to this
   method to ensure that only the correct fields are updated
@@ -87,9 +87,7 @@ async function updateUserProfile(id, {
   if (fullname) user.fullname = fullname;
   if (photoURL) user.photoURL = photoURL;
   if (cloudinaryPhotoID) user.cloudinaryPhotoID = cloudinaryPhotoID;
-  if (country) user.country = country;
-  if (state) user.state = state;
-  if (address) user.address = address;
+  if (residentialAddress) user.residentialAddress = residentialAddress;
 
   user = await user.save();
   return user;
@@ -117,6 +115,18 @@ async function verifyUserEmail(email) {
   return user;
 }
 
+/**
+ * Updates a user's email
+ * @param {String} email - The user's new email
+ */
+async function updateUserEmail(userEmail, newEmail) {
+  let user = await findUserByEmail(userEmail);
+  user.email = newEmail;
+  user.verifiedEmail = false;
+  user = await user.save();
+  return user;
+}
+
 module.exports = {
   findUserByEmail,
   createUser,
@@ -126,4 +136,5 @@ module.exports = {
   updateUserProfile,
   checkEmailVerificationStatus,
   verifyUserEmail,
+  updateUserEmail,
 };

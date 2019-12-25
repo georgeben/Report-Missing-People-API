@@ -6,7 +6,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const routes = require('./routes');
 const { jwtParser } = require('./middlewares');
-// const { logger } = require('./utils');
+require('./utils/newsletter-cron');
+
 const { NODE_ENV } = process.env;
 
 const app = express();

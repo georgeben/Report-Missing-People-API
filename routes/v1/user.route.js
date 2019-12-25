@@ -16,5 +16,6 @@ router.put(
   validate(schemas.updateUserProfile),
   userController.updateUserProfile,
 );
+router.put('/email', validate(schemas.updateEmail), userController.updateEmail);
 
 module.exports = router;

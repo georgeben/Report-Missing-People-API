@@ -1,4 +1,5 @@
 const path = require('path');
+const { processConfirmEmail } = require('../background-jobs');
 
 const HOME_DIR = path.join(__dirname, '..');
 
@@ -38,8 +39,10 @@ function removePassword(user) {
  * @param {function} next
  */
 async function signUpUser(req, res, next) {
-  const { firstname, lastname, fullname, email, password } = req.body;
-  // Check if user exisits
+  const {
+    firstname, lastname, fullname, email, password,
+  } = req.body;
+  // Check if user exists
   try {
     const user = await userService.findUserByEmail(email);
     if (user) {
@@ -60,8 +63,8 @@ async function signUpUser(req, res, next) {
     let createdUser = await userService.createUser(userData);
     createdUser = removePassword(createdUser);
     const token = await generateJWTToken(createdUser);
-    // Send email confirmation
-    emailService.sendConfirmationEmail(email);
+    // Add the send confirmation email job to the queue
+    processConfirmEmail(email);
 
     return res.status(201).json({
       data: {
@@ -113,10 +116,8 @@ async function signInUser(req, res, next) {
 
     return res.status(200).json({
       data: {
-        user: {
-          ...existingUser,
-          token,
-        },
+        user: existingUser,
+        token,
       },
     });
   } catch (error) {
@@ -358,8 +359,15 @@ async function twitterSignIn(req, res, next) {
  */
 async function verifyEmail(req, res, next) {
   try {
-    const { token } = req.query;
+    const { token } = req.body;
     const email = await authHelper.decodeJWTToken(token);
+    // check if the email exists before it is verified
+    const exists = await userService.findUserByEmail(email);
+    if (!exists) {
+      return res.status(404).json({
+        error: 'Account for this email is not found',
+      });
+    }
     const verifiedEmail = await userService.checkEmailVerificationStatus(email);
     if (verifiedEmail) {
       return res.status(409).json({
@@ -367,18 +375,24 @@ async function verifyEmail(req, res, next) {
       });
     }
 
-    let updatedUser = await userService.verifyUserEmail(email);
-    updatedUser = updatedUser.toJSON();
+    const updatedUser = await userService.verifyUserEmail(email);
+    // Regenerate a new token
+    const updatedToken = await generateJWTToken(updatedUser);
+    console.log({ updatedToken });
 
     return res.status(200).json({
       data: {
-        user: {
-          ...updatedUser,
-        },
+        user: updatedUser,
+        token: updatedToken,
       },
     });
   } catch (error) {
     console.log('Boom', error);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(400).json({
+        error: 'Email verification failed',
+      });
+    }
     // TODO: Handle error
   }
 }

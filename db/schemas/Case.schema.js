@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring */
 const mongoose = require('mongoose');
 const slug = require('mongoose-slug-generator');
+const locationSchema = require('./Location.Schema');
 
 mongoose.plugin(slug);
 
@@ -32,27 +33,42 @@ const caseSchema = new Schema(
     gender: {
       type: String,
       required: true,
-      enum: ['MALE', 'FEMALE', 'BISEXUAL', 'OTHER'],
+      enum: ['MALE', 'FEMALE'],
     },
     language: {
       type: String,
       required: true,
     },
+    residentialAddress: {
+      location: locationSchema,
+      formatted_address: {
+        type: String,
+      },
+      state: {
+        type: String,
+      },
+      country: {
+        type: String,
+      },
+    },
     addressLastSeen: {
-      type: String,
-      required: true,
-    },
-    state: {
-      type: String,
-      required: true,
-    },
-    country: {
-      type: String,
-      required: true,
+      location: locationSchema,
+      formatted_address: {
+        type: String,
+      },
+      state: {
+        type: String,
+      },
+      country: {
+        type: String,
+      },
     },
     dateLastSeen: {
       type: Date,
       required: true,
+    },
+    lastSeenClothing: {
+      type: String,
     },
     photoURL: {
       type: String,
@@ -62,7 +78,7 @@ const caseSchema = new Schema(
       type: String,
       required: true,
     },
-    eventDescription: {
+    eventCircumstances: {
       type: String,
     },
     reportedBy: {
@@ -71,7 +87,7 @@ const caseSchema = new Schema(
       required: true,
     },
     physicalInformation: {
-      description: {
+      specialCharacteristics: {
         type: String,
       },
       height: {
@@ -79,9 +95,6 @@ const caseSchema = new Schema(
       },
       weight: {
         type: Number,
-      },
-      lastSeenClothing: {
-        type: String,
       },
       healthInformation: {
         type: String,

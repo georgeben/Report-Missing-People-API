@@ -53,12 +53,27 @@ module.exports = {
       .trim()
       .min(2)
       .pattern(fullnamePattern, 'Firstname Lastname'),
-    country: Joi.string().trim(),
-    state: Joi.string().trim(),
-    address: Joi.string().trim(),
-  })
-    .with('country', 'state')
-    .with('state', 'address'),
+    residentialAddress: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }),
+  }),
   checkForSlug: Joi.object({
     slug: Joi.string()
       .trim()
@@ -76,35 +91,66 @@ module.exports = {
       .integer()
       .min(1)
       .required(),
+    residentialAddress: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }).required(),
     gender: Joi.string()
       .trim()
       .required()
-      .valid('MALE', 'FEMALE', 'BISEXUAL', 'OTHER'),
+      .valid('MALE', 'FEMALE'),
     language: Joi.string()
       .trim()
       .required()
       .pattern(namePattern, 'name'),
-    addressLastSeen: Joi.string()
-      .trim()
-      .required(),
-    country: Joi.string()
-      .trim()
-      .required(),
-    state: Joi.string()
-      .trim()
-      .required(),
+    addressLastSeen: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }).required(),
     dateLastSeen: Joi.date()
       .required()
       .max('now'),
-    eventDescription: Joi.string().trim(),
+    lastSeenClothing: Joi.string().trim(),
+    eventCircumstances: Joi.string().trim(),
     physicalInformation: Joi.object({
-      description: Joi.string().trim(),
+      specialCharacteristics: Joi.string().trim(),
       height: Joi.number()
         .positive()
         .min(0.1)
         .precision(3),
       weight: Joi.number().integer(),
-      lastSeenClothing: Joi.string().trim(),
       healthInformation: Joi.string().trim(),
     }),
   }),
@@ -142,4 +188,31 @@ module.exports = {
   })
     .with('country', 'state')
     .with('state', 'addressLastSeen'),
+  newsletterSubscription: Joi.object({
+    email: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 })
+      .required(),
+    frequency: Joi.string()
+      .trim()
+      .valid('DAILY', 'WEEKLY')
+      .required(),
+    country: Joi.string().trim(),
+    state: Joi.string().trim(),
+  }).with('state', 'country'),
+  updateNewsletterSubscription: Joi.object({
+    newEmail: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 }),
+    frequency: Joi.string()
+      .trim()
+      .valid('DAILY', 'WEEKLY'),
+    country: Joi.string().trim(),
+    state: Joi.string().trim(),
+  }).with('state', 'country'),
+  updateEmail: Joi.object({
+    email: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 }),
+  }),
 };

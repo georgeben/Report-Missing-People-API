@@ -5,7 +5,9 @@ const router = Router();
 const HOME_DIR = path.join(__dirname, '..', '..');
 
 const { caseController } = require(path.join(HOME_DIR, 'controllers'));
-const { checkAuth, checkProfileStatus, validate, upload } = require(path.join(
+const {
+  checkAuth, checkProfileStatus, validate, upload,
+} = require(path.join(
   HOME_DIR,
   'middlewares',
 ));
@@ -21,7 +23,7 @@ router.post(
   '/',
   checkAuth,
   checkProfileStatus,
-  upload('case-photo'),
+  upload('casePhoto'),
   validate(schemas.createCase),
   caseController.createCase,
 );
