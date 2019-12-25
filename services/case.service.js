@@ -5,7 +5,7 @@ const { CaseModel } = require('../db/models');
  * @returns {Object} existingCase - Details about the existing case if found
  */
 async function findCaseByName(fullname) {
-  let existingCase = await CaseModel.findOne({
+  const existingCase = await CaseModel.findOne({
     fullname,
   });
   return existingCase;
@@ -28,7 +28,7 @@ async function createCase(caseData) {
 async function checkForDuplicateCase(caseData) {
   /* For a case to be a duplicate, I think it should have the same fullname,
   and it must be reported by the same person */
-  let existingCase = await findCaseByName(caseData.fullname);
+  const existingCase = await findCaseByName(caseData.fullname);
   if (!existingCase) return false;
   return existingCase.reportedBy.toString() === caseData.reportedBy;
 }
@@ -69,6 +69,13 @@ async function getCasesFromDate(startDate) {
   return cases;
 }
 
+async function getCaseByUser(id) {
+  const cases = await CaseModel.find({
+    reportedBy: id,
+  });
+  return cases;
+}
+
 /**
  * Retrieves information about a reported case
  * @param {String} slug - The case's slug
@@ -101,10 +108,10 @@ async function updateCase(
     eventDescription,
     physicalInformation,
     solved,
-  }
+  },
 ) {
   // TODO: Refactor this method
-  let reportedCase = await findCaseBySlug(slug);
+  const reportedCase = await findCaseBySlug(slug);
   if (fullname) reportedCase.fullname = fullname;
   if (nicknames) reportedCase.nicknames = nicknames;
   if (age) reportedCase.age = age;
@@ -120,7 +127,7 @@ async function updateCase(
   if (physicalInformation) reportedCase.physicalInformation = physicalInformation;
   if (solved) reportedCase.solved = solved;
 
-  let updatedCase = await reportedCase.save();
+  const updatedCase = await reportedCase.save();
   return updatedCase;
 }
 
@@ -131,4 +138,5 @@ module.exports = {
   findCaseBySlug,
   updateCase,
   getCasesFromDate,
+  getCaseByUser,
 };
