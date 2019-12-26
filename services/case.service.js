@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 const { CaseModel } = require('../db/models');
 
 /**
@@ -38,19 +39,30 @@ async function checkForDuplicateCase(caseData) {
  * @param {String} status - The status of the case: open, close or all
  * @returns {Array} cases - The list of reported cases
  */
-async function getCases(status) {
+async function getCases(status, offset = 0, limit = 15) {
   let cases;
+  const query = {};
   switch (status) {
     case 'all':
-      cases = await CaseModel.find().lean();
+      // cases = await CaseModel.find().lean().skip(offset).limit(limit);
       break;
     case 'closed':
-      cases = await CaseModel.find({ solved: true }).lean();
+      // cases = await CaseModel.find({ solved: true }).lean();
+      query.solved = true;
       break;
     default:
-      cases = await CaseModel.find({ solved: false }).lean();
+      // cases = await CaseModel.find({ solved: false }).lean();
+      query.solved = false;
       break;
   }
+
+  cases = await CaseModel.find(query)
+    .skip(parseInt(offset))
+    .limit(parseInt(limit))
+    .lean()
+    .sort({
+      updatedAt: -1,
+    });
 
   return cases;
 }
@@ -72,6 +84,8 @@ async function getCasesFromDate(startDate) {
 async function getCaseByUser(id) {
   const cases = await CaseModel.find({
     reportedBy: id,
+  }).sort({
+    updatedAt: -1,
   });
   return cases;
 }
@@ -105,8 +119,9 @@ async function updateCase(
     dateLastSeen,
     photoURL,
     cloudinaryPhotoID,
-    eventDescription,
+    eventCircumstances,
     physicalInformation,
+    lastSeenClothing,
     solved,
   },
 ) {
@@ -123,8 +138,9 @@ async function updateCase(
   if (dateLastSeen) reportedCase.dateLastSeen = dateLastSeen;
   if (photoURL) reportedCase.photoURL = photoURL;
   if (cloudinaryPhotoID) reportedCase.cloudinaryPhotoID = cloudinaryPhotoID;
-  if (eventDescription) reportedCase.eventDescription = eventDescription;
+  if (eventCircumstances) reportedCase.eventDescription = eventCircumstances;
   if (physicalInformation) reportedCase.physicalInformation = physicalInformation;
+  if (lastSeenClothing) reportedCase.lastSeenClothing = lastSeenClothing;
   if (solved) reportedCase.solved = solved;
 
   const updatedCase = await reportedCase.save();
