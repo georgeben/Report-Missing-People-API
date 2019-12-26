@@ -165,29 +165,64 @@ module.exports = {
       .min(1),
     gender: Joi.string()
       .trim()
-      .valid('MALE', 'FEMALE', 'BISEXUAL', 'OTHER'),
+      .valid('MALE', 'FEMALE'),
     language: Joi.string()
       .trim()
       .pattern(namePattern, 'name'),
-    addressLastSeen: Joi.string().trim(),
-    country: Joi.string().trim(),
-    state: Joi.string().trim(),
+    residentialAddress: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }),
+    addressLastSeen: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }),
     dateLastSeen: Joi.date().max('now'),
-    eventDescription: Joi.string().trim(),
+    lastSeenClothing: Joi.string().trim(),
+    eventCircumstances: Joi.string().trim(),
     physicalInformation: Joi.object({
-      description: Joi.string().trim(),
+      specialCharacteristics: Joi.string().trim(),
       height: Joi.number()
         .positive()
         .min(0.1)
         .precision(3),
       weight: Joi.number().integer(),
-      lastSeenClothing: Joi.string().trim(),
       healthInformation: Joi.string().trim(),
     }),
     solved: Joi.boolean(),
-  })
-    .with('country', 'state')
-    .with('state', 'addressLastSeen'),
+  }),
   newsletterSubscription: Joi.object({
     email: Joi.string()
       .trim()
