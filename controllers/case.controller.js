@@ -10,7 +10,7 @@ const { caseService, cloudinaryService } = require('../services');
  */
 async function createCase(req, res, next) {
   // Get the case data
-  let caseData = req.body;
+  const caseData = req.body;
   const { id } = req.user;
   const { file } = req;
   try {
@@ -30,7 +30,7 @@ async function createCase(req, res, next) {
       });
     }
     // Upload case photo to cloudinary
-    let image = await cloudinaryService.uploadImage(file.path, 'case_photos');
+    const image = await cloudinaryService.uploadImage(file.path, 'case_photos');
     caseData.photoURL = image.secure_url;
     caseData.cloudinaryPhotoID = image.public_id;
 
@@ -61,9 +61,9 @@ async function createCase(req, res, next) {
  * @param {Function} next - Next middleware
  */
 async function getCases(req, res, next) {
-  const { status } = req.query;
+  const { status, offset, limit } = req.query;
   try {
-    const cases = await caseService.getCases(status);
+    const cases = await caseService.getCases(status, offset, limit);
     return res.status(200).json({
       data: cases,
     });
@@ -80,7 +80,7 @@ async function getCases(req, res, next) {
  * @param {Function} next - Next middleware
  */
 async function getSingleCase(req, res, next) {
-  let { slug } = req.params;
+  const { slug } = req.params;
   try {
     const reportedCase = await caseService.findCaseBySlug(slug);
     if (!reportedCase) {
@@ -111,7 +111,7 @@ async function updateCase(req, res, next) {
   const caseData = req.body;
   const { file } = req;
   try {
-    let reportedCase = await caseService.findCaseBySlug(slug);
+    const reportedCase = await caseService.findCaseBySlug(slug);
 
     // Check that the case exists
     if (!reportedCase) {
@@ -133,7 +133,7 @@ async function updateCase(req, res, next) {
       if (reportedCase.cloudinaryPhotoID) {
         await cloudinaryService.deleteImage(reportedCase.cloudinaryPhotoID);
       }
-      let image = await cloudinaryService.uploadImage(file.path, 'case_photos');
+      const image = await cloudinaryService.uploadImage(file.path, 'case_photos');
 
       caseData.photoURL = image.secure_url;
       caseData.cloudinaryPhotoID = image.public_id;
@@ -143,7 +143,7 @@ async function updateCase(req, res, next) {
     }
 
     // Update the case
-    let updatedCase = await caseService.updateCase(slug, caseData);
+    const updatedCase = await caseService.updateCase(slug, caseData);
     return res.status(200).json({
       data: {
         case: updatedCase,

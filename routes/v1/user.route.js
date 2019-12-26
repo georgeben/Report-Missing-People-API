@@ -9,6 +9,7 @@ const { checkAuth, validate, upload } = require(path.join(HOME_DIR, 'middlewares
 const schemas = require(path.join(HOME_DIR, 'schemas'));
 
 router.get('/', checkAuth, userController.getUserData);
+router.get('/cases', checkAuth, userController.getUserCases);
 router.put(
   '/',
   checkAuth,

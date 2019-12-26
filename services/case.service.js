@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 const { CaseModel } = require('../db/models');
 
 /**
@@ -5,7 +6,7 @@ const { CaseModel } = require('../db/models');
  * @returns {Object} existingCase - Details about the existing case if found
  */
 async function findCaseByName(fullname) {
-  let existingCase = await CaseModel.findOne({
+  const existingCase = await CaseModel.findOne({
     fullname,
   });
   return existingCase;
@@ -28,7 +29,7 @@ async function createCase(caseData) {
 async function checkForDuplicateCase(caseData) {
   /* For a case to be a duplicate, I think it should have the same fullname,
   and it must be reported by the same person */
-  let existingCase = await findCaseByName(caseData.fullname);
+  const existingCase = await findCaseByName(caseData.fullname);
   if (!existingCase) return false;
   return existingCase.reportedBy.toString() === caseData.reportedBy;
 }
@@ -38,19 +39,30 @@ async function checkForDuplicateCase(caseData) {
  * @param {String} status - The status of the case: open, close or all
  * @returns {Array} cases - The list of reported cases
  */
-async function getCases(status) {
+async function getCases(status, offset = 0, limit = 15) {
   let cases;
+  const query = {};
   switch (status) {
     case 'all':
-      cases = await CaseModel.find().lean();
+      // cases = await CaseModel.find().lean().skip(offset).limit(limit);
       break;
     case 'closed':
-      cases = await CaseModel.find({ solved: true }).lean();
+      // cases = await CaseModel.find({ solved: true }).lean();
+      query.solved = true;
       break;
     default:
-      cases = await CaseModel.find({ solved: false }).lean();
+      // cases = await CaseModel.find({ solved: false }).lean();
+      query.solved = false;
       break;
   }
+
+  cases = await CaseModel.find(query)
+    .skip(parseInt(offset))
+    .limit(parseInt(limit))
+    .lean()
+    .sort({
+      updatedAt: -1,
+    });
 
   return cases;
 }
@@ -65,6 +77,15 @@ async function getCasesFromDate(startDate) {
     createdAt: {
       $gt: startDate,
     },
+  });
+  return cases;
+}
+
+async function getCaseByUser(id) {
+  const cases = await CaseModel.find({
+    reportedBy: id,
+  }).sort({
+    updatedAt: -1,
   });
   return cases;
 }
@@ -98,13 +119,14 @@ async function updateCase(
     dateLastSeen,
     photoURL,
     cloudinaryPhotoID,
-    eventDescription,
+    eventCircumstances,
     physicalInformation,
+    lastSeenClothing,
     solved,
-  }
+  },
 ) {
   // TODO: Refactor this method
-  let reportedCase = await findCaseBySlug(slug);
+  const reportedCase = await findCaseBySlug(slug);
   if (fullname) reportedCase.fullname = fullname;
   if (nicknames) reportedCase.nicknames = nicknames;
   if (age) reportedCase.age = age;
@@ -116,11 +138,12 @@ async function updateCase(
   if (dateLastSeen) reportedCase.dateLastSeen = dateLastSeen;
   if (photoURL) reportedCase.photoURL = photoURL;
   if (cloudinaryPhotoID) reportedCase.cloudinaryPhotoID = cloudinaryPhotoID;
-  if (eventDescription) reportedCase.eventDescription = eventDescription;
+  if (eventCircumstances) reportedCase.eventDescription = eventCircumstances;
   if (physicalInformation) reportedCase.physicalInformation = physicalInformation;
+  if (lastSeenClothing) reportedCase.lastSeenClothing = lastSeenClothing;
   if (solved) reportedCase.solved = solved;
 
-  let updatedCase = await reportedCase.save();
+  const updatedCase = await reportedCase.save();
   return updatedCase;
 }
 
@@ -131,4 +154,5 @@ module.exports = {
   findCaseBySlug,
   updateCase,
   getCasesFromDate,
+  getCaseByUser,
 };

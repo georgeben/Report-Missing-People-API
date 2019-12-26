@@ -1,7 +1,7 @@
 
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
-const { userService, cloudinaryService } = require('../services');
+const { userService, cloudinaryService, caseService } = require('../services');
 const { authHelper } = require('../utils');
 const { processConfirmEmail } = require('../background-jobs');
 
@@ -116,8 +116,30 @@ async function updateEmail(req, res, next) {
   }
 }
 
+/**
+ * Route handler for retrieving cases a user has reported
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - Next middleware
+ */
+async function getUserCases(req, res, next) {
+  const { id } = req.user;
+  try {
+    const userCases = await caseService.getCaseByUser(id);
+    return res.status(200).json({
+      data: {
+        cases: userCases,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // TODO Handle error
+  }
+}
+
 module.exports = {
   updateUserProfile,
   getUserData,
   updateEmail,
+  getUserCases,
 };

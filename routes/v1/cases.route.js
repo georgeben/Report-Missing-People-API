@@ -32,7 +32,7 @@ router.put(
   checkAuth,
   checkProfileStatus,
   validate(schemas.checkForSlug, 'params'),
-  upload('case-photo'),
+  upload('casePhoto'),
   validate(schemas.updateCase),
   caseController.updateCase,
 );
