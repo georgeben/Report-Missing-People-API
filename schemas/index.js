@@ -255,4 +255,8 @@ module.exports = {
       .trim()
       .email({ minDomainSegments: 2 }),
   }),
+  updatePassword: Joi.object({
+    currentPassword: Joi.string().min(4),
+    newPassword: Joi.string().min(4).required(),
+  }),
 };

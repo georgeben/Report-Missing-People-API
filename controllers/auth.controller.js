@@ -485,6 +485,11 @@ async function resetPassword(req, res, next) {
         error: 'Password reset failed',
       });
     }
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({
+        error: 'Password reset link has expired',
+      });
+    }
     // TODO Handle error
   }
 }
