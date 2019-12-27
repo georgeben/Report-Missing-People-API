@@ -3,6 +3,7 @@ const { UserModel } = require('../db/models');
 /**
  * Retrieves a user from the db using an email address
  * @param {String} email - User's email
+ * @param {Boolean} includePassword - If password should be included
  * @returns {Object} user - The user's details if the user exists
  */
 async function findUserByEmail(email, includePassword = true) {
@@ -127,6 +128,18 @@ async function updateUserEmail(userEmail, newEmail) {
   return user;
 }
 
+/**
+ * Updates a user's password
+ * @param {String} email - The user's email
+ * @param {String} password - The new hashed password
+ */
+async function resetPassword(email, password) {
+  let user = await findUserByEmail(email);
+  user.password = password;
+  user = await user.save();
+  return user;
+}
+
 module.exports = {
   findUserByEmail,
   createUser,
@@ -137,4 +150,5 @@ module.exports = {
   checkEmailVerificationStatus,
   verifyUserEmail,
   updateUserEmail,
+  resetPassword,
 };

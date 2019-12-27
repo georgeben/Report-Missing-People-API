@@ -15,6 +15,14 @@ async function processConfirmEmail(email) {
 }
 
 /**
+ * Places a forgot password email job on the background queue
+ * @param {String} email - The email to send the mail to
+ */
+async function processForgotPasswordMail(email) {
+  emailQueue.add(constants.JOB_NAMES.FORGOT_PASSWORD_MAIL, { email });
+}
+
+/**
  * Places a newsletter acknowledgement email job on the background queue
  * @param {String} email - The email to send the mail to
  */
@@ -65,6 +73,7 @@ async function processWeeklyNewsletterEmail(subscribers, reportedCases) {
 
 module.exports = {
   processConfirmEmail,
+  processForgotPasswordMail,
   processNewsletterAcknowledgementEmail,
   processNewCaseEvent,
   processCaseUpdateEvent,

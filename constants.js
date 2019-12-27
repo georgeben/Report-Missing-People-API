@@ -3,6 +3,7 @@ module.exports = {
     CONFIRM_EMAIL: 'confirm-email',
     RESET_EMAIL: 'reset-email',
     NEWSLETTER_ACKNOWLEDGEMENT: 'newsletter-acknowledgement',
+    FORGOT_PASSWORD: 'forgot-password',
   },
   WORKERS: {
     EMAIL_WORKER: 'email-worker',
@@ -12,6 +13,7 @@ module.exports = {
   },
   JOB_NAMES: {
     CONFIRM_EMAIL: 'confirm-email',
+    FORGOT_PASSWORD_MAIL: 'forgot-password',
     NEWSLETTER_ACKNOWLEDGEMENT_EMAIL: 'newsletter-acknowledgement-email',
     ADD_NEW_CASE: 'add-case',
     UPDATE_CASE: 'update-case',
