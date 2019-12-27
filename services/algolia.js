@@ -24,13 +24,14 @@ async function addObject(data) {
  */
 async function updateObject(data) {
   const { changedFields } = data;
-  let caseData = data._doc;
+  const caseData = data._doc;
   try {
     const algoliaObject = {};
     changedFields.forEach((item) => {
       algoliaObject[item] = caseData[item];
     });
     algoliaObject.objectID = caseData._id.toString();
+    algoliaObject.slug = caseData.slug;
     await casesIndex.partialUpdateObject(algoliaObject);
   } catch (error) {
     console.log({ error });

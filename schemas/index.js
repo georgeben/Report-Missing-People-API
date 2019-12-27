@@ -43,6 +43,11 @@ module.exports = {
       .trim()
       .required(),
   }),
+  verifyToken: Joi.object({
+    token: Joi.string()
+      .trim()
+      .required(),
+  }),
   googleSignIn: Joi.object({
     id_token: Joi.string()
       .trim()

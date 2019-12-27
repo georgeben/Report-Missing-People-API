@@ -38,4 +38,6 @@ router.get('/twitter/callback', authController.twitterSignIn);
 router.put('/verify-email', validate(schemas.verifyEmail), authController.verifyEmail);
 router.post('/resend-verification-email', checkAuth, authController.resendVerificationEmail);
 
+router.post('/forgot-password', authController.forgotPassword);
+router.put('/reset-password', validate(schemas.verifyToken), authController.resetPassword);
 module.exports = router;
