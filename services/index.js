@@ -5,6 +5,7 @@ const caseService = require('./case.service');
 const cloudinaryService = require('./cloudinary.service');
 const algoliaService = require('./algolia');
 const newsletterService = require('./newslettersubscription.service');
+const twitterBot = require('./twitterbot');
 
 module.exports = {
   oauthService,
@@ -14,4 +15,5 @@ module.exports = {
   cloudinaryService,
   algoliaService,
   newsletterService,
+  twitterBot,
 };

@@ -4,6 +4,7 @@ const constants = require('./constants');
 const emailQueue = new Bull('email-worker');
 const algoliaQueue = new Bull(constants.WORKERS.ALGOLIA_WORKER);
 const newsletterQueue = new Bull(constants.WORKERS.NEWSLETTER_WORKER);
+const twitterQueue = new Bull(constants.WORKERS.TWITTER_BOT);
 
 /**
  * Places a confirm email job on the background queue
@@ -31,7 +32,8 @@ async function processNewCaseEvent(caseData) {
    * and the case is posted on Twitter
    */
   algoliaQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData });
-  // TODO: Post case to Twitter
+  // TODO: Send the real case data
+  twitterQueue.add(constants.JOB_NAMES.TWEET_NEWCASE, { message: 'Merry Christmas' });
 }
 
 /**

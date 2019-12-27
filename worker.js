@@ -5,6 +5,7 @@ const {
   emailService,
   algoliaService,
   newsletterService,
+  twitterBot,
 } = require('./services');
 
 logger.log('info', 'Workers ready 🔥🔥🔥');
@@ -12,6 +13,7 @@ logger.log('info', 'Workers ready 🔥🔥🔥');
 const emailQueue = new Bull('email-worker');
 const algoliaQueue = new Bull(constants.WORKERS.ALGOLIA_WORKER);
 const newsletterQueue = new Bull(constants.WORKERS.NEWSLETTER_WORKER);
+const twitterQueue = new Bull(constants.WORKERS.TWITTER_BOT);
 
 /**
  * Job handler for sending confirmation emails
@@ -153,4 +155,31 @@ newsletterQueue.on('stalled', (job) => {
 
 newsletterQueue.on('failed', (job, error) => {
   logger.log('error', `📰Job ${job.name}#${job.id} has failed 😭😭`, error);
+});
+
+/**
+ * Job handler for tweeting new cases
+ */
+twitterQueue.process(constants.JOB_NAMES.TWEET_NEWCASE, async (job, done) => {
+  logger.log('info', `🐦Received ${job.name}#${job.id}`);
+  const { message } = job.data;
+  twitterBot.tweetNewCase(message);
+
+  done();
+});
+
+twitterQueue.on('active', (job) => {
+  logger.log('info', `🐦Job ${job.name}#${job.id} is now active 🚁🚁🚁`);
+});
+
+twitterQueue.on('completed', (job, result) => {
+  logger.log('info', `🐦Job ${job.name}#${job.id} is completed 🚀🚀`, result);
+});
+
+twitterQueue.on('stalled', (job) => {
+  logger.log('info', `🐦Job ${job.name}#${job.id} is stalled 😰😰`);
+});
+
+twitterQueue.on('failed', (job, error) => {
+  logger.log('error', `🐦Job ${job.name}#${job.id} has failed 😭😭`, error);
 });
