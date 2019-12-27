@@ -378,7 +378,6 @@ async function verifyEmail(req, res, next) {
     const updatedUser = await userService.verifyUserEmail(email);
     // Regenerate a new token
     const updatedToken = await generateJWTToken(updatedUser);
-    console.log({ updatedToken });
 
     return res.status(200).json({
       data: {
