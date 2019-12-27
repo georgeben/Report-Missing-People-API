@@ -55,6 +55,12 @@ function getEmailHtml(type, token) {
                 <p><a href='${BASE_URL}/api/v1/newsletter/?token=${token}'>Change email subscription settings</a></p>
               </body>
               `;
+    case constants.EMAIL_TYPES.FORGOT_PASSWORD:
+      return `
+              <body>
+                <p>Click this link to reset your password. <a href='${FRONTEND_URL}/auth/reset-password?token=${token}'>Reset password</a></p>
+              </body>
+              `;
     default:
       throw new Error('Email kind not found');
   }
@@ -79,6 +85,26 @@ async function sendConfirmationEmail(email) {
     console.log(error);
 
     // TODO: Handle error
+  }
+}
+
+/**
+ * Sends an email to a user to reset their password
+ * @param {String} email - The email to send the mail to
+ */
+async function sendForgotPasswordMail(email) {
+  try {
+    const token = await authHelper.signJWTToken({ email }, { expiresIn: '1h' });
+    const msg = {
+      to: email,
+      from: constants.FROM_EMAIL,
+      subject: 'Reset your password',
+      html: getEmailHtml(constants.EMAIL_TYPES.FORGOT_PASSWORD, token),
+    };
+
+    sgMail.send(msg);
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -147,4 +173,5 @@ module.exports = {
   sendConfirmationEmail,
   sendNewsletterAcknowledgementEmail,
   sendNewsletter,
+  sendForgotPasswordMail,
 };

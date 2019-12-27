@@ -49,10 +49,11 @@ async function comparePassword(password, hash) {
 /**
  * Creates a signed JWT token
  * @param  {Object} payload - Data to be encoded in the JWT token
+ * @param {Object} options - the options for signing the JWT
  * @return {String} token - Returns a promise containing the signed token
  */
-async function signJWTToken(payload) {
-  const token = await jwt.sign(payload, process.env.JWT_SECRET);
+async function signJWTToken(payload, options = {}) {
+  const token = await jwt.sign(payload, process.env.JWT_SECRET, options);
   return token;
 }
 

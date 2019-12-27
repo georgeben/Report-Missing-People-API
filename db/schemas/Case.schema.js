@@ -86,6 +86,9 @@ const caseSchema = new Schema(
       ref: 'User',
       required: true,
     },
+    description: {
+      type: String,
+    },
     physicalInformation: {
       specialCharacteristics: {
         type: String,
@@ -107,7 +110,5 @@ const caseSchema = new Schema(
   },
   { timestamps: true },
 );
-
-// TODO: Create a pre-save hook to save firstname and lastname fields
 
 module.exports = caseSchema;
