@@ -37,32 +37,44 @@ async function checkForDuplicateCase(caseData) {
 /**
  * Retrieves the list of reported cases
  * @param {String} status - The status of the case: open, close or all
+ * @param {Number} offset - The number of documents to skip
+ * @param {Number} limit - The maximum number of documents to retrieve
+ * @param {Object} ipInfo - The user's location information
  * @returns {Array} cases - The list of reported cases
  */
-async function getCases(status, offset = 0, limit = 15) {
+async function getCases(status, offset = 0, limit = 15, ipInfo) {
   let cases;
-  const query = {};
+  let query = {};
   switch (status) {
     case 'all':
-      // cases = await CaseModel.find().lean().skip(offset).limit(limit);
       break;
     case 'closed':
-      // cases = await CaseModel.find({ solved: true }).lean();
       query.solved = true;
       break;
     default:
-      // cases = await CaseModel.find({ solved: false }).lean();
       query.solved = false;
       break;
+  }
+
+  if (ipInfo) {
+    query = {
+      ...query,
+      'addressLastSeen.location': {
+        $near: {
+          $geometry:
+          {
+            type: 'Point',
+            coordinates: [ipInfo.ll[1], ipInfo.ll[0]],
+          },
+        },
+      },
+    };
   }
 
   cases = await CaseModel.find(query)
     .skip(parseInt(offset))
     .limit(parseInt(limit))
-    .lean()
-    .sort({
-      updatedAt: -1,
-    });
+    .lean();
 
   return cases;
 }
