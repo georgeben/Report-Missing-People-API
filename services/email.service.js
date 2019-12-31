@@ -45,8 +45,6 @@ function getEmailHtml(type, token) {
                         font-size: 16px;
                         font-weight: bold;
                         cursor: pointer;" href='${FRONTEND_URL}/verify-email?token=${token}'>confirm email</a>
-                <p style="color: rgb(93, 93, 93); font-size: 17px; margin-top: 50px;">Once confirmed, you'll be able to log in to Barefoot Nomad with your new account.</p>
-                <p style="text-align: left; margin-left: 16px; margin-top: 20px; color: rgb(93, 93, 93);">Best wishes from barefoot nomad team</p>
               </div>
               </body>`;
     case 'newsletter-acknowledgement':
@@ -115,7 +113,6 @@ async function sendForgotPasswordMail(email) {
 async function sendNewsletterAcknowledgementEmail(email) {
   try {
     const token = await authHelper.signJWTToken({ email });
-    console.log('Newsletter token', token);
     const msg = {
       to: email,
       from: constants.FROM_EMAIL,
@@ -134,23 +131,41 @@ async function sendNewsletterAcknowledgementEmail(email) {
 }
 
 /**
+ * Generates the HTML for a case when sending daily/weekly newsletters
+ * @param {Object} caseData - Data about the case
+ * @returns {String} HTML email markup of the case
+ */
+function getCaseHTML(caseData) {
+  return `
+    <div>
+      <h1>${caseData.fullname}</h1>
+      <img src='${caseData.photoURL}' alt='Image of missing person'>
+      <p>${caseData.description}</p>
+      <a href='${FRONTEND_URL}/cases/${caseData.slug}'>View case</a>
+    </div>
+  `;
+}
+
+/**
  * Sends a daily newsletter listing all the reported cases that have been reported
  * the past day
  * @param {String} email - The email to send the mail to
  * @param {Array} cases - The array of cases that have been reported since the past day
  */
-async function sendNewsletter(email, cases, type) {
+async function sendNewsletter(emails, cases, type) {
   try {
-    const token = await authHelper.signJWTToken({ email });
-    let text = '';
-    for (let i = 0; i < cases.length; i++) {
-      text += cases[i].fullname;
+    // const token = await authHelper.signJWTToken({ email });
+    let html = `
+      <h1>The following people got missing in your area</h1>
+    `;
+    for (let i = 0; i < cases.length; i += 1) {
+      html += getCaseHTML(cases[i]);
     }
     let msg = {
-      to: email,
+      to: emails,
       from: constants.FROM_EMAIL,
       subject: `Reported cases of missing people for the past ${type === 'DAILY' ? 'day' : 'week'}`,
-      text,
+      html,
     };
     if (process.env.NODE_ENV !== 'production') {
       msg = {
@@ -166,6 +181,7 @@ async function sendNewsletter(email, cases, type) {
     sgMail.send(msg);
   } catch (error) {
     console.log(error);
+    // TODO Handle error
   }
 }
 

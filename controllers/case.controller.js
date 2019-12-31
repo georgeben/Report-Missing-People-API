@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
+const expressip = require('express-ip')();
 const { caseService, cloudinaryService } = require('../services');
 
 /**
@@ -62,8 +63,11 @@ async function createCase(req, res, next) {
  */
 async function getCases(req, res, next) {
   const { status, offset, limit } = req.query;
+  const xForwardedFor = (req.headers['x-forwarded-for'] || '').replace(/:\d+$/, '');
+  const ip = xForwardedFor || req.connection.remoteAddress;
+  const ipInfo = expressip.getIpInfo(ip);
   try {
-    const cases = await caseService.getCases(status, offset, limit);
+    const cases = await caseService.getCases(status, offset, limit, ipInfo);
     return res.status(200).json({
       data: cases,
     });
