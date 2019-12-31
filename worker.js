@@ -100,7 +100,6 @@ algoliaQueue.on('active', (job) => {
 });
 
 algoliaQueue.on('completed', (job, result) => {
-  const { email } = job.data;
   logger.log(
     'info',
     `🔍Job ${job.name}#${job.id} is completed 🚀🚀`,

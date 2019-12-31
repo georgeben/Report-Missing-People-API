@@ -89,7 +89,7 @@ async function getCasesFromDate(startDate) {
     createdAt: {
       $gt: startDate,
     },
-  });
+  }).lean();
   return cases;
 }
 
