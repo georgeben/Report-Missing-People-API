@@ -43,6 +43,11 @@ module.exports = {
       .trim()
       .required(),
   }),
+  verifyToken: Joi.object({
+    token: Joi.string()
+      .trim()
+      .required(),
+  }),
   googleSignIn: Joi.object({
     id_token: Joi.string()
       .trim()
@@ -249,5 +254,9 @@ module.exports = {
     email: Joi.string()
       .trim()
       .email({ minDomainSegments: 2 }),
+  }),
+  updatePassword: Joi.object({
+    currentPassword: Joi.string().min(4),
+    newPassword: Joi.string().min(4).required(),
   }),
 };

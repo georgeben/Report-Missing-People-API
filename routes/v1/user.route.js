@@ -17,6 +17,7 @@ router.put(
   validate(schemas.updateUserProfile),
   userController.updateUserProfile,
 );
-router.put('/email', validate(schemas.updateEmail), userController.updateEmail);
+router.put('/email', checkAuth, validate(schemas.updateEmail), userController.updateEmail);
+router.put('/password', checkAuth, validate(schemas.updatePassword), userController.updatePassword);
 
 module.exports = router;

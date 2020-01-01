@@ -13,7 +13,7 @@ cron.schedule('0 8 * * *', async () => {
   const startDate = moment().subtract(1, 'days').toDate();
 
   // Fetch all the case that where reported starting from start date
-  let casesReportedFromPastDay = await caseService.getCasesFromDate(startDate);
+  const casesReportedFromPastDay = await caseService.getCasesFromDate(startDate);
   processDailyNewsletterEmail(dailySubscribers, casesReportedFromPastDay);
 });
 
@@ -26,6 +26,6 @@ cron.schedule('0 8 * * 1', async () => {
   const startDate = moment().subtract(7, 'days').toDate();
 
   // Fetch all the case that where reported starting from start date
-  let casesReportedFromPastWeek = await caseService.getCasesFromDate(startDate);
+  const casesReportedFromPastWeek = await caseService.getCasesFromDate(startDate);
   processWeeklyNewsletterEmail(weeklySubscribers, casesReportedFromPastWeek);
 });

@@ -117,6 +117,45 @@ async function updateEmail(req, res, next) {
 }
 
 /**
+ * Route handler for updating a user's password
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - Next middleware
+ */
+async function updatePassword(req, res, next) {
+  try {
+    const { email } = req.user;
+    const { currentPassword, newPassword } = req.body;
+    // Fetch the password of the user
+    const user = await userService.findUserByEmail(email);
+    if (user.password) {
+      if (!currentPassword) {
+        return res.status(400).json({
+          error: 'Invalid credentials',
+        });
+      }
+      const match = await authHelper.comparePassword(currentPassword, user.password);
+      if (!match) {
+        return res.status(400).json({
+          error: 'Invalid credentials',
+        });
+      }
+    }
+
+    const hashedPassword = await authHelper.generatePasswordHash(newPassword);
+    await userService.resetPassword(email, hashedPassword);
+    return res.status(200).json({
+      data: {
+        message: 'Successfully updated password',
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // TODO Handle error
+  }
+}
+
+/**
  * Route handler for retrieving cases a user has reported
  * @param {Object} req - The request object
  * @param {Object} res - The response object
@@ -142,4 +181,5 @@ module.exports = {
   getUserData,
   updateEmail,
   getUserCases,
+  updatePassword,
 };

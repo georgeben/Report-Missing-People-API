@@ -27,6 +27,16 @@ emailQueue.process(constants.JOB_NAMES.CONFIRM_EMAIL, async (job, done) => {
 });
 
 /**
+ * Job handler for forgot password emails
+ */
+emailQueue.process(constants.JOB_NAMES.FORGOT_PASSWORD_MAIL, async (job, done) => {
+  logger.log('info', `📧Received ${job.name}#${job.id}`);
+  const { email } = job.data;
+  await emailService.sendForgotPasswordMail(email);
+  done();
+});
+
+/**
  * Job handler for sending newsletter acknowledgement emails
  */
 emailQueue.process(
@@ -90,7 +100,6 @@ algoliaQueue.on('active', (job) => {
 });
 
 algoliaQueue.on('completed', (job, result) => {
-  const { email } = job.data;
   logger.log(
     'info',
     `🔍Job ${job.name}#${job.id} is completed 🚀🚀`,

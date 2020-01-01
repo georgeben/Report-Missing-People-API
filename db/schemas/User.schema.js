@@ -86,6 +86,8 @@ userSchema.pre('save', function (next) {
       // The profile is complete
       this.completedProfile = true;
     }
+  } else {
+    this.completedProfile = false;
   }
   next();
 });

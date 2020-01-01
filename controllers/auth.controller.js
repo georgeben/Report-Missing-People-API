@@ -1,5 +1,5 @@
 const path = require('path');
-const { processConfirmEmail } = require('../background-jobs');
+const { processConfirmEmail, processForgotPasswordMail } = require('../background-jobs');
 
 const HOME_DIR = path.join(__dirname, '..');
 
@@ -378,7 +378,6 @@ async function verifyEmail(req, res, next) {
     const updatedUser = await userService.verifyUserEmail(email);
     // Regenerate a new token
     const updatedToken = await generateJWTToken(updatedUser);
-    console.log({ updatedToken });
 
     return res.status(200).json({
       data: {
@@ -429,6 +428,71 @@ async function resendVerificationEmail(req, res, next) {
   }
 }
 
+/**
+ * Route handler for sending reset password mail
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next
+ */
+
+async function forgotPassword(req, res, next) {
+  try {
+    const { email } = req.body;
+    const existingAccount = await userService.findUserByEmail(email, false);
+    if (!existingAccount) {
+      return res.status(404).json({
+        error: 'This account does not exist',
+      });
+    }
+
+    processForgotPasswordMail(email);
+
+    return res.status(200).json({
+      data: {
+        message: 'Password reset mail has been sent to you',
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // TODO: Handle error
+  }
+}
+
+/**
+ * Route handler for resetting a user's password
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next
+ */
+async function resetPassword(req, res, next) {
+  try {
+    const { token, password } = req.body;
+    const { email } = await authHelper.decodeJWTToken(token);
+    const hashedPassword = await authHelper.generatePasswordHash(password);
+
+    // Change the password of whoever has that email
+    await userService.resetPassword(email, hashedPassword);
+    return res.status(200).json({
+      data: {
+        message: 'Successfully reset password',
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(400).json({
+        error: 'Password reset failed',
+      });
+    }
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({
+        error: 'Password reset link has expired',
+      });
+    }
+    // TODO Handle error
+  }
+}
+
 module.exports = {
   googleSignIn,
   facebookSignIn,
@@ -438,4 +502,6 @@ module.exports = {
   signInUser,
   verifyEmail,
   resendVerificationEmail,
+  forgotPassword,
+  resetPassword,
 };

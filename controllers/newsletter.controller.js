@@ -8,15 +8,15 @@ const { processNewsletterAcknowledgementEmail } = require('../background-jobs');
  */
 async function addSubscription(req, res, next) {
   try {
-    let { email, frequency, state, country } = req.body;
-    let existingSubscriber = await newsletterService.getSubscriber(email);
+    const { email, frequency, address } = req.body;
+    const existingSubscriber = await newsletterService.getSubscriber(email);
     if (existingSubscriber) {
       return res.status(409).json({
         error: 'This email has already subscribed',
       });
     }
-    let subscriptionData = { email, frequency, state, country };
-    let newSubscription = await newsletterService.addNewSubscription(
+    const subscriptionData = { email, frequency, address };
+    const newSubscription = await newsletterService.addNewSubscription(
       subscriptionData,
     );
     // Add the newsletter subscription acknowledgement email job to the queue
@@ -51,21 +51,29 @@ async function updateSubscription(req, res, next) {
    * the settings
    */
   try {
-    let { email } = req.user;
+    const { email } = req.user;
     console.log('User trying to update subscription settings', email);
-    let { newEmail, frequency, state, country } = req.body;
-    let existingSubscription = await newsletterService.getSubscriber(email);
+    const {
+      newEmail, frequency, address,
+    } = req.body;
+    const existingSubscription = await newsletterService.getSubscriber(email);
     if (!existingSubscription) {
       return res.status(404).json({
         error: 'Email not registered yet',
       });
     }
 
-    let updatedSubscription = await newsletterService.updateSubscription(email, {
+    const emailExists = await newsletterService.getSubscriber(newEmail);
+    if (emailExists) {
+      return res.status(409).json({
+        error: 'This email has already subscribed',
+      });
+    }
+
+    const updatedSubscription = await newsletterService.updateSubscription(email, {
       newEmail,
       frequency,
-      state,
-      country,
+      address,
     });
 
     // If newEmail, send acknowledgement email to the new email address
@@ -108,8 +116,8 @@ async function getAllSubscribers(req, res, next) {
  */
 async function unsubscribeFromNewsletter(req, res, next) {
   try {
-    let { email } = req.user;
-    let existingSubscription = await newsletterService.getSubscriber(email);
+    const { email } = req.user;
+    const existingSubscription = await newsletterService.getSubscriber(email);
     if (!existingSubscription) {
       return res.status(404).json({
         error: 'Email not registered yet',

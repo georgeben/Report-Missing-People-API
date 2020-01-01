@@ -6,11 +6,12 @@ const HOME_DIR = path.join(__dirname, '..', '..');
 
 const { caseController } = require(path.join(HOME_DIR, 'controllers'));
 const {
-  checkAuth, checkProfileStatus, validate, upload,
-} = require(path.join(
-  HOME_DIR,
-  'middlewares',
-));
+  checkAuth,
+  checkProfileStatus,
+  validate,
+  upload,
+  validateRecaptcha,
+} = require(path.join(HOME_DIR, 'middlewares'));
 const schemas = require(path.join(HOME_DIR, 'schemas'));
 
 router.get('/', caseController.getCases);
@@ -24,6 +25,7 @@ router.post(
   checkAuth,
   checkProfileStatus,
   upload('casePhoto'),
+  validateRecaptcha,
   validate(schemas.createCase),
   caseController.createCase,
 );
@@ -33,6 +35,7 @@ router.put(
   checkProfileStatus,
   validate(schemas.checkForSlug, 'params'),
   upload('casePhoto'),
+  validateRecaptcha,
   validate(schemas.updateCase),
   caseController.updateCase,
 );
