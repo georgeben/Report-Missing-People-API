@@ -29,6 +29,9 @@ router.post(
   validate(schemas.createCase),
   caseController.createCase,
 );
+
+router.put('/:slug/status', checkAuth, checkProfileStatus, caseController.updateCaseStatus);
+
 router.put(
   '/:slug',
   checkAuth,

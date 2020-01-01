@@ -93,9 +93,14 @@ async function getCasesFromDate(startDate) {
   return cases;
 }
 
+/**
+ * Retrieves the list of cases reported by a user
+ * @param {String} id - The user's ID
+ */
 async function getCaseByUser(id) {
   const cases = await CaseModel.find({
     reportedBy: id,
+    solved: false,
   }).sort({
     updatedAt: -1,
   });
@@ -134,7 +139,6 @@ async function updateCase(
     eventCircumstances,
     physicalInformation,
     lastSeenClothing,
-    solved,
   },
 ) {
   // TODO: Refactor this method
@@ -153,10 +157,22 @@ async function updateCase(
   if (eventCircumstances) reportedCase.eventDescription = eventCircumstances;
   if (physicalInformation) reportedCase.physicalInformation = physicalInformation;
   if (lastSeenClothing) reportedCase.lastSeenClothing = lastSeenClothing;
-  if (solved) reportedCase.solved = solved;
 
   const updatedCase = await reportedCase.save();
   return updatedCase;
+}
+
+/**
+ * Updates the status of a reported cases
+ * @param {String} slug - The case's slug
+ * @param {Boolean} solved - The status of the case. true for solved (closed) and false for unsolved (open)
+ * @returns {Object} -The reported case
+ */
+async function updateCaseStatus(slug, solved) {
+  let reportedCase = await findCaseBySlug(slug);
+  reportedCase.solved = solved;
+  reportedCase = await reportedCase.save();
+  return reportedCase;
 }
 
 module.exports = {
@@ -167,4 +183,5 @@ module.exports = {
   updateCase,
   getCasesFromDate,
   getCaseByUser,
+  updateCaseStatus,
 };

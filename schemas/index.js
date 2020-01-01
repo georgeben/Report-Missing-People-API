@@ -226,7 +226,6 @@ module.exports = {
       weight: Joi.number().integer(),
       healthInformation: Joi.string().trim(),
     }),
-    solved: Joi.boolean(),
   }),
   newsletterSubscription: Joi.object({
     email: Joi.string()
@@ -237,9 +236,27 @@ module.exports = {
       .trim()
       .valid('DAILY', 'WEEKLY')
       .required(),
-    country: Joi.string().trim(),
-    state: Joi.string().trim(),
-  }).with('state', 'country'),
+    address: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }),
+  }),
   updateNewsletterSubscription: Joi.object({
     newEmail: Joi.string()
       .trim()
@@ -247,9 +264,27 @@ module.exports = {
     frequency: Joi.string()
       .trim()
       .valid('DAILY', 'WEEKLY'),
-    country: Joi.string().trim(),
-    state: Joi.string().trim(),
-  }).with('state', 'country'),
+    address: Joi.object({
+      location: Joi.object({
+        type: Joi.string()
+          .trim()
+          .required(),
+        coordinates: Joi.array()
+          .items(Joi.number())
+          .max(2)
+          .required(),
+      }),
+      formatted_address: Joi.string()
+        .trim()
+        .required(),
+      country: Joi.string()
+        .trim()
+        .required(),
+      state: Joi.string()
+        .trim()
+        .required(),
+    }),
+  }),
   updateEmail: Joi.object({
     email: Joi.string()
       .trim()

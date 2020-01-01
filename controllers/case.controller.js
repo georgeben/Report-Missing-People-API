@@ -159,9 +159,44 @@ async function updateCase(req, res, next) {
   }
 }
 
+/**
+ * Route handler for updating the status of a reported case
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - Next middleware
+ */
+async function updateCaseStatus(req, res, next) {
+  try {
+    const { slug } = req.params;
+    const { id } = req.user;
+    const { solved } = req.body;
+    const reportedCase = await caseService.findCaseBySlug(slug);
+    if (!reportedCase) {
+      return res.status(404).json({
+        error: 'Case not found',
+      });
+    }
+    if (reportedCase.reportedBy.toString() !== id) {
+      return res.status(403).json({
+        error: 'Operation not permitted',
+      });
+    }
+    const result = await caseService.updateCaseStatus(slug, solved);
+    return res.status(200).json({
+      data: {
+        case: result,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // TODO Handle error
+  }
+}
+
 module.exports = {
   createCase,
   getCases,
   getSingleCase,
   updateCase,
+  updateCaseStatus,
 };
