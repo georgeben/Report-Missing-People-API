@@ -162,8 +162,8 @@ newsletterQueue.on('failed', (job, error) => {
  */
 twitterQueue.process(constants.JOB_NAMES.TWEET_NEWCASE, async (job, done) => {
   logger.log('info', `🐦Received ${job.name}#${job.id}`);
-  const { message } = job.data;
-  twitterBot.tweetNewCase(message);
+  const { caseData } = job.data;
+  twitterBot.tweetNewCase(caseData);
 
   done();
 });

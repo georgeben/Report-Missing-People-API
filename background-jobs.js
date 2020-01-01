@@ -32,8 +32,7 @@ async function processNewCaseEvent(caseData) {
    * and the case is posted on Twitter
    */
   algoliaQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData });
-  // TODO: Send the real case data
-  twitterQueue.add(constants.JOB_NAMES.TWEET_NEWCASE, { message: 'Merry Christmas' });
+  twitterQueue.add(constants.JOB_NAMES.TWEET_NEWCASE, { caseData });
 }
 
 /**
