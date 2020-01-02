@@ -292,6 +292,14 @@ module.exports = {
   }),
   updatePassword: Joi.object({
     currentPassword: Joi.string().min(4),
-    newPassword: Joi.string().min(4).required(),
+    newPassword: Joi.string()
+      .min(4)
+      .required(),
+  }),
+  checkForEmail: Joi.object({
+    email: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 })
+      .required(),
   }),
 };

@@ -1,13 +1,12 @@
 const passport = require('passport');
-const FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookTokenStrategy = require('passport-facebook-token');
 
 passport.use(
-  new FacebookStrategy(
+  'facebook',
+  new FacebookTokenStrategy(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-      profileFields: ['id', 'emails', 'name', 'picture.type(large)'],
     },
     ((accessToken, refreshToken, profile, done) => done(null, profile)),
   ),

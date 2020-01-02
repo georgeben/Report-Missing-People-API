@@ -203,14 +203,11 @@ async function facebookSignIn(req, res, next) {
     }
     if (existingUser) {
       // User has already registered, sign user in
-      existingUser = existingUser.toJSON();
       const token = await generateJWTToken(existingUser);
       return res.status(200).json({
         data: {
-          user: {
-            ...existingUser,
-            token,
-          },
+          user: existingUser,
+          token,
         },
       });
     }
@@ -229,14 +226,11 @@ async function facebookSignIn(req, res, next) {
     let createdUser = await userService.createUser(userData);
 
     const token = await generateJWTToken(createdUser);
-    createdUser = createdUser.toJSON();
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        user: {
-          ...createdUser,
-          token,
-        },
+        user: createdUser,
+        token,
       },
     });
   } catch (error) {
