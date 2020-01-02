@@ -174,6 +174,32 @@ async function updateCaseStatus(slug, solved) {
   return reportedCase;
 }
 
+/**
+ * Retrieves a list of cases related to a case
+ * @param {String} slug - The slug of the case
+ * @param {Number} limit - The number of related cases to fetch
+ */
+async function findRelatedCases(slug, limit = 2) {
+  let existingCase = await findCaseBySlug(slug);
+  if (!existingCase) {
+    return [];
+  }
+  let relatedCases = CaseModel.find({
+    'addressLastSeen.location': {
+      $near: {
+        $geometry: existingCase.addressLastSeen.location,
+      },
+    },
+    slug: {
+      $ne: slug,
+    },
+  })
+    .limit(parseInt(limit))
+    .lean();
+
+  return relatedCases;
+}
+
 module.exports = {
   createCase,
   checkForDuplicateCase,
@@ -183,4 +209,5 @@ module.exports = {
   getCasesFromDate,
   getCaseByUser,
   updateCaseStatus,
+  findRelatedCases,
 };

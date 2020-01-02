@@ -15,6 +15,8 @@ const {
 const schemas = require(path.join(HOME_DIR, 'schemas'));
 
 router.get('/', caseController.getCases);
+router.get('/:slug/related', validate(schemas.checkForSlug, 'params'), caseController.getRelatedCases);
+
 router.get(
   '/:slug',
   validate(schemas.checkForSlug, 'params'),

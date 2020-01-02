@@ -104,6 +104,27 @@ async function getSingleCase(req, res, next) {
 }
 
 /**
+ * Route handler for retrieving cases related to a case
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - Next middleware
+ */
+async function getRelatedCases(req, res, next) {
+  try {
+    const { slug } = req.params;
+    const relatedCases = await caseService.findRelatedCases(slug);
+    return res.status(200).json({
+      data: {
+        cases: relatedCases,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    // TODO Handle error
+  }
+}
+
+/**
  * Route handler for updating a reported case
  * @param {Object} req - The request object
  * @param {Object} res - The response object
@@ -199,4 +220,5 @@ module.exports = {
   getSingleCase,
   updateCase,
   updateCaseStatus,
+  getRelatedCases,
 };
