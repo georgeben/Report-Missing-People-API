@@ -55,8 +55,7 @@ async function getCases(status, offset = 0, limit = 15, ipInfo) {
       query.solved = false;
       break;
   }
-
-  if (ipInfo) {
+  if (ipInfo && !ipInfo.error) {
     query = {
       ...query,
       'addressLastSeen.location': {

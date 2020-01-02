@@ -1,5 +1,6 @@
 const express = require('express');
 const { authHelper } = require('../utils/');
+const { userService } = require('../services');
 
 const router = express.Router();
 
@@ -11,6 +12,12 @@ router.use(async (req, res, next) => {
   try {
     const requestToken = authorizationHeader.split('Bearer').pop().trim();
     const decoded = await authHelper.decodeJWTToken(requestToken);
+    const user = await userService.findUserByID(decoded.id);
+    if (!user) {
+      return res.status(401).json({
+        error: 'Invalid credentials',
+      });
+    }
     req.user = decoded;
     next();
   } catch (error) {

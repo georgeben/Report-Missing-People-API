@@ -100,6 +100,12 @@ async function signInUser(req, res, next) {
       });
     }
 
+    if (!existingUser.password) {
+      return res.status(400).json({
+        error: 'Invalid credentials',
+      });
+    }
+
     // Check if passwords match
     const match = await authHelper.comparePassword(
       password,
@@ -138,20 +144,17 @@ async function signInUser(req, res, next) {
 async function googleSignIn(req, res, next) {
   const { id_token } = req.body;
   try {
-    // Retreieve user data
+    // Retrieve user data
     const payload = await oauthService.verifyGoogleIDToken(id_token);
 
     // Check if user exists
     let existingUser = await userService.findUserByEmail(payload.email);
     if (existingUser) {
-      existingUser = existingUser.toJSON();
       const token = await generateJWTToken(existingUser);
       return res.status(200).json({
         data: {
-          user: {
-            ...existingUser,
-            token,
-          },
+          user: existingUser,
+          token,
         },
       });
     }
@@ -167,15 +170,11 @@ async function googleSignIn(req, res, next) {
     let createdUser = await userService.createUser(userData);
 
     const token = await generateJWTToken(createdUser);
-    createdUser = createdUser.toJSON();
-
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        user: {
-          ...createdUser,
-          token,
-        },
+        user: createdUser,
+        token,
       },
     });
   } catch (error) {
@@ -210,14 +209,11 @@ async function facebookSignIn(req, res, next) {
     }
     if (existingUser) {
       // User has already registered, sign user in
-      existingUser = existingUser.toJSON();
       const token = await generateJWTToken(existingUser);
       return res.status(200).json({
         data: {
-          user: {
-            ...existingUser,
-            token,
-          },
+          user: existingUser,
+          token,
         },
       });
     }
@@ -236,14 +232,11 @@ async function facebookSignIn(req, res, next) {
     let createdUser = await userService.createUser(userData);
 
     const token = await generateJWTToken(createdUser);
-    createdUser = createdUser.toJSON();
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        user: {
-          ...createdUser,
-          token,
-        },
+        user: createdUser,
+        token,
       },
     });
   } catch (error) {
@@ -269,10 +262,11 @@ async function getTwitterAuthorization(req, res, next) {
         error: 'Something went wrong',
       });
     }
-    return res.redirect(
-      302,
-      `https://api.twitter.com/oauth/authorize?oauth_token=${twitterRequestToken}`,
-    );
+    return res.status(200).json({
+      data: {
+        redirectUrl: `https://api.twitter.com/oauth/authorize?oauth_token=${twitterRequestToken}`,
+      },
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -293,7 +287,7 @@ async function twitterSignIn(req, res, next) {
     const {
       oauth_token: requestToken,
       oauth_verifier: oauthVerifier,
-    } = req.query;
+    } = req.body;
     const twitterData = await oauthService.getTwitterUserData(
       requestToken,
       oauthVerifier,
@@ -310,13 +304,10 @@ async function twitterSignIn(req, res, next) {
     if (existingUser) {
       // Sign the user in
       const token = await generateJWTToken(existingUser);
-      existingUser = existingUser.toJSON();
       return res.status(200).json({
         data: {
-          user: {
-            ...existingUser,
-            token,
-          },
+          user: existingUser,
+          token,
         },
       });
     }
@@ -325,21 +316,19 @@ async function twitterSignIn(req, res, next) {
       fullname: twitterData.name,
       photoURL: twitterData.profile_image_url_https,
       twitterID: twitterData.id,
+      verifiedEmail: true,
     };
 
     if (twitterEmail) userData.email = twitterEmail;
     let createdUser = await userService.createUser(userData);
 
     const token = await generateJWTToken(createdUser);
-    createdUser = createdUser.toJSON();
 
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        user: {
-          ...createdUser,
-          token,
-        },
+        user: createdUser,
+        token,
       },
     });
   } catch (error) {

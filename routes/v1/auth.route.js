@@ -19,13 +19,8 @@ router.post(
   authController.googleSignIn,
 );
 
-router.get(
+router.post(
   '/facebook',
-  passport.authenticate('facebook', { scope: ['email'] }),
-);
-
-router.get(
-  '/facebook/callback',
   passport.authenticate('facebook', {
     session: false,
   }),
@@ -33,11 +28,15 @@ router.get(
 );
 
 router.get('/twitter', authController.getTwitterAuthorization);
-router.get('/twitter/callback', authController.twitterSignIn);
+router.post('/twitter/callback', authController.twitterSignIn);
 
 router.put('/verify-email', validate(schemas.verifyEmail), authController.verifyEmail);
 router.post('/resend-verification-email', checkAuth, authController.resendVerificationEmail);
 
-router.post('/forgot-password', authController.forgotPassword);
+router.post(
+  '/forgot-password',
+  validate(schemas.checkForEmail),
+  authController.forgotPassword,
+);
 router.put('/reset-password', validate(schemas.verifyToken), authController.resetPassword);
 module.exports = router;
