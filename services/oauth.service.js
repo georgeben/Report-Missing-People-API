@@ -25,11 +25,11 @@ const signInWithTwitter = twitterSignIn({
 async function verifyGoogleIDToken(id_token) {
   const { CLIENT_ID } = process.env;
   const client = new OAuth2Client(CLIENT_ID);
-  const ticket = await client.verifyIdToken({
+  const token = await client.verifyIdToken({
     idToken: id_token,
     audience: CLIENT_ID,
   });
-  const payload = ticket.getPayload();
+  const payload = token.getPayload();
   return payload;
 }
 

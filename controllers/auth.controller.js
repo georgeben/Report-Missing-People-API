@@ -144,14 +144,11 @@ async function googleSignIn(req, res, next) {
     // Check if user exists
     let existingUser = await userService.findUserByEmail(payload.email);
     if (existingUser) {
-      existingUser = existingUser.toJSON();
       const token = await generateJWTToken(existingUser);
       return res.status(200).json({
         data: {
-          user: {
-            ...existingUser,
-            token,
-          },
+          user: existingUser,
+          token,
         },
       });
     }
@@ -167,15 +164,11 @@ async function googleSignIn(req, res, next) {
     let createdUser = await userService.createUser(userData);
 
     const token = await generateJWTToken(createdUser);
-    createdUser = createdUser.toJSON();
-
     return res.status(201).json({
       data: {
         message: 'Successfully created user',
-        user: {
-          ...createdUser,
-          token,
-        },
+        user: createdUser,
+        token,
       },
     });
   } catch (error) {
