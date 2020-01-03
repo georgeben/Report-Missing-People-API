@@ -23,6 +23,14 @@ async function processForgotPasswordMail(email) {
 }
 
 /**
+ * Places a message from a user via the contact us form on the background queue
+ * @param {Object} data - The contact details
+ */
+async function processContactMessage(data) {
+  emailQueue.add(constants.JOB_NAMES.CONTACT_US_MESSAGE, { data });
+}
+
+/**
  * Places a newsletter acknowledgement email job on the background queue
  * @param {String} email - The email to send the mail to
  */
@@ -78,4 +86,5 @@ module.exports = {
   processCaseUpdateEvent,
   processDailyNewsletterEmail,
   processWeeklyNewsletterEmail,
+  processContactMessage,
 };

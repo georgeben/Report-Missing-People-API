@@ -20,6 +20,7 @@ module.exports = {
     DAILY_NEWSLETTER: 'daily-newsletter',
     WEEKLY_NEWSLETTER: 'weekly-newsletter',
     TWEET_NEWCASE: 'tweet-new-case',
+    CONTACT_US_MESSAGE: 'contact-us-message',
   },
   FROM_EMAIL: 'no-reply@report-missing-people.com',
 };

@@ -185,9 +185,30 @@ async function sendNewsletter(emails, cases, type) {
   }
 }
 
+/**
+ * Sends an email submitted through the contact form
+ * @param {Object} messageDetails - An object containing {fullname, email, message}
+ */
+async function sendContactUsMessage({ fullname, email, message }) {
+  try {
+    const msg = {
+      to: process.env.CONTACT_EMAIL,
+      from: email,
+      subject: `Message from ${fullname} via Help find me`,
+      text: message,
+    };
+
+    sgMail.send(msg);
+  } catch (error) {
+    console.log(error);
+    // TODO Handle error
+  }
+}
+
 module.exports = {
   sendConfirmationEmail,
   sendNewsletterAcknowledgementEmail,
   sendNewsletter,
   sendForgotPasswordMail,
+  sendContactUsMessage,
 };

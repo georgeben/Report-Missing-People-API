@@ -302,4 +302,18 @@ module.exports = {
       .email({ minDomainSegments: 2 })
       .required(),
   }),
+  contactMessage: Joi.object({
+    email: Joi.string()
+      .trim()
+      .email({ minDomainSegments: 2 })
+      .required(),
+    fullname: Joi.string()
+      .trim()
+      .min(2)
+      .required(),
+    message: Joi.string()
+      .trim()
+      .min(70)
+      .required(),
+  }),
 };

@@ -37,6 +37,16 @@ emailQueue.process(constants.JOB_NAMES.FORGOT_PASSWORD_MAIL, async (job, done) =
 });
 
 /**
+ * Job handler for messages sent via the contact us form
+ */
+emailQueue.process(constants.JOB_NAMES.CONTACT_US_MESSAGE, async (job, done) => {
+  logger.log('info', `📧Received ${job.name}#${job.id}`);
+  const { data } = job.data;
+  await emailService.sendContactUsMessage(data);
+  done();
+});
+
+/**
  * Job handler for sending newsletter acknowledgement emails
  */
 emailQueue.process(
