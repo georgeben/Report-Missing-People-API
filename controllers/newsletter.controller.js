@@ -25,8 +25,7 @@ async function addSubscription(req, res, next) {
       data: newSubscription,
     });
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return next(error);
   }
 }
 
@@ -37,22 +36,8 @@ async function addSubscription(req, res, next) {
  * @param {Function} next - The next middleware
  */
 async function updateSubscription(req, res, next) {
-  /**
-   * How can someone update their newsletter subscription?
-   * To subscribe to the newsletter, they don't need to register, they
-   * can just provide their email and frequency settings.
-   * A user would see the link to update subscription settings in the newsletters
-   * sent to their inbox. When they click update subscription settings,
-   * how do you know which user is trying to update their settings?
-   * To do this, I encode the email a user subscribes with into a JWT, add it
-   * to the update subscription link in the email, then that
-   * JWT is sent as part of the request to update their subscription settings,
-   * I can then decode the JWT, check that the email has subscribed, then update
-   * the settings
-   */
   try {
     const { email } = req.user;
-    console.log('User trying to update subscription settings', email);
     const {
       newEmail, frequency, address,
     } = req.body;
@@ -86,7 +71,7 @@ async function updateSubscription(req, res, next) {
       data: updatedSubscription,
     });
   } catch (error) {
-    console.log(error);
+    return next(error);
   }
 }
 
@@ -103,8 +88,7 @@ async function getAllSubscribers(req, res, next) {
       data: subscribers,
     });
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return next(error);
   }
 }
 
@@ -128,8 +112,7 @@ async function unsubscribeFromNewsletter(req, res, next) {
       data: 'Successfully unsubscribed',
     });
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return next(error);
   }
 }
 

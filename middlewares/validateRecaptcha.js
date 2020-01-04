@@ -31,8 +31,7 @@ router.use(async (req, res, next) => {
   request.post(verifyCaptchaOptions, async (error, response, body) => {
     if (error) {
       if (req.file) await fs.unlinkAsync(req.file.path);
-      return console.log(error);
-      // TODO Handle error
+      return next(error);
     }
 
     if (!body.success) {

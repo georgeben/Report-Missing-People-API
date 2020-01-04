@@ -8,7 +8,7 @@ const cloudinary = require('../config/cloudinary');
 async function uploadImage(path, directory) {
   let image = await cloudinary.uploader.upload(path, {
     folder: `report_missing_people/${directory}/`,
-    width: 260,
+    width: 520,
     crop: 'scale',
   });
   return image;

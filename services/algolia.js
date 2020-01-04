@@ -1,4 +1,6 @@
+/* eslint-disable consistent-return */
 const algolia = require('algoliasearch');
+const { logger, handleError } = require('../utils');
 
 const client = algolia(process.env.ALGOLIA_APPID, process.env.ALGOLIA_APIKEY);
 const casesIndex = client.initIndex(process.env.CASE_INDEX || 'dev_CASES');
@@ -13,8 +15,8 @@ async function addObject(data) {
     algoliaObject.objectID = data._id;
     await casesIndex.addObject(algoliaObject);
   } catch (error) {
-    // TODO: How to handle error when an algolia operation fails
-    console.log(error);
+    logger.log('error', `Failed to add object ${data._id} to algolia`, error);
+    return handleError(error);
   }
 }
 
@@ -34,7 +36,8 @@ async function updateObject(data) {
     algoliaObject.slug = caseData.slug;
     await casesIndex.partialUpdateObject(algoliaObject);
   } catch (error) {
-    console.log({ error });
+    logger.log('error', `Failed to update object ${caseData._id} to algolia`, error);
+    return handleError(error);
   }
 }
 

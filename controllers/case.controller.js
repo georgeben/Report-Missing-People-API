@@ -40,18 +40,14 @@ async function createCase(req, res, next) {
 
     let createdCase = await caseService.createCase(caseData);
     createdCase = createdCase.toJSON();
-    // TODO: Probably call a service to tweet the case
 
-    res.status(201).json({
+    return res.status(201).json({
       data: {
         ...createdCase,
       },
     });
-
-    // TODO: Send acknowledgement email to the user creating the case
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return next(error);
   }
 }
 
@@ -72,8 +68,7 @@ async function getCases(req, res, next) {
       data: cases,
     });
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return next(error);
   }
 }
 
@@ -99,7 +94,7 @@ async function getSingleCase(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
+    return next(error);
   }
 }
 
@@ -119,8 +114,7 @@ async function getRelatedCases(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    return next(error);
   }
 }
 
@@ -175,8 +169,7 @@ async function updateCase(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return next(error);
   }
 }
 
@@ -209,8 +202,7 @@ async function updateCaseStatus(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    return next(error);
   }
 }
 

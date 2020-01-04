@@ -1,6 +1,5 @@
 const { OAuth2Client } = require('google-auth-library');
 const twitterSignIn = require('twittersignin');
-const Twit = require('twit');
 const redis = require('../config/redis');
 
 const {
@@ -34,7 +33,7 @@ async function verifyGoogleIDToken(id_token) {
 }
 
 /**
- * Retreives the request token from the Twitter API, necessary
+ * Retrieves the request token from the Twitter API, necessary
  * for Twitter sign in
  * @returns {String} requestToken - The request token
  */

@@ -7,15 +7,19 @@ const { processContactMessage } = require('../background-jobs');
  * @param {Function} next - Next middleware
  */
 async function sendContactMessage(req, res, next) {
-  const { email, fullname, message } = req.body;
-  const data = { email, fullname, message };
-  processContactMessage(data);
-  return res.status(200).json({
-    data: {
-      message: 'Thank you for your response',
-    },
-  });
-};
+  try {
+    const { email, fullname, message } = req.body;
+    const data = { email, fullname, message };
+    processContactMessage(data);
+    return res.status(200).json({
+      data: {
+        message: 'Thank you for your response',
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
 
 module.exports = {
   sendContactMessage,

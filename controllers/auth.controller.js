@@ -3,7 +3,7 @@ const { processConfirmEmail, processForgotPasswordMail } = require('../backgroun
 
 const HOME_DIR = path.join(__dirname, '..');
 
-const { logger, authHelper } = require(path.join(HOME_DIR, 'utils'));
+const { authHelper } = require(path.join(HOME_DIR, 'utils'));
 const { oauthService, userService, emailService } = require(path.join(HOME_DIR, 'services'));
 
 /**
@@ -76,10 +76,7 @@ async function signUpUser(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: 'Something went wrong',
-    });
+    return next(error);
   }
 }
 
@@ -90,8 +87,8 @@ async function signUpUser(req, res, next) {
  * @param {function} next
  */
 async function signInUser(req, res, next) {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
     // Check if user exists
     let existingUser = await userService.findUserByEmail(email);
     if (!existingUser) {
@@ -127,11 +124,7 @@ async function signInUser(req, res, next) {
       },
     });
   } catch (error) {
-    console.log('Boom', error);
-    // Handle error
-    return res.status(500).json({
-      error: 'Something bad happened',
-    });
+    return next(error);
   }
 }
 
@@ -178,13 +171,7 @@ async function googleSignIn(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    logger.log('error', 'Shit happens', {
-      error,
-    });
-    return res.status(500).json({
-      error: 'I think I fucked up',
-    });
+    return next(error);
   }
 }
 
@@ -240,10 +227,7 @@ async function facebookSignIn(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: 'Something went wrong',
-    });
+    return next(error);
   }
 }
 
@@ -268,10 +252,7 @@ async function getTwitterAuthorization(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: 'Something went wrong',
-    });
+    return next(error);
   }
 }
 
@@ -332,11 +313,7 @@ async function twitterSignIn(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    logger.log('error', error);
-    return res.status(500).json({
-      error: 'Something went wrong',
-    });
+    return next(error);
   }
 }
 
@@ -375,13 +352,7 @@ async function verifyEmail(req, res, next) {
       },
     });
   } catch (error) {
-    console.log('Boom', error);
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(400).json({
-        error: 'Email verification failed',
-      });
-    }
-    // TODO: Handle error
+    return next(error);
   }
 }
 
@@ -412,8 +383,7 @@ async function resendVerificationEmail(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // Handle error
+    return next(error);
   }
 }
 
@@ -442,8 +412,7 @@ async function forgotPassword(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return next(error);
   }
 }
 
@@ -467,7 +436,6 @@ async function resetPassword(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
     if (error.name === 'JsonWebTokenError') {
       return res.status(400).json({
         error: 'Password reset failed',
@@ -478,7 +446,7 @@ async function resetPassword(req, res, next) {
         error: 'Password reset link has expired',
       });
     }
-    // TODO Handle error
+    return next(error);
   }
 }
 

@@ -1,4 +1,6 @@
 const Bull = require('bull');
+require('dotenv').config();
+require('./config/sentry');
 const { logger } = require('./utils');
 const constants = require('./constants');
 const {

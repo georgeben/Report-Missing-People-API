@@ -1,5 +1,7 @@
+/* eslint-disable consistent-return */
 const Twit = require('twit');
 const axios = require('axios');
+const { handleError, logger } = require('../utils');
 require('dotenv').config();
 
 let FRONTEND_URL;
@@ -35,8 +37,8 @@ async function tweetNewCase(data) {
     };
     await bot.post('statuses/update', params);
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    logger.log('error', `Failed to tweet case ${data._id}, ${data.fullname}`);
+    return handleError(error);
   }
 }
 

@@ -1,7 +1,7 @@
+/* eslint-disable consistent-return */
 const sgMail = require('@sendgrid/mail');
-const { authHelper } = require('../utils');
+const { authHelper, handleError, logger } = require('../utils');
 const constants = require('../constants');
-require('dotenv').config();
 
 let FRONTEND_URL;
 if (process.env.NODE_ENV === 'production') {
@@ -78,11 +78,9 @@ async function sendConfirmationEmail(email) {
       html: getEmailHtml(constants.EMAIL_TYPES.CONFIRM_EMAIL, token),
     };
 
-    sgMail.send(msg);
+    await sgMail.send(msg);
   } catch (error) {
-    console.log(error);
-
-    // TODO: Handle error
+    return handleError(error);
   }
 }
 
@@ -100,9 +98,9 @@ async function sendForgotPasswordMail(email) {
       html: getEmailHtml(constants.EMAIL_TYPES.FORGOT_PASSWORD, token),
     };
 
-    sgMail.send(msg);
+    await sgMail.send(msg);
   } catch (error) {
-    console.log(error);
+    return handleError(error);
   }
 }
 
@@ -123,10 +121,9 @@ async function sendNewsletterAcknowledgementEmail(email) {
       ),
     };
 
-    sgMail.send(msg);
+    await sgMail.send(msg);
   } catch (error) {
-    console.log(error);
-    // TODO: Handle error
+    return handleError(error);
   }
 }
 
@@ -178,10 +175,9 @@ async function sendNewsletter(emails, cases, type) {
       };
     }
 
-    sgMail.send(msg);
+    await sgMail.send(msg);
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    return handleError(error);
   }
 }
 
@@ -198,10 +194,10 @@ async function sendContactUsMessage({ fullname, email, message }) {
       text: message,
     };
 
-    sgMail.send(msg);
+    await sgMail.send(msg);
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    logger.log('error', `Failed to send contact message from ${email}`);
+    return handleError(error);
   }
 }
 

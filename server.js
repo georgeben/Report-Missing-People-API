@@ -21,11 +21,10 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(res => {
+  .then(() => {
     logger.log('info', 'Successfully connected to MongoDB');
   })
   .catch(error => {
-    // TODO: Handle error
     logger.log('error', 'Failed to connect to mongo database', {
       error,
     });

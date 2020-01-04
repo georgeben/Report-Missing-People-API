@@ -24,8 +24,7 @@ async function getUserData(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // Handle error
+    return next(error);
   }
 }
 
@@ -75,8 +74,7 @@ async function updateUserProfile(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO:Handle error
+    return next(error);
   }
 }
 
@@ -111,8 +109,7 @@ async function updateEmail(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    return next(error);
   }
 }
 
@@ -150,8 +147,7 @@ async function updatePassword(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    return next(error);
   }
 }
 
@@ -171,8 +167,7 @@ async function getUserCases(req, res, next) {
       },
     });
   } catch (error) {
-    console.log(error);
-    // TODO Handle error
+    return next(error);
   }
 }
 
