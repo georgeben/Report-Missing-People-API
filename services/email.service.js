@@ -20,43 +20,98 @@ sgMail.setApiKey(process.env.SENDGRID_APIKEY);
  * @return { String} - The email HTML
  */
 function getEmailHtml(type, token) {
+  // <p>
+  //   <a href="${BASE_URL}/api/v1/newsletter/?token=${token}">
+  //     Change email subscription settings
+  //   </a>
+  // </p>;
+  const bodyStyle = "font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+  const containerStyle = 'margin: auto;background-color: white;width: 90%;padding-bottom: 40px;box-shadow: box-shadow: 0px 2px 7px 0px rgba(181, 181, 181, 0.4);';
+  const headerStyle = 'background: linear-gradient(97.06deg, rgba(89, 215, 182, 0.9) 28.21%, rgba(102, 195, 204, 0.9) 96.06%);';
   switch (type) {
     case 'confirm-email':
-      return `<body style="font-family: sans-serif;">
-                <div style="
-                margin: auto;
-                background-color: rgb(245, 245, 245);
-                width: 650px;
-                height: 400px;
-                text-align: center;
-                box-shadow: 0px 5px 15px 0px rgb(153, 153, 153, 0.5);
-                border-radius: 8px;">
-                <h4 style="color: rgb(93, 93, 93); font-size: 28px; padding-top: 40px;">Please confirm your email</h4>
-                <p style="color: rgb(93, 93, 93); font-size: 17px;">Please confirm your account by clicking the button below, Ignore this message if you didn't request it</p>
-                <a style="background-color: #FD297B; /* Green */
-                        outline: none;
-                        border-radius: 360px;
-                        color: white;
-                        margin-top: 10px;
-                        padding: 15px 32px;
-                        text-align: center;
-                        text-decoration: none;
-                        display: inline-block;
-                        font-size: 16px;
-                        font-weight: bold;
-                        cursor: pointer;" href='${FRONTEND_URL}/verify-email?token=${token}'>confirm email</a>
-              </div>
+      return ` <body style="${bodyStyle}">
+                <div
+                  style="${containerStyle}"
+                >
+                  <div style="${headerStyle}">
+                    <h4 style="color: white; font-size: 24px; padding: 25px 0; text-align: center;">
+                      Please confirm your email
+                    </h4>
+                  </div>
+                  <div style="text-align: center; color: rgb(93, 93, 93); padding: 0 15px; line-height: 1.8;">
+                    <p style=" font-size: 17px;text-align: justify;">
+                      Hi! Thank you for signing up. To get started, please confirm your account by clicking the button below, Ignore this
+                      message if you didn't request it.
+                    </p>
+                    <a
+                      style="background-color: #308894; 
+                                      outline: none;
+                                      color: white;
+                                      margin-top: 10px;
+                                      padding: 10px;
+                                      text-decoration: none;
+                                      display: inline-block;
+                                      font-size: 16px;
+                                      cursor: pointer;"
+                      href="${FRONTEND_URL}/verify-email?token=${token}"
+                      >Confirm email</a
+                    >
+
+                    <p style="margin-top: 15px; text-align: justify;  font-size: 17px;">
+                      Regards, <br>
+                      The Help Look for Me Team.
+                    </p>
+                  </div>
+                </div>
               </body>`;
     case 'newsletter-acknowledgement':
       return `<body>
-                <h2>You will start receiving emails now</h2>
-                <p><a href='${BASE_URL}/api/v1/newsletter/?token=${token}'>Change email subscription settings</a></p>
+                <div
+                  style="${containerStyle}"
+                >
+                  <div style="${headerStyle}">
+                    <h4 style="color: white; font-size: 24px; padding: 25px 0; text-align: center;">
+                      You will start receiving emails now
+                    </h4>
+                  </div>
+                  <div style="text-align: center; color: rgb(93, 93, 93); padding: 0 15px; line-height: 1.8;">
+                    <p style=" font-size: 17px;text-align: justify;">
+                      Hi there! Thank you so much for subscribing to our newsletter. You will start receiving alerts of people
+                      that get missing around you. You can also tell your friends and family to signup to our newsletter so more 
+                      people can get informed when people get missing around their location.
+                    </p>
+
+                    <p style="margin-top: 15px; text-align: justify;  font-size: 17px;">
+                      Regards, <br>
+                      The Help Look for Me Team.
+                    </p>
+                  </div>
+                </div>
               </body>
               `;
     case constants.EMAIL_TYPES.FORGOT_PASSWORD:
       return `
               <body>
-                <p>Click this link to reset your password. <a href='${FRONTEND_URL}/auth/reset-password?token=${token}'>Reset password</a></p>
+                <div
+                  style="${containerStyle}"
+                >
+                  <div style="${headerStyle}">
+                    <h4 style="color: white; font-size: 24px; padding: 25px 0; text-align: center;">
+                      You will start receiving emails now
+                    </h4>
+                  </div>
+                  <div style="text-align: center; color: rgb(93, 93, 93); padding: 0 15px; line-height: 1.8;">
+                    <p style=" font-size: 17px;text-align: justify;">
+                      Oops! You forgot your password? No worries. Click this link to reset your password. <a href='${FRONTEND_URL}/auth/reset-password?token=${token}'>Reset password</a>
+                    </p>
+
+                    <p style="margin-top: 15px; text-align: justify;  font-size: 17px;">
+                      Regards, <br>
+                      The Help Look for Me Team.
+                    </p>
+                  </div>
+                </div>
               </body>
               `;
     default:
