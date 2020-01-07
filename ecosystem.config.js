@@ -3,9 +3,7 @@ module.exports = {
     {
       name: 'server',
       script: 'server.js',
-
-      // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
-      instances: '1',
+      instances: 3,
       exec_mode: 'cluster',
       autorestart: true,
       watch: false,
@@ -20,9 +18,7 @@ module.exports = {
     {
       name: 'worker',
       script: 'worker.js',
-
-      // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
-      instances: 1,
+      instances: 3,
       autorestart: true,
       watch: false,
       max_memory_restart: '1G',

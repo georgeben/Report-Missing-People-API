@@ -2,7 +2,7 @@
 const sgMail = require('@sendgrid/mail');
 const { authHelper, handleError, logger } = require('../utils');
 const constants = require('../constants');
-const { frontEndUrl, baseUrl } = require('../config');
+const { frontEndUrl, baseUrl } = require('../config')();
 
 // let FRONTEND_URL;
 /* if (process.env.NODE_ENV === 'production') {

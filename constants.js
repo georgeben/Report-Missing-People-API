@@ -22,5 +22,5 @@ module.exports = {
     TWEET_NEWCASE: 'tweet-new-case',
     CONTACT_US_MESSAGE: 'contact-us-message',
   },
-  FROM_EMAIL: 'no-reply@report-missing-people.com',
+  FROM_EMAIL: 'no-reply@helplookfor.me',
 };
