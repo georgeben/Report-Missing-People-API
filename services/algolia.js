@@ -1,9 +1,10 @@
 /* eslint-disable consistent-return */
 const algolia = require('algoliasearch');
 const { logger, handleError } = require('../utils');
+const { algoliaIndex } = require('../config')();
 
 const client = algolia(process.env.ALGOLIA_APPID, process.env.ALGOLIA_APIKEY);
-const casesIndex = client.initIndex(process.env.CASE_INDEX || 'dev_CASES');
+const casesIndex = client.initIndex(algoliaIndex);
 
 /**
  * Adds a new object to the algolia index

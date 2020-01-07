@@ -1,35 +1,44 @@
-const dotenv = require('dotenv');
+/* const dotenv = require('dotenv');
 
-dotenv.config();
+dotenv.config(); */
 const mongoose = require('mongoose');
+const { dbUrl, port } = require('./config')();
 const app = require('./app');
 
-const PORT = process.env.PORT || 3001;
-const { DEV_DBURL, PROD_DBURL, NODE_ENV } = process.env;
 const { logger } = require('./utils');
 
-let DB_URL;
-if (NODE_ENV === 'production') {
-  DB_URL = PROD_DBURL;
-} else {
-  DB_URL = DEV_DBURL;
-}
+console.log({ dbUrl });
 
 // Connecting to MongoDB
 mongoose
-  .connect(DB_URL, {
+  .connect(dbUrl, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
   })
   .then(() => {
     logger.log('info', 'Successfully connected to MongoDB');
   })
-  .catch(error => {
+  .catch((error) => {
     logger.log('error', 'Failed to connect to mongo database', {
       error,
     });
   });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on PORT ${PORT}`);
+const server = app.listen(port, () => {
+  logger.log('info', `Server running on PORT ${port} in ${process.env.NODE_ENV} mode`);
+});
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  server.close((error) => {
+    if (error) {
+      process.exit(error ? 1 : 0);
+    }
+    logger.log('info', 'Shutting down server');
+    mongoose.disconnect()
+      .then(() => {
+        logger.log('info', 'Successfully disconnected from database');
+        process.exit(0);
+      })
+      .catch((err) => process.exit(err ? 1 : 0));
+  });
 });

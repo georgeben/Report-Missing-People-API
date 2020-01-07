@@ -2,15 +2,15 @@
 const Twit = require('twit');
 const axios = require('axios');
 const { handleError, logger } = require('../utils');
-require('dotenv').config();
+const { frontEndUrl } = require('../config')();
 
-let FRONTEND_URL;
+/* let FRONTEND_URL;
 
 if (process.env.NODE_ENV !== 'production') {
   FRONTEND_URL = process.env.DEV_FRONTEND_URL;
 } else {
   FRONTEND_URL = process.env.FRONTEND_URL;
-}
+} */
 
 const bot = new Twit({
   consumer_key: process.env.BOT_CONSUMER_KEY,
@@ -32,7 +32,7 @@ async function tweetNewCase(data) {
     const meta_params = { media_id: mediaIdStr, alt_text: { text: altText } };
     await bot.post('media/metadata/create', meta_params);
     const params = {
-      status: `${data.description}. For more info, visit ${FRONTEND_URL}/cases/${data.slug} #HelpLookFor${data.fullname.split(' ').join('')} #HelpLookForMe`,
+      status: `${data.description}. For more info, visit ${frontEndUrl}/cases/${data.slug} #HelpLookFor${data.fullname.split(' ').join('')} #HelpLookForMe`,
       media_ids: [mediaIdStr],
     };
     await bot.post('statuses/update', params);

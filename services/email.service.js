@@ -2,14 +2,15 @@
 const sgMail = require('@sendgrid/mail');
 const { authHelper, handleError, logger } = require('../utils');
 const constants = require('../constants');
+const { frontEndUrl, baseUrl } = require('../config');
 
-let FRONTEND_URL;
-if (process.env.NODE_ENV === 'production') {
+// let FRONTEND_URL;
+/* if (process.env.NODE_ENV === 'production') {
   FRONTEND_URL = process.env.FRONTEND_URL;
 } else {
   FRONTEND_URL = process.env.DEV_FRONTEND_URL;
-}
-const { BASE_URL } = process.env;
+} */
+// const { BASE_URL } = process.env;
 
 sgMail.setApiKey(process.env.SENDGRID_APIKEY);
 
@@ -54,7 +55,7 @@ function getEmailHtml(type, token) {
                                       display: inline-block;
                                       font-size: 16px;
                                       cursor: pointer;"
-                      href="${FRONTEND_URL}/verify-email?token=${token}"
+                      href="${frontEndUrl}/verify-email?token=${token}"
                       >Confirm email</a
                     >
 
@@ -103,7 +104,7 @@ function getEmailHtml(type, token) {
                   </div>
                   <div style="text-align: center; color: rgb(93, 93, 93); padding: 0 15px; line-height: 1.8;">
                     <p style=" font-size: 17px;text-align: justify;">
-                      Oops! You forgot your password? No worries. Click this link to reset your password. <a href='${FRONTEND_URL}/auth/reset-password?token=${token}'>Reset password</a>
+                      Oops! You forgot your password? No worries. Click this link to reset your password. <a href='${frontEndUrl}/auth/reset-password?token=${token}'>Reset password</a>
                     </p>
 
                     <p style="margin-top: 15px; text-align: justify;  font-size: 17px;">
@@ -193,7 +194,7 @@ function getCaseHTML(caseData) {
       <h1>${caseData.fullname}</h1>
       <img src='${caseData.photoURL}' alt='Image of missing person'>
       <p>${caseData.description}</p>
-      <a href='${FRONTEND_URL}/cases/${caseData.slug}'>View case</a>
+      <a href='${frontEndUrl}/cases/${caseData.slug}'>View case</a>
     </div>
   `;
 }

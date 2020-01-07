@@ -1,11 +1,14 @@
-const express = require('express');
 const bodyParser = require('body-parser');
+const compression = require('compression');
+const cors = require('cors');
+const express = require('express');
+const helmet = require('helmet');
 const methodOverride = require('method-override');
+const morgan = require('morgan');
 const passport = require('passport');
 const Sentry = require('@sentry/node');
-const morgan = require('morgan');
-const cors = require('cors');
 const routes = require('./routes');
+const { logFormat } = require('./config')();
 const { jwtParser } = require('./middlewares');
 const { logger } = require('./utils');
 require('./utils/newsletter-cron');
@@ -13,19 +16,18 @@ require('./utils/newsletter-cron');
 const { NODE_ENV } = process.env;
 
 const app = express();
+app.use(helmet());
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV,
+  environment: process.env.APP_ENV,
 });
 app.use(Sentry.Handlers.requestHandler());
 
 // TODO: Add domain whitelist
 app.use(cors());
-if (NODE_ENV === 'production') {
-  app.use(morgan('combined'));
-} else {
-  app.use(morgan('dev'));
-}
+app.use(compression());
+
+app.use(morgan(logFormat));
 
 app.use(passport.initialize());
 
