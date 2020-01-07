@@ -7,8 +7,6 @@ const app = require('./app');
 
 const { logger } = require('./utils');
 
-console.log({ dbUrl });
-
 // Connecting to MongoDB
 mongoose
   .connect(dbUrl, {

@@ -10,6 +10,7 @@ require('dotenv').config();
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
+console.log('Redis url', process.env.REDIS_URL);
 const client = redis.createClient(process.env.REDIS_URL);
 
 
