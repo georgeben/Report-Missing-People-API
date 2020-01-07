@@ -12,10 +12,19 @@ const {
 
 logger.log('info', 'Workers ready 🔥🔥🔥');
 
-const emailQueue = new Bull('email-worker');
-const algoliaQueue = new Bull(constants.WORKERS.ALGOLIA_WORKER);
-const newsletterQueue = new Bull(constants.WORKERS.NEWSLETTER_WORKER);
-const twitterQueue = new Bull(constants.WORKERS.TWITTER_BOT);
+const emailQueue = new Bull('email-worker', process.env.REDIS_URL);
+const algoliaQueue = new Bull(
+  constants.WORKERS.ALGOLIA_WORKER,
+  process.env.REDIS_URL,
+);
+const newsletterQueue = new Bull(
+  constants.WORKERS.NEWSLETTER_WORKER,
+  process.env.REDIS_URL,
+);
+const twitterQueue = new Bull(
+  constants.WORKERS.TWITTER_BOT,
+  process.env.REDIS_URL,
+);
 
 /**
  * Job handler for sending confirmation emails
