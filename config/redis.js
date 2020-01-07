@@ -5,11 +5,12 @@
 const redis = require('redis');
 const bluebird = require('bluebird');
 const { logger } = require('../utils');
-const { redisUrl } = require('../config');
+// const { redisUrl } = require('../config');
+require('dotenv').config();
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
-const client = redis.createClient(redisUrl);
+const client = redis.createClient(process.env.REDIS_URL);
 
 
 client.on('connect', () => logger.log('info', 'Successfully connected to redis'));
