@@ -10,6 +10,7 @@ module.exports = function () {
         algoliaIndex: 'staging_CASES',
         frontEndUrl: 'http://localhost:8080',
         baseUrl: process.env.STAGING_BASEURL,
+        redisUrl: process.env.REDIS_URL,
       };
     case 'production':
       return {
