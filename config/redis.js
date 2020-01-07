@@ -15,7 +15,9 @@ if (process.env.REDIS_URL) {
   const redisUrl = url.parse(process.env.REDIS_URL);
   console.log('Redis port', redisUrl.port);
   console.log('Redis hostname', redisUrl.hostname);
-  client = redisUrl.createClient(redisUrl.port, redisUrl.hostname);
+  // client = redis.createClient(redisUrl.port, redisUrl.hostname);
+  // client.auth(redisUrl.auth.split(':')[1]);
+  client = redis.createClient(redisUrl.port, redisUrl.hostname);
   client.auth(redisUrl.auth.split(':')[1]);
 } else {
   client = redis.createClient();
