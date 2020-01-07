@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'server',
       script: 'server.js',
-      instances: 3,
+      instances: 2,
       exec_mode: 'cluster',
       autorestart: true,
       watch: false,
@@ -18,7 +18,7 @@ module.exports = {
     {
       name: 'worker',
       script: 'worker.js',
-      instances: 3,
+      instances: 2,
       autorestart: true,
       watch: false,
       max_memory_restart: '1G',
