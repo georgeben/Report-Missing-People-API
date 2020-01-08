@@ -6,6 +6,7 @@ const cloudinary = require('../config/cloudinary');
  * @param {String} directory - The destination folder to store the image on cloudinary
  */
 async function uploadImage(path, directory) {
+  console.log('Photo path', path);
   let image = await cloudinary.uploader.upload(path, {
     folder: `report_missing_people/${directory}/`,
     width: 520,

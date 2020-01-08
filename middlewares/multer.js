@@ -1,6 +1,6 @@
 const multer = require('multer');
 
-const maxFileSize = (1 * 1024 * 1024);
+const maxFileSize = (2 * 1024 * 1024);
 
 const storage = multer.diskStorage({
   destination: 'temp/uploads/',

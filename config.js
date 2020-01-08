@@ -8,7 +8,7 @@ module.exports = function () {
         port: process.env.PORT,
         logFormat: 'combined',
         algoliaIndex: 'staging_CASES',
-        frontEndUrl: 'https://helplookforme-staging.netlify.com/#/',
+        frontEndUrl: 'https://helplookforme-staging.netlify.com/#',
         baseUrl: process.env.STAGING_BASEURL,
         redisUrl: process.env.REDIS_URL,
       };
