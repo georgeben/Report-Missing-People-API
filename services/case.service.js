@@ -70,6 +70,8 @@ async function getCases(status, offset = 0, limit = 15, ipInfo) {
     };
   }
 
+  console.log('Case query', query);
+
   cases = await CaseModel.find(query)
     .skip(parseInt(offset))
     .limit(parseInt(limit))
