@@ -1,6 +1,7 @@
 const { OAuth2Client } = require('google-auth-library');
 const twitterSignIn = require('twittersignin');
 const redis = require('../config/redis');
+const { twitterCallbackUrl } = require('../config')();
 
 const {
   TWITTER_CONSUMER_KEY,
@@ -38,7 +39,9 @@ async function verifyGoogleIDToken(id_token) {
  * @returns {String} requestToken - The request token
  */
 async function getTwitterRequestToken() {
-  const response = await signInWithTwitter.getRequestToken();
+  const response = await signInWithTwitter.getRequestToken({
+    oauth_callback: twitterCallbackUrl,
+  });
   const {
     oauth_token: requestToken,
     oauth_token_secret: requestTokenSecret,

@@ -61,12 +61,9 @@ async function getCases(req, res, next) {
   const { status, offset, limit } = req.query;
   const xForwardedFor = (req.headers['x-forwarded-for'] || '').replace(/:\d+$/, '');
   const ip = xForwardedFor || req.connection.remoteAddress;
-  console.log({ ip });
   const ipInfo = expressip.getIpInfo(ip);
-  console.log({ ipInfo });
   try {
     const cases = await caseService.getCases(status, offset, limit, ipInfo);
-    console.log('Cases don show', cases);
     return res.status(200).json({
       data: cases,
     });

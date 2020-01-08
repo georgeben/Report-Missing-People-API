@@ -11,6 +11,8 @@ module.exports = function () {
         frontEndUrl: 'https://helplookforme-staging.netlify.com/#',
         baseUrl: process.env.STAGING_BASEURL,
         redisUrl: process.env.REDIS_URL,
+        twitterCallbackUrl:
+          'https://helplookforme-staging.netlify.com/auth/login/twitter',
       };
     case 'production':
       return {
@@ -20,6 +22,7 @@ module.exports = function () {
         algoliaIndex: 'CASES',
         frontEndUrl: 'http://localhost:8080',
         baseUrl: process.env.BASE_URL,
+        twitterCallbackUrl: '',
       };
     default:
       return {
@@ -29,6 +32,7 @@ module.exports = function () {
         algoliaIndex: 'dev_CASES',
         frontEndUrl: 'http://localhost:8080',
         baseUrl: process.env.DEV_BASE_URL,
+        twitterCallbackUrl: 'http://localhost:8080/auth/login/twitter/',
       };
   }
 };
