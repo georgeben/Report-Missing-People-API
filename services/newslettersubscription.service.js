@@ -172,6 +172,16 @@ async function processNewsletters(subscribers, reportedCases, type) {
   });
 }
 
+async function getSubscriberCount() {
+  let count = await NewsletterSubscription.estimatedDocumentCount();
+  return count;
+}
+
+async function getCountryCount() {
+  const countriesCount = await NewsletterSubscription.distinct('address.country');
+  return countriesCount.length;
+}
+
 module.exports = {
   getSubscriber,
   addNewSubscription,
@@ -181,4 +191,6 @@ module.exports = {
   getDailySubscribers,
   getWeeklySubscribers,
   processNewsletters,
+  getSubscriberCount,
+  getCountryCount,
 };

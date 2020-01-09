@@ -200,6 +200,11 @@ async function findRelatedCases(slug, limit = 2) {
   return relatedCases;
 }
 
+async function getCaseCount() {
+  let count = await CaseModel.estimatedDocumentCount();
+  return count;
+}
+
 module.exports = {
   createCase,
   checkForDuplicateCase,
@@ -210,4 +215,5 @@ module.exports = {
   getCaseByUser,
   updateCaseStatus,
   findRelatedCases,
+  getCaseCount,
 };
