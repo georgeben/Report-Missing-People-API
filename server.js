@@ -3,6 +3,7 @@
 dotenv.config(); */
 const mongoose = require('mongoose');
 const { dbUrl, port } = require('./config')();
+require('newrelic');
 const app = require('./app');
 
 const { logger } = require('./utils');
