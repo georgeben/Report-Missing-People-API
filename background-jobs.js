@@ -56,8 +56,8 @@ async function processNewCaseEvent(caseData) {
   /* When a new case is created, the case is added to the algolia case index,
    * and the case is posted on Twitter
    */
-  algoliaQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData });
   twitterQueue.add(constants.JOB_NAMES.TWEET_NEWCASE, { caseData });
+  algoliaQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData });
 }
 
 /**
