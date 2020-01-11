@@ -9,6 +9,7 @@ const {
   newsletterService,
   twitterBot,
 } = require('./services');
+const redis = require('./config/redis');
 
 logger.log('info', 'Workers ready 🔥🔥🔥');
 
@@ -212,4 +213,25 @@ twitterQueue.on('stalled', (job) => {
 
 twitterQueue.on('failed', (job, error) => {
   logger.log('error', `🐦Job ${job.name}#${job.id} has failed 😭😭`, error);
+});
+
+function gracefulShutdown() {
+  redis
+    .quitAsync()
+    .then(() => {
+      logger.log('info', 'Successfully disconnected from redis');
+      process.exit(0);
+    })
+    .catch((err) => {
+      logger.log('error', 'Failed to close redis connections', err);
+      process.exit(1);
+    });
+}
+
+process.on('SIGINT', () => {
+  gracefulShutdown();
+});
+
+process.on('SIGTERM', () => {
+  gracefulShutdown();
 });
