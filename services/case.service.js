@@ -1,5 +1,8 @@
 /* eslint-disable radix */
+const axios = require('axios');
 const { CaseModel } = require('../db/models');
+const { twitterBotUrl } = require('../config')();
+const { handleError } = require('../utils');
 
 /**
  * @param {String} fullname - The name of the case
@@ -205,6 +208,29 @@ async function getCaseCount() {
   return count;
 }
 
+/**
+ * Tweets when a case is reported
+ * @param {Object} caseData - The case to tweet
+ */
+// eslint-disable-next-line consistent-return
+async function tweetCase(caseData) {
+  const requestPayload = { caseData };
+  try {
+    axios.post(
+      `${twitterBotUrl}/case`,
+      requestPayload,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${process.env.TWITTER_BOT_AUTH}`,
+        },
+      },
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
 module.exports = {
   createCase,
   checkForDuplicateCase,
@@ -216,4 +242,5 @@ module.exports = {
   updateCaseStatus,
   findRelatedCases,
   getCaseCount,
+  tweetCase,
 };

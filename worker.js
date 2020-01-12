@@ -8,7 +8,6 @@ const {
   emailService,
   algoliaService,
   newsletterService,
-  twitterBot,
 } = require('./services');
 const redis = require('./config/redis');
 
@@ -21,10 +20,6 @@ const algoliaQueue = new Bull(
 );
 const newsletterQueue = new Bull(
   constants.WORKERS.NEWSLETTER_WORKER,
-  process.env.REDIS_URL,
-);
-const twitterQueue = new Bull(
-  constants.WORKERS.TWITTER_BOT,
   process.env.REDIS_URL,
 );
 
@@ -187,33 +182,6 @@ newsletterQueue.on('stalled', (job) => {
 
 newsletterQueue.on('failed', (job, error) => {
   logger.log('error', `📰Job ${job.name}#${job.id} has failed 😭😭`, error);
-});
-
-/**
- * Job handler for tweeting new cases
- */
-twitterQueue.process(constants.JOB_NAMES.TWEET_NEWCASE, async (job, done) => {
-  logger.log('info', `🐦Received ${job.name}#${job.id}`);
-  const { caseData } = job.data;
-  twitterBot.tweetNewCase(caseData);
-
-  done();
-});
-
-twitterQueue.on('active', (job) => {
-  logger.log('info', `🐦Job ${job.name}#${job.id} is now active 🚁🚁🚁`);
-});
-
-twitterQueue.on('completed', (job, result) => {
-  logger.log('info', `🐦Job ${job.name}#${job.id} is completed 🚀🚀`, result);
-});
-
-twitterQueue.on('stalled', (job) => {
-  logger.log('info', `🐦Job ${job.name}#${job.id} is stalled 😰😰`);
-});
-
-twitterQueue.on('failed', (job, error) => {
-  logger.log('error', `🐦Job ${job.name}#${job.id} has failed 😭😭`, error);
 });
 
 function gracefulShutdown() {

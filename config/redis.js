@@ -18,7 +18,6 @@ if (process.env.REDIS_URL) {
   client = redis.createClient();
 }
 
-
 client.on('connect', () => logger.log('info', 'Successfully connected to redis'));
 client.on('error', (error) => logger.log('error', 'Could not connect to redis', { error }));
 

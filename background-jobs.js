@@ -10,10 +10,6 @@ const newsletterQueue = new Bull(
   constants.WORKERS.NEWSLETTER_WORKER,
   process.env.REDIS_URL,
 );
-const twitterQueue = new Bull(
-  constants.WORKERS.TWITTER_BOT,
-  process.env.REDIS_URL,
-);
 
 /**
  * Places a confirm email job on the background queue
@@ -53,10 +49,9 @@ async function processNewsletterAcknowledgementEmail(email) {
  * @param {Object} caseData - The data about the newly created case
  */
 async function processNewCaseEvent(caseData) {
-  /* When a new case is created, the case is added to the algolia case index,
-   * and the case is posted on Twitter
+  /**
+    When a new case is created, the case is added to the algolia case index
    */
-  twitterQueue.add(constants.JOB_NAMES.TWEET_NEWCASE, { caseData });
   algoliaQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData });
 }
 
