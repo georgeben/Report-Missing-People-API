@@ -1,14 +1,10 @@
 module.exports = {
+  JOB_QUEUE: 'job-queue',
   EMAIL_TYPES: {
     CONFIRM_EMAIL: 'confirm-email',
     RESET_EMAIL: 'reset-email',
     NEWSLETTER_ACKNOWLEDGEMENT: 'newsletter-acknowledgement',
     FORGOT_PASSWORD: 'forgot-password',
-  },
-  WORKERS: {
-    EMAIL_WORKER: 'email-worker',
-    ALGOLIA_WORKER: 'algolia-worker',
-    NEWSLETTER_WORKER: 'newsletter-worker',
   },
   JOB_NAMES: {
     CONFIRM_EMAIL: 'confirm-email',

@@ -1,22 +1,13 @@
-const Bull = require('bull');
 const constants = require('./constants');
 
-const emailQueue = new Bull('email-worker', process.env.REDIS_URL);
-const algoliaQueue = new Bull(
-  constants.WORKERS.ALGOLIA_WORKER,
-  process.env.REDIS_URL,
-);
-const newsletterQueue = new Bull(
-  constants.WORKERS.NEWSLETTER_WORKER,
-  process.env.REDIS_URL,
-);
+const jobQueue = require('./createQueue');
 
 /**
  * Places a confirm email job on the background queue
  * @param {String} email - The email to send the mail to
  */
 async function processConfirmEmail(email) {
-  emailQueue.add(constants.JOB_NAMES.CONFIRM_EMAIL, { email });
+  jobQueue.add(constants.JOB_NAMES.CONFIRM_EMAIL, { email }, { attempts: 2 });
 }
 
 /**
@@ -24,7 +15,7 @@ async function processConfirmEmail(email) {
  * @param {String} email - The email to send the mail to
  */
 async function processForgotPasswordMail(email) {
-  emailQueue.add(constants.JOB_NAMES.FORGOT_PASSWORD_MAIL, { email });
+  jobQueue.add(constants.JOB_NAMES.FORGOT_PASSWORD_MAIL, { email });
 }
 
 /**
@@ -32,7 +23,7 @@ async function processForgotPasswordMail(email) {
  * @param {Object} data - The contact details
  */
 async function processContactMessage(data) {
-  emailQueue.add(constants.JOB_NAMES.CONTACT_US_MESSAGE, { data });
+  jobQueue.add(constants.JOB_NAMES.CONTACT_US_MESSAGE, { data }, { attempts: 2 });
 }
 
 /**
@@ -40,7 +31,7 @@ async function processContactMessage(data) {
  * @param {String} email - The email to send the mail to
  */
 async function processNewsletterAcknowledgementEmail(email) {
-  emailQueue.add(constants.JOB_NAMES.NEWSLETTER_ACKNOWLEDGEMENT_EMAIL, { email });
+  jobQueue.add(constants.JOB_NAMES.NEWSLETTER_ACKNOWLEDGEMENT_EMAIL, { email }, { attempts: 2 });
 }
 
 /**
@@ -52,7 +43,7 @@ async function processNewCaseEvent(caseData) {
   /**
     When a new case is created, the case is added to the algolia case index
    */
-  algoliaQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData });
+  jobQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData }, { attempts: 3 });
 }
 
 /**
@@ -65,21 +56,33 @@ async function processCaseUpdateEvent(caseData) {
    * When a case is updated, the algolia case index should also be updated with
    * the latest case information
    */
-  algoliaQueue.add(constants.JOB_NAMES.UPDATE_CASE, { caseData: { ...caseData } });
+  jobQueue.add(constants.JOB_NAMES.UPDATE_CASE, { caseData: { ...caseData } }, { attempts: 3 });
 }
 
 /**
  * Places the daily newsletter emails on the background queue
  */
 async function processDailyNewsletterEmail(subscribers, reportedCases) {
-  newsletterQueue.add(constants.JOB_NAMES.DAILY_NEWSLETTER, { subscribers, reportedCases });
+  jobQueue.add(constants.JOB_NAMES.DAILY_NEWSLETTER, {
+    subscribers,
+    reportedCases,
+  },
+  {
+    attempts: 3,
+  });
 }
 
 /**
  * Places the daily newsletter emails on the background queue
  */
 async function processWeeklyNewsletterEmail(subscribers, reportedCases) {
-  newsletterQueue.add(constants.JOB_NAMES.WEEKLY_NEWSLETTER, { subscribers, reportedCases });
+  jobQueue.add(constants.JOB_NAMES.WEEKLY_NEWSLETTER, {
+    subscribers,
+    reportedCases,
+  },
+  {
+    attempts: 3,
+  });
 }
 
 module.exports = {
