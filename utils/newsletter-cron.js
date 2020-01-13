@@ -7,9 +7,7 @@ const logger = require('./logger');
 /**
  * Cron job for sending out daily newsletters at 8am
  */
-// 8am - 0 8 * * *
-// Test every 10 minutes - */10 * * * *
-cron.schedule('*/10 * * * *', async () => {
+cron.schedule('0 8 * * *', async () => {
   logger.log('info', 'Running daily newsletter cron job');
   const dailySubscribers = await newsletterService.getDailySubscribers();
   const startDate = moment().subtract(1, 'days').toDate();
