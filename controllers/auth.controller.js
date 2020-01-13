@@ -92,8 +92,8 @@ async function signInUser(req, res, next) {
     // Check if user exists
     let existingUser = await userService.findUserByEmail(email);
     if (!existingUser) {
-      return res.status(404).json({
-        error: 'The user does not exist. Create an account first.',
+      return res.status(400).json({
+        error: 'Invalid email or password',
       });
     }
 
