@@ -44,6 +44,7 @@ async function processNewCaseEvent(caseData) {
     When a new case is created, the case is added to the algolia case index
    */
   jobQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData }, { attempts: 3 });
+  jobQueue.add(constants.JOB_NAMES.TWEET_NEW_CASE, { caseData }, { attempts: 2 });
 }
 
 /**

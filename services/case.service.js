@@ -208,29 +208,6 @@ async function getCaseCount() {
   return count;
 }
 
-/**
- * Tweets when a case is reported
- * @param {Object} caseData - The case to tweet
- */
-// eslint-disable-next-line consistent-return
-async function tweetCase(caseData) {
-  const requestPayload = { caseData };
-  try {
-    axios.post(
-      `${twitterBotUrl}/case`,
-      requestPayload,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${process.env.TWITTER_BOT_AUTH}`,
-        },
-      },
-    );
-  } catch (error) {
-    return handleError(error);
-  }
-}
-
 module.exports = {
   createCase,
   checkForDuplicateCase,
@@ -242,5 +219,4 @@ module.exports = {
   updateCaseStatus,
   findRelatedCases,
   getCaseCount,
-  tweetCase,
 };

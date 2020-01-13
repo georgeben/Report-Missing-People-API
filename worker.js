@@ -7,6 +7,7 @@ const jobQueue = require('./createQueue');
 const emailService = require('./services/email.service');
 const algoliaService = require('./services/algolia');
 const newsletterService = require('./services/newslettersubscription.service');
+const twitterBot = require('./services/twitterbot');
 
 logger.log('info', 'Workers ready 🔥🔥🔥');
 
@@ -119,6 +120,12 @@ jobQueue.process(constants.JOB_NAMES.WEEKLY_NEWSLETTER, 50, async (job, done) =>
   done();
 });
 
+jobQueue.process(constants.JOB_NAMES.TWEET_NEW_CASE, 30, async (job, done) => {
+  logger.log('info', `🐦Received ${job.name}#${job.id}`);
+  const { caseData } = job.data;
+  twitterBot.tweetNewCase(caseData);
+  done();
+});
 
 process.on('SIGTERM', () => {
   jobQueue.close().then(() => {

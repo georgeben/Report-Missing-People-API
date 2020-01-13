@@ -39,8 +39,6 @@ async function createCase(req, res, next) {
     await fs.unlinkAsync(req.file.path);
 
     let createdCase = await caseService.createCase(caseData);
-    // Tweet the case
-    caseService.tweetCase(createdCase);
     createdCase = createdCase.toJSON();
 
     return res.status(201).json({

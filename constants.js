@@ -15,6 +15,7 @@ module.exports = {
     DAILY_NEWSLETTER: 'daily-newsletter',
     WEEKLY_NEWSLETTER: 'weekly-newsletter',
     CONTACT_US_MESSAGE: 'contact-us-message',
+    TWEET_NEW_CASE: 'tweet-case',
   },
   FROM_EMAIL: 'no-reply@helplookfor.me',
 };
