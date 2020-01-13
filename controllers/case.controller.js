@@ -2,6 +2,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const expressip = require('express-ip')();
 const { caseService, cloudinaryService } = require('../services');
+const { caseFolderName } = require('../config')();
 
 /**
  * Route handler for creating a case
@@ -31,7 +32,7 @@ async function createCase(req, res, next) {
       });
     }
     // Upload case photo to cloudinary
-    const image = await cloudinaryService.uploadImage(file.path, 'case_photos');
+    const image = await cloudinaryService.uploadImage(file.path, caseFolderName);
     caseData.photoURL = image.secure_url;
     caseData.cloudinaryPhotoID = image.public_id;
 
@@ -152,7 +153,7 @@ async function updateCase(req, res, next) {
       if (reportedCase.cloudinaryPhotoID) {
         await cloudinaryService.deleteImage(reportedCase.cloudinaryPhotoID);
       }
-      const image = await cloudinaryService.uploadImage(file.path, 'case_photos');
+      const image = await cloudinaryService.uploadImage(file.path, caseFolderName);
 
       caseData.photoURL = image.secure_url;
       caseData.cloudinaryPhotoID = image.public_id;

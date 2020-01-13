@@ -14,6 +14,8 @@ module.exports = function () {
         twitterCallbackUrl:
           'https://helplookforme-staging.netlify.com/auth/login/twitter',
         twitterBotUrl: process.env.TWITTER_BOT_STAGING,
+        caseFolderName: 'case_photos_staging',
+        userFolderName: 'user_photos_staging',
       };
     case 'production':
       return {
@@ -25,6 +27,8 @@ module.exports = function () {
         baseUrl: process.env.BASE_URL,
         twitterCallbackUrl: 'http://helplookfor.me/auth/login/twitter',
         twitterBotUrl: process.env.TWITTER_BOT,
+        caseFolderName: 'case_photos_prod',
+        userFolderName: 'user_photos_prod',
       };
     default:
       return {
@@ -36,6 +40,8 @@ module.exports = function () {
         baseUrl: process.env.DEV_BASE_URL,
         twitterCallbackUrl: 'http://localhost:8080/auth/login/twitter/',
         twitterBotUrl: process.env.TWITTER_BOT_DEV,
+        caseFolderName: 'case_photos',
+        userFolderName: 'user_photos',
       };
   }
 };

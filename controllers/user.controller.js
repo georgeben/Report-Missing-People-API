@@ -4,6 +4,7 @@ const fs = Promise.promisifyAll(require('fs'));
 const { userService, cloudinaryService, caseService } = require('../services');
 const { authHelper } = require('../utils');
 const { processConfirmEmail } = require('../background-jobs');
+const { userFolderName } = require('../config')();
 
 /**
  * Route handler for retrieving data about the logged in user
@@ -55,7 +56,7 @@ async function updateUserProfile(req, res, next) {
       // Upload the image to cloudinary and retrieve the URL
       const image = await cloudinaryService.uploadImage(
         file.path,
-        'user_photos',
+        userFolderName,
       );
 
       // Add the new URL to the user's profile
