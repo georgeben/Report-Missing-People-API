@@ -1,5 +1,6 @@
 module.exports = {
   JOB_QUEUE: 'job-queue',
+  TWITTER_QUEUE: 'twitter-queue',
   EMAIL_TYPES: {
     CONFIRM_EMAIL: 'confirm-email',
     RESET_EMAIL: 'reset-email',

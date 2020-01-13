@@ -2,7 +2,7 @@ require('dotenv').config();
 require('./config/sentry');
 const { logger } = require('./utils');
 const constants = require('./constants');
-const jobQueue = require('./createQueue');
+const { jobQueue, twitterQueue } = require('./createQueue');
 
 const emailService = require('./services/email.service');
 const algoliaService = require('./services/algolia');
@@ -120,11 +120,27 @@ jobQueue.process(constants.JOB_NAMES.WEEKLY_NEWSLETTER, 50, async (job, done) =>
   done();
 });
 
-jobQueue.process(constants.JOB_NAMES.TWEET_NEW_CASE, 30, async (job, done) => {
-  logger.log('info', `🐦Received ${job.name}#${job.id}`);
-  const { caseData } = job.data;
-  twitterBot.tweetNewCase(caseData);
-  done();
+twitterQueue.process(
+  constants.JOB_NAMES.TWEET_NEW_CASE,
+  30,
+  async (job, done) => {
+    logger.log('info', `🐦Received ${job.name}#${job.id}`);
+    const { caseData } = job.data;
+    twitterBot.tweetNewCase(caseData);
+    done();
+  },
+);
+
+twitterQueue.on('active', (job) => {
+  logger.log('info', `📧Job ${job.name}#${job.id} is now active 🚁🚁🚁`);
+});
+
+twitterQueue.on('completed', (job, result) => {
+  logger.log(
+    'info',
+    `📧Job ${job.name}#${job.id} is completed 🚀🚀`,
+    result,
+  );
 });
 
 process.on('SIGTERM', () => {

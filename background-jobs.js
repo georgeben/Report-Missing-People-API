@@ -1,6 +1,6 @@
 const constants = require('./constants');
 
-const jobQueue = require('./createQueue');
+const { jobQueue, twitterQueue} = require('./createQueue');
 
 /**
  * Places a confirm email job on the background queue
@@ -44,7 +44,7 @@ async function processNewCaseEvent(caseData) {
     When a new case is created, the case is added to the algolia case index
    */
   jobQueue.add(constants.JOB_NAMES.ADD_NEW_CASE, { caseData }, { attempts: 3 });
-  jobQueue.add(constants.JOB_NAMES.TWEET_NEW_CASE, { caseData }, { attempts: 2 });
+  twitterQueue.add(constants.JOB_NAMES.TWEET_NEW_CASE, { caseData }, { attempts: 2 });
 }
 
 /**
