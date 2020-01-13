@@ -313,7 +313,7 @@ module.exports = {
       .required(),
     message: Joi.string()
       .trim()
-      .min(70)
+      .min(20)
       .required(),
   }),
 };
