@@ -129,7 +129,7 @@ async function sendConfirmationEmail(email) {
     const token = await authHelper.signJWTToken(email);
     const msg = {
       to: email,
-      from: 'no-reply@report-missing-people.com',
+      from: constants.FROM_EMAIL,
       subject: 'Confirmation Email',
       html: getEmailHtml(constants.EMAIL_TYPES.CONFIRM_EMAIL, token),
     };
