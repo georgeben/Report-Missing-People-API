@@ -49,6 +49,7 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   logger.log('error', 'An error occurred', error);
+  Sentry.captureException(error);
   if (NODE_ENV !== 'production') {
     return res.status(error.status || 500).json({
       message: 'Something bad happened',

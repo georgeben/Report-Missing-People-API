@@ -11,7 +11,7 @@ router.use((req, res, next) => {
       error: 'User must complete profile in order to report cases',
     });
   }
-  return next();
+  next();
 });
 
 module.exports = router;
