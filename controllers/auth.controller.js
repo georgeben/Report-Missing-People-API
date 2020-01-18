@@ -171,6 +171,11 @@ async function googleSignIn(req, res, next) {
       },
     });
   } catch (error) {
+    if (error.toString().includes('Error: Wrong number of segments in token:')) {
+      return res.status(400).json({
+        error: 'Invalid google id token',
+      });
+    }
     return next(error);
   }
 }
@@ -313,6 +318,11 @@ async function twitterSignIn(req, res, next) {
       },
     });
   } catch (error) {
+    if (error.statusCode >= 400) {
+      return res.status(error.statusCode).json({
+        error: error.twitterReply,
+      });
+    }
     return next(error);
   }
 }

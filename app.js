@@ -48,7 +48,12 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-  logger.log('error', 'An error occurred', error);
+  logger.log('error', 'An error occurred ', error);
+  if (error.oauthError.statusCode === 400) {
+    return res.status(400).json({
+      error: 'Invalid OAuth access token',
+    });
+  }
   Sentry.captureException(error);
   if (NODE_ENV !== 'production') {
     return res.status(error.status || 500).json({
