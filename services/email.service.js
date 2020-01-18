@@ -99,7 +99,7 @@ function getEmailHtml(type, token) {
                 >
                   <div style="${headerStyle}">
                     <h4 style="color: white; font-size: 24px; padding: 25px 0; text-align: center;">
-                      You will start receiving emails now
+                      Reset Password
                     </h4>
                   </div>
                   <div style="text-align: center; color: rgb(93, 93, 93); padding: 0 15px; line-height: 1.8;">
