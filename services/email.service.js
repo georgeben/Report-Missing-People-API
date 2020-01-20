@@ -4,14 +4,6 @@ const { authHelper, handleError, logger } = require('../utils');
 const constants = require('../constants');
 const { frontEndUrl, baseUrl } = require('../config')();
 
-// let FRONTEND_URL;
-/* if (process.env.NODE_ENV === 'production') {
-  FRONTEND_URL = process.env.FRONTEND_URL;
-} else {
-  FRONTEND_URL = process.env.DEV_FRONTEND_URL;
-} */
-// const { BASE_URL } = process.env;
-
 sgMail.setApiKey(process.env.SENDGRID_APIKEY);
 
 /**

@@ -8,7 +8,8 @@
   "main": "server.js",
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha \"./test/**/*.spec.js\" --timeout=20000 --require test/prepare --exit",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "author": "George Benjamin",
   "license": "MIT",
@@ -49,8 +50,15 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "coveralls": "^3.0.9",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "^7.0.0",
+    "mocha-prepare": "^0.1.0",
+    "mongo-unit": "^1.5.1",
+    "nyc": "^15.0.0"
   }
 }

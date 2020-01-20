@@ -1,0 +1,48 @@
+{
+  "cases": [
+    {
+      "_id": "5e05fd31cc1a04c61988197f",
+      "nicknames": [],
+      "solved": false,
+      "fullname": "Test Person",
+      "age": 26,
+      "residentialAddress": {
+        "formatted_address": "Lekki Phase 1, Lekki, Nigeria",
+        "location": {
+          "coordinates": [
+            3.472349500000064,
+            6.447809299999999
+          ],
+          "type": "Point"
+        },
+        "state": "Lagos",
+        "country": "Nigeria"
+      },
+      "gender": "FEMALE",
+      "language": "Igbo",
+      "addressLastSeen": {
+        "formatted_address": "Garki, Abuja, Nigeria",
+        "location": {
+          "coordinates": [
+            7.482812200000012,
+            9.031895899999999
+          ],
+          "type": "Point"
+        },
+        "state": "Federal Capital Territory",
+        "country": "Nigeria"
+      },
+      "dateLastSeen": "2019-12-19T12:44:00.000Z",
+      "physicalInformation": {
+        "specialCharacteristics": "So fine"
+      },
+      "reportedBy": "5dfcae3305f27a2adc5e38fc",
+      "photoURL": "https://testphoto.com",
+      "cloudinaryPhotoID": "testCloudinaryPhotoId",
+      "createdAt": "2019-12-27T12:46:41.181Z",
+      "updatedAt": "2019-12-27T12:46:41.181Z",
+      "slug": "test-person",
+      "__v": 0
+    }
+  ]
+}
