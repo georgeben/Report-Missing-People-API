@@ -57,3 +57,5 @@ process.on('SIGINT', () => {
 process.on('SIGTERM', () => {
   gracefulShutdown();
 });
+
+module.exports = server;

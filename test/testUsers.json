@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "photoURL": "https://p7.hiclipart.com/preview/419/473/131/computer-icons-user-profile-login-user.jpg",
+      "completedProfile": false,
+      "verifiedEmail": false,
+      "password": "$2b$10$aZ8tzQYCiEeUaBpXqjZM/eBPPXXIJN/bRYa0HpnLPeqI7ktuavV8u",
+      "firstname": "John",
+      "lastname": "Okafor",
+      "fullname": "John Okafor",
+      "email": "testemail@email.com",
+      "createdAt": "2020-01-18T00:40:26.890Z",
+      "updatedAt": "2020-01-18T00:40:26.890Z",
+      "slug": "john-okafor",
+      "__v": 0
+    } 
+  ]
+}
