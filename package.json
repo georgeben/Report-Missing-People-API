@@ -9,9 +9,7 @@
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "test": "mocha \"./test/**/*.spec.js\" --timeout=20000 --require test/prepare --exit",
-    "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
-    "coveralls-coverage": "coveralls < lcov.info",
-    "coverage": "nyc npm test && npm run generate-lcov && npm run coveralls-coverage"
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "author": "George Benjamin",
   "license": "MIT",
@@ -54,6 +52,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "coveralls": "^3.0.9",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
