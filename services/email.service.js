@@ -125,7 +125,6 @@ function getEmailHtml(type, token) {
  * @param {String} email - The email to send the mail to
  */
 async function sendConfirmationEmail(email) {
-  if (process.env.NODE_ENV !== 'production') return;
   try {
     const token = await authHelper.signJWTToken(email);
     const msg = {
@@ -166,7 +165,6 @@ async function sendForgotPasswordMail(email) {
  * @param {String} email - The email to send the mail to
  */
 async function sendNewsletterAcknowledgementEmail(email) {
-  if (process.env.NODE_ENV !== 'production') return;
   try {
     const token = await authHelper.signJWTToken({ email });
     const msg = {
