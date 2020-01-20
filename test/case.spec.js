@@ -3,7 +3,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoUnit = require('mongo-unit');
 const server = require('../server');
-const testCases = require('./testCases.json');
+const testCases = require('./testData.json');
 
 const { expect } = chai;
 
