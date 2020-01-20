@@ -8,6 +8,13 @@ const { expect } = chai;
 
 chai.use(chaiHttp);
 
+/*
+ TODO Check that emails are sent when someone subscribes to newsletter
+ - User testmail.app to check that emails are sent
+ - use nodemailer to send emails during testing, not send grid
+
+*/
+
 
 describe('newsletter endpoint', () => {
   afterEach(() => mongoUnit.drop());
