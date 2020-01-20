@@ -1,3 +1,6 @@
+/**
+ * Creates and configures a sentry client
+ */
 const Sentry = require('@sentry/node');
 
 Sentry.init({

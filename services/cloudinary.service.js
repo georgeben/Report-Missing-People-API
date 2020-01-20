@@ -1,9 +1,13 @@
+/**
+ * Helper functions for communicating with the cloudinary API
+ */
 const cloudinary = require('../config/cloudinary');
 
 /**
  * Uploads an image to cloudinary
  * @param {String} path - The location where the image to be uploaded is stored on disk
  * @param {String} directory - The destination folder to store the image on cloudinary
+ * @returns {Object} - An object containing information about the uploaded photo e.g url
  */
 async function uploadImage(path, directory) {
   let image = await cloudinary.uploader.upload(path, {

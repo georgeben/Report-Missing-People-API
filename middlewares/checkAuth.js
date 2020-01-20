@@ -1,3 +1,6 @@
+/**
+ * Ensures that a user is authenticated
+ */
 const { Router } = require('express');
 
 const router = Router();

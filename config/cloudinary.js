@@ -1,3 +1,6 @@
+/**
+ * Creates and configures a cloudinary client
+ */
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({

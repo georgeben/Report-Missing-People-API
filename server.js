@@ -1,4 +1,6 @@
-
+/**
+ * Configures and starts the server
+ */
 const mongoose = require('mongoose');
 const { dbUrl, port } = require('./config')();
 require('newrelic');
@@ -27,15 +29,18 @@ const server = app.listen(port, () => {
 
 // Graceful shutdown
 function gracefulShutdown() {
+  // Prevent the server from receiving anymore incoming requests
   server.close((error) => {
     if (error) {
       process.exit(error ? 1 : 0);
     }
     logger.log('info', 'Shutting down server');
+    // Disconnect from MongoDB
     mongoose
       .disconnect()
       .then(() => {
         logger.log('info', 'Successfully disconnected from database');
+        // Disconnect from redis-server
         redis
           .quitAsync()
           .then(() => {
@@ -50,6 +55,7 @@ function gracefulShutdown() {
       .catch((err) => process.exit(err ? 1 : 0));
   });
 }
+
 process.on('SIGINT', () => {
   gracefulShutdown();
 });

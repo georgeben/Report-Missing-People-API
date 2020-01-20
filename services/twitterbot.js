@@ -1,4 +1,7 @@
 /* eslint-disable consistent-return */
+/**
+ * Post tweets whenever a new case is reported
+ */
 const Twit = require('twit');
 const axios = require('axios');
 const { handleError, logger } = require('../utils');
@@ -11,6 +14,10 @@ const bot = new Twit({
   access_token_secret: process.env.BOT_ACCESS_TOKEN_SECRET,
 });
 
+/**
+ * Post a tweet about a reported case
+ * @param {Object} data - Data about the case
+ */
 async function tweetNewCase(data) {
   try {
     let image = await axios.get(

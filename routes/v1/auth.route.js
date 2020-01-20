@@ -1,3 +1,6 @@
+/**
+ * Route for authentication
+ */
 const path = require('path');
 const { Router } = require('express');
 

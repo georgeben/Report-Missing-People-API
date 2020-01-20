@@ -1,3 +1,8 @@
+/**
+ * PM2 Configuration https://pm2.keymetrics.io/docs/usage/application-declaration/
+ * Only one instances of worker and server are run because of heroku's memory limitation problem
+ * for hobby plans
+ */
 module.exports = {
   apps: [
     {

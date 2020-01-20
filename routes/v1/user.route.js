@@ -1,3 +1,6 @@
+/**
+ * Route for accessing user resources
+ */
 const path = require('path');
 const { Router } = require('express');
 

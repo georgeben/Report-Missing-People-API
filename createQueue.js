@@ -1,3 +1,6 @@
+/**
+ * Creates a exports bull queues that would be used for managing background jobs
+ */
 const Bull = require('bull');
 const constants = require('./constants');
 

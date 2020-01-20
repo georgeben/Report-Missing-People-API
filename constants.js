@@ -1,3 +1,6 @@
+/**
+ * Declares strings that are constant through out the application
+ */
 module.exports = {
   JOB_QUEUE: 'job-queue',
   TWITTER_QUEUE: 'twitter-queue',

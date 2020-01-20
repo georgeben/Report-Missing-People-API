@@ -1,3 +1,6 @@
+/**
+ * Helper function for interfacing with the Users collection
+ */
 const { UserModel } = require('../db/models');
 
 /**
@@ -72,7 +75,7 @@ async function createUser(userData) {
 
 /**
  * Updates a user's profile. Profile information
- * includes names, photo country, state and address.
+ * includes names, photo, address
  * @param {String} id - The ID of the user to update
  * @param {Object} userData - The data of the user to be created
  * @returns {Object} user - The updated user
@@ -119,6 +122,7 @@ async function verifyUserEmail(email) {
 /**
  * Updates a user's email
  * @param {String} email - The user's new email
+ * @returns {Object} - The updated user
  */
 async function updateUserEmail(userEmail, newEmail) {
   let user = await findUserByEmail(userEmail);
@@ -132,6 +136,7 @@ async function updateUserEmail(userEmail, newEmail) {
  * Updates a user's password
  * @param {String} email - The user's email
  * @param {String} password - The new hashed password
+ * @returns {Object} - The updated user
  */
 async function resetPassword(email, password) {
   let user = await findUserByEmail(email);

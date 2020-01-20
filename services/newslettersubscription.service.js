@@ -1,3 +1,7 @@
+/* eslint-disable max-len */
+/**
+ * Helper functions for accessing the NewsletterSubscription collection
+ */
 const geolib = require('geolib');
 const { NewsletterSubscription } = require('../db/models');
 const emailService = require('./email.service');
@@ -5,6 +9,7 @@ const emailService = require('./email.service');
 /**
  * Retrieves a newsletter subscriber with the given email
  * @param {String} email - The email of the user
+ * @returns {Object} - Details about the subscriber
  */
 async function getSubscriber(email) {
   const subscribed = await NewsletterSubscription.findOne({ email });
@@ -13,6 +18,7 @@ async function getSubscriber(email) {
 
 /**
  * Retrieves all newsletter subscribers
+ * @returns {Array} - A list of all newsletter subscribers
  */
 async function getAllSubscribers() {
   const subscribers = await NewsletterSubscription.find({});
@@ -21,6 +27,7 @@ async function getAllSubscribers() {
 
 /**
  * Retrieves all daily newsletter subscribers
+ * @returns {Array} - A list of all daily newsletter subscribers
  */
 async function getDailySubscribers() {
   const subscribers = await NewsletterSubscription.find({
@@ -31,6 +38,7 @@ async function getDailySubscribers() {
 
 /**
  * Retrieves all weekly newsletter subscribers
+ * @returns {Array} - A list of all weekly newsletter subscribers
  */
 async function getWeeklySubscribers() {
   const subscribers = await NewsletterSubscription.find({
@@ -53,7 +61,8 @@ async function addNewSubscription(subscriptionData) {
 /**
  * Updates subscription setting
  * @param {String} email - The email of the subscriber updating subscription settings
- * @param {*} param1 - The new subscription settings
+ * @param {Object} param1 - The new subscription settings
+ * @returns {Object} - The updated subscriber data
  */
 async function updateSubscription(
   email,

@@ -1,3 +1,6 @@
+/**
+ * Configures passport for Facebook OAUTH sign in
+ */
 const passport = require('passport');
 const FacebookTokenStrategy = require('passport-facebook-token');
 
