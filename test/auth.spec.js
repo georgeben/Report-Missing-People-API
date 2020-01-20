@@ -5,13 +5,19 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
 
+/*
+ TODO Check that emails are sent when a user signs up, forgot password, etc
+ - User testmail.app to check that emails are sent
+ - use nodemailer to send emails during testing, not send grid
+
+*/
 const { expect } = chai;
 
 chai.use(chaiHttp);
 
 // before(() => mongoUnit.load(testCases));
 
-describe('users endpoint', () => {
+describe('auth endpoint', () => {
   const testUser = {
     fullname: 'John Okafor',
     email: 'test@email.com',
