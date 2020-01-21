@@ -1,3 +1,7 @@
+/**
+ * Route for sending 'contact me' messages
+ */
+
 const { Router } = require('express');
 const path = require('path');
 

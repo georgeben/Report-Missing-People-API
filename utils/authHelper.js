@@ -1,3 +1,7 @@
+/**
+ * Contains helper functions for authentication
+ */
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Promise = require('bluebird');

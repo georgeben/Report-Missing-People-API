@@ -1,3 +1,6 @@
+/**
+ * Creates and configures a logger
+ */
 const { createLogger, format, transports } = require('winston');
 
 const logger = createLogger({

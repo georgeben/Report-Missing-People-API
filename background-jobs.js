@@ -1,6 +1,10 @@
 const constants = require('./constants');
 
-const { jobQueue, twitterQueue} = require('./createQueue');
+/**
+ * Contains functions for placing background jobs on the queue for processing
+ */
+
+const { jobQueue, twitterQueue } = require('./createQueue');
 
 /**
  * Places a confirm email job on the background queue

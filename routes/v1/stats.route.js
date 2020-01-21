@@ -1,3 +1,6 @@
+/**
+ * Route for app stats
+ */
 const { Router } = require('express');
 const path = require('path');
 

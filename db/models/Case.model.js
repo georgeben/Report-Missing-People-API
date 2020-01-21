@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable func-names */
 const mongoose = require('mongoose');
 const caseSchema = require('../schemas/Case.schema');
 const { processNewCaseEvent, processCaseUpdateEvent } = require('../../background-jobs');
@@ -16,6 +18,7 @@ caseSchema.pre('save', function (next) {
 
 caseSchema.post('save', function (caseData) {
   if (this.firstTimeSave) {
+    // If it is a new case start job to send case data to algolia and tweet the case
     return processNewCaseEvent(caseData);
   }
   processCaseUpdateEvent(caseData);

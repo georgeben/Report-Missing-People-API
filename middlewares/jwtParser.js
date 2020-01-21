@@ -1,3 +1,8 @@
+/**
+ * Parses the authorization header in requests and creates a req.user property
+ * with details of the authenticated user
+ */
+
 const express = require('express');
 const { authHelper } = require('../utils/');
 const { userService } = require('../services');

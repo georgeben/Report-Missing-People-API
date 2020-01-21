@@ -1,3 +1,6 @@
+/**
+ * Contains workers for processing background jobs
+ */
 require('dotenv').config();
 require('./config/sentry');
 const { logger } = require('./utils');
@@ -57,6 +60,9 @@ jobQueue.process(
   },
 );
 
+/**
+ * Listeners for queue events i.e when a job is added to the queue
+ */
 jobQueue.on('active', (job) => {
   logger.log('info', `📧Job ${job.name}#${job.id} is now active 🚁🚁🚁`);
 });
@@ -113,6 +119,9 @@ jobQueue.process(constants.JOB_NAMES.DAILY_NEWSLETTER, 50, async (job, done) => 
   done();
 });
 
+/**
+ * Job handler for sending weekly news letters
+ */
 jobQueue.process(constants.JOB_NAMES.WEEKLY_NEWSLETTER, 50, async (job, done) => {
   logger.log('info', `📰Received ${job.name}#${job.id}`);
   const { subscribers, reportedCases } = job.data;
@@ -120,6 +129,9 @@ jobQueue.process(constants.JOB_NAMES.WEEKLY_NEWSLETTER, 50, async (job, done) =>
   done();
 });
 
+/**
+ * Job handler for posting a new case on twitter
+ */
 twitterQueue.process(
   constants.JOB_NAMES.TWEET_NEW_CASE,
   30,
@@ -131,6 +143,9 @@ twitterQueue.process(
   },
 );
 
+/**
+ * Listeners for twitter queue events
+ */
 twitterQueue.on('active', (job) => {
   logger.log('info', `📧Job ${job.name}#${job.id} is now active 🚁🚁🚁`);
 });
@@ -143,6 +158,9 @@ twitterQueue.on('completed', (job, result) => {
   );
 });
 
+/**
+ * Close all queues when the process is interrupted
+ */
 process.on('SIGTERM', () => {
   jobQueue.close().then(() => {
     logger.log('info', 'Closed queue');
@@ -150,6 +168,9 @@ process.on('SIGTERM', () => {
   });
 });
 
+/**
+ * Close all open queues when the process is about to be terminated
+ */
 process.on('SIGINT', () => {
   jobQueue.close().then(() => {
     logger.log('info', 'Closed queue');

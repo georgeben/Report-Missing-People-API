@@ -1,3 +1,6 @@
+/**
+ * Creates an configures an express app
+ */
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const cors = require('cors');
