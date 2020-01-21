@@ -1,3 +1,6 @@
+/**
+ * Handles OAuth stuff e.g Twitter sign in, Google sign in
+ */
 const { OAuth2Client } = require('google-auth-library');
 const twitterSignIn = require('twittersignin');
 const redis = require('../config/redis');

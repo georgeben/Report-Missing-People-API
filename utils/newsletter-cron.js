@@ -1,3 +1,6 @@
+/**
+ * Schedules newsletter daily and weekly emails
+ */
 const cron = require('node-cron');
 const moment = require('moment');
 const { newsletterService, caseService } = require('../services');

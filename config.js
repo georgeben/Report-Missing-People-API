@@ -1,5 +1,9 @@
 require('dotenv').config();
 
+/**
+ * Exports environment specific configuration for app
+ */
+
 module.exports = function () {
   switch (process.env.APP_ENV) {
     case 'staging':

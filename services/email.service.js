@@ -1,8 +1,11 @@
 /* eslint-disable consistent-return */
+/**
+ * Helper functions for sending emails
+ */
 const sgMail = require('@sendgrid/mail');
 const { authHelper, handleError, logger } = require('../utils');
 const constants = require('../constants');
-const { frontEndUrl, baseUrl } = require('../config')();
+const { frontEndUrl } = require('../config')();
 
 sgMail.setApiKey(process.env.SENDGRID_APIKEY);
 
@@ -13,11 +16,6 @@ sgMail.setApiKey(process.env.SENDGRID_APIKEY);
  * @return { String} - The email HTML
  */
 function getEmailHtml(type, token) {
-  // <p>
-  //   <a href="${BASE_URL}/api/v1/newsletter/?token=${token}">
-  //     Change email subscription settings
-  //   </a>
-  // </p>;
   const bodyStyle = "font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
   const containerStyle = 'margin: auto;background-color: white;width: 90%;padding-bottom: 40px;box-shadow: box-shadow: 0px 2px 7px 0px rgba(181, 181, 181, 0.4);';
   const headerStyle = 'background: linear-gradient(97.06deg, rgba(89, 215, 182, 0.9) 28.21%, rgba(102, 195, 204, 0.9) 96.06%);';
@@ -192,9 +190,9 @@ function getCaseHTML(caseData) {
 }
 
 /**
- * Sends a daily newsletter listing all the reported cases that have been reported
- * the past day
- * @param {String} email - The email to send the mail to
+ * Sends a daily newsletter listing all the reported cases that have been reported to
+ * all subscribers
+ * @param {String} emails - The emails to send the mail to
  * @param {Array} cases - The array of cases that have been reported since the past day
  */
 async function sendNewsletter(emails, cases, type) {

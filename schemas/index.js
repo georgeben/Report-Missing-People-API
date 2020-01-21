@@ -1,3 +1,7 @@
+/**
+ * Schemas for validating API request data
+ */
+// TODO Break this file into smaller ones
 const Joi = require('@hapi/joi');
 
 const namePattern = /^[a-zA-Z]+$/;

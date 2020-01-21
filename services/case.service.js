@@ -1,8 +1,8 @@
 /* eslint-disable radix */
-const axios = require('axios');
+/**
+ * Helper functions for communicating with case collection in MongoDB
+ */
 const { CaseModel } = require('../db/models');
-const { twitterBotUrl } = require('../config')();
-const { handleError } = require('../utils');
 
 /**
  * @param {String} fullname - The name of the case
@@ -38,7 +38,8 @@ async function checkForDuplicateCase(caseData) {
 }
 
 /**
- * Retrieves the list of reported cases
+ * Retrieves the list of reported cases and sorts cases according to
+ * their proximity to user's location
  * @param {String} status - The status of the case: open, close or all
  * @param {Number} offset - The number of documents to skip
  * @param {Number} limit - The maximum number of documents to retrieve
@@ -98,6 +99,7 @@ async function getCasesFromDate(startDate) {
 /**
  * Retrieves the list of cases reported by a user
  * @param {String} id - The user's ID
+ * @returns {Array} - The list of cases reported by a user
  */
 async function getCaseByUser(id) {
   const cases = await CaseModel.find({
@@ -123,6 +125,7 @@ async function findCaseBySlug(slug) {
  * Updates a reported cases
  * @param {String} slug - The slug of the case to update
  * @param {Object} param1 - The updated data of the case
+ * @returns {Object} - The updated case data
  */
 async function updateCase(
   slug,
@@ -167,7 +170,7 @@ async function updateCase(
 /**
  * Updates the status of a reported cases
  * @param {String} slug - The case's slug
- * @param {Boolean} solved - The status of the case. true for solved (closed) and false for unsolved (open)
+ * @param {Boolean} solved - Case status. true for solved (closed) and false for unsolved (open)
  * @returns {Object} -The reported case
  */
 async function updateCaseStatus(slug, solved) {
@@ -181,6 +184,7 @@ async function updateCaseStatus(slug, solved) {
  * Retrieves a list of cases related to a case
  * @param {String} slug - The slug of the case
  * @param {Number} limit - The number of related cases to fetch
+ * @returns {Array} - An array of related cases
  */
 async function findRelatedCases(slug, limit = 2) {
   let existingCase = await findCaseBySlug(slug);
@@ -203,6 +207,9 @@ async function findRelatedCases(slug, limit = 2) {
   return relatedCases;
 }
 
+/**
+ * Retrieves the number of cases that have been reported
+ */
 async function getCaseCount() {
   let count = await CaseModel.estimatedDocumentCount();
   return count;

@@ -1,9 +1,14 @@
 /* eslint-disable consistent-return */
+/**
+ * Contains helper methods for communicating with the Algolia API https://www.algolia.com/
+ */
 const algolia = require('algoliasearch');
 const { logger, handleError } = require('../utils');
 const { algoliaIndex } = require('../config')();
 
+// Create an algolia client
 const client = algolia(process.env.ALGOLIA_APPID, process.env.ALGOLIA_APIKEY);
+// Create an algolia index
 const casesIndex = client.initIndex(algoliaIndex);
 
 /**
