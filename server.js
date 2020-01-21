@@ -55,7 +55,6 @@ function gracefulShutdown() {
       .catch((err) => process.exit(err ? 1 : 0));
   });
 }
-
 process.on('SIGINT', () => {
   gracefulShutdown();
 });
