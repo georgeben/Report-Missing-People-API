@@ -93,6 +93,9 @@ an index,
 
 If you had any difficulty setting up, please create an issue so we can help you.
 
+## Run tests
+Run `npm test` to run tests
+
 ## Contributing
 Your contributions no matter how small are welcome. You can create an issue for bugs and send in PRs for fixes. Read the Contributors.md file 
 for detailed instructions on how you can contribute.
