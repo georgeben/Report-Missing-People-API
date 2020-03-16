@@ -20,6 +20,10 @@ module.exports = function () {
         twitterBotUrl: process.env.TWITTER_BOT_STAGING,
         caseFolderName: 'case_photos_staging',
         userFolderName: 'user_photos_staging',
+        twitterBotConsumerKey: process.env.BOT_CONSUMER_KEY_STAGING,
+        twitterBotConsumerKeySecret: process.env.BOT_CONSUMER_SECRET_STAGING,
+        twitterBotAccessToken: process.env.BOT_ACCESS_TOKEN_STAGING,
+        twitterBotAccessTokenSecret: process.env.BOT_ACCESS_TOKEN_SECRET_STAGING,
       };
     case 'production':
       return {
@@ -33,6 +37,10 @@ module.exports = function () {
         twitterBotUrl: process.env.TWITTER_BOT,
         caseFolderName: 'case_photos_prod',
         userFolderName: 'user_photos_prod',
+        twitterBotConsumerKey: process.env.BOT_CONSUMER_KEY,
+        twitterBotConsumerKeySecret: process.env.BOT_CONSUMER_SECRET,
+        twitterBotAccessToken: process.env.BOT_ACCESS_TOKEN,
+        twitterBotAccessTokenSecret: process.env.BOT_ACCESS_TOKEN_SECRET,
       };
     default:
       return {
@@ -46,6 +54,10 @@ module.exports = function () {
         twitterBotUrl: process.env.TWITTER_BOT_DEV,
         caseFolderName: 'case_photos',
         userFolderName: 'user_photos',
+        twitterBotConsumerKey: process.env.BOT_CONSUMER_KEY_STAGING,
+        twitterBotConsumerKeySecret: process.env.BOT_CONSUMER_SECRET_STAGING,
+        twitterBotAccessToken: process.env.BOT_ACCESS_TOKEN_STAGING,
+        twitterBotAccessTokenSecret: process.env.BOT_ACCESS_TOKEN_SECRET_STAGING,
       };
   }
 };
