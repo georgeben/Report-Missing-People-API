@@ -28,7 +28,6 @@ const caseSchema = new Schema(
     nicknames: [String],
     age: {
       type: Number,
-      required: true,
     },
     gender: {
       type: String,
@@ -37,7 +36,6 @@ const caseSchema = new Schema(
     },
     language: {
       type: String,
-      required: true,
     },
     residentialAddress: {
       location: locationSchema,
