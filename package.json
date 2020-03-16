@@ -8,7 +8,7 @@
   "main": "server.js",
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
-    "test": "mocha \"./test/**/*.spec.js\" --timeout=20000 --require test/prepare --exit",
+    "test": "mocha test/exit-mocha.js \"./test/**/*.spec.js\" --timeout=20000 --require test/prepare --exit",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "author": "George Benjamin",

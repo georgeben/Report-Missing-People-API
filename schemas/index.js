@@ -93,40 +93,32 @@ module.exports = {
     fullname: Joi.string()
       .trim()
       .min(2)
-      .required()
-      .pattern(fullnamePattern, 'Firstname Lastname'),
+      .required(),
     nicknames: Joi.array().items(Joi.string()),
     age: Joi.number()
       .integer()
-      .min(1)
-      .required(),
+      .min(1),
     residentialAddress: Joi.object({
       location: Joi.object({
         type: Joi.string()
-          .trim()
-          .required(),
+          .trim(),
         coordinates: Joi.array()
           .items(Joi.number())
-          .max(2)
-          .required(),
+          .max(2),
       }),
       formatted_address: Joi.string()
-        .trim()
-        .required(),
+        .trim().optional(),
       country: Joi.string()
-        .trim()
-        .required(),
+        .trim(),
       state: Joi.string()
-        .trim()
-        .required(),
-    }).required(),
+        .trim(),
+    }).optional(),
     gender: Joi.string()
       .trim()
       .required()
       .valid('MALE', 'FEMALE'),
     language: Joi.string()
       .trim()
-      .required()
       .pattern(namePattern, 'name'),
     addressLastSeen: Joi.object({
       location: Joi.object({
@@ -166,8 +158,7 @@ module.exports = {
   updateCase: Joi.object({
     fullname: Joi.string()
       .trim()
-      .min(3)
-      .pattern(fullnamePattern, 'Firstname Lastname'),
+      .min(3),
     nicknames: Joi.array().items(Joi.string()),
     age: Joi.number()
       .integer()
@@ -181,23 +172,18 @@ module.exports = {
     residentialAddress: Joi.object({
       location: Joi.object({
         type: Joi.string()
-          .trim()
-          .required(),
+          .trim(),
         coordinates: Joi.array()
           .items(Joi.number())
-          .max(2)
-          .required(),
+          .max(2),
       }),
       formatted_address: Joi.string()
-        .trim()
-        .required(),
+        .trim().optional(),
       country: Joi.string()
-        .trim()
-        .required(),
+        .trim(),
       state: Joi.string()
-        .trim()
-        .required(),
-    }),
+        .trim(),
+    }).optional(),
     addressLastSeen: Joi.object({
       location: Joi.object({
         type: Joi.string()

@@ -135,6 +135,7 @@ async function updateCase(
     age,
     gender,
     language,
+    residentialAddress,
     addressLastSeen,
     state,
     country,
@@ -153,6 +154,7 @@ async function updateCase(
   if (age) reportedCase.age = age;
   if (gender) reportedCase.gender = gender;
   if (language) reportedCase.language = language;
+  if (residentialAddress) reportedCase.residentialAddress = residentialAddress;
   if (addressLastSeen) reportedCase.addressLastSeen = addressLastSeen;
   if (state) reportedCase.state = state;
   if (country) reportedCase.country = country;
