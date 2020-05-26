@@ -14,6 +14,19 @@ View the documentation on how to use this API [here](https://documenter.getpostm
 - [Redis](https://redis.io/)
 
 ## Set up
+
+### Using docker
+- Clone this repository
+- Install Docker on your machine
+- `cd` into the repository
+- RUN `export REDIS_PASSWORD=anypasswordyouwant`
+- Create a .env file in the root directory of the project. A .env file stores sensitive credentials needed to run this project. After creating a .env file, copy the content of the .env.sample file and add the corresponding values.
+After creating a .env file, copy the content of the .env.sample file and add the corresponding values. For more information about how to do this, view the section about Setting up .env variables below
+- RUN `docker-compose up`. Make sure you have a stable internet connection.
+- :tada: That's it! View app on http://localhost:3000  
+
+
+### Manual setup
 Before setting up this project on your local machine. Ensure you have the above listed technologies installed on your machine. If you dont have them
 installed yet, read these guides on how to install them.
 - [Installing Redis](https://redis.io/topics/quickstart)
