@@ -8,6 +8,7 @@
   "main": "server.js",
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
+    "start:dev": "pm2-runtime start ecosystem.config.js --env development",
     "test": "mocha \"./test/**/*.spec.js\" --timeout=20000 --require test/prepare --exit",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
